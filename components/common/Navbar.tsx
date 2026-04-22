@@ -1,8 +1,10 @@
 "use client"
 
-import * as React from "react"
 import Link from "next/link"
-import { Menu, Search, Rocket, X } from "lucide-react"
+import { Menu, Search, TreePalm } from "lucide-react"
+import { AnimatedButton } from "../SmallComponents/AnimatedButton"
+import { ButtonShiny } from "../SmallComponents/ButtonShiny"
+import { cn } from "@/lib/utils"
 
 import {
   NavigationMenu,
@@ -19,7 +21,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
 import { ThemeToggle } from "./ThemeToggle"
 
 const navItems = [
@@ -31,16 +32,17 @@ const navItems = [
 
 export function Navbar() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
+    <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
+      <div className="relative container mx-auto flex h-16 items-center justify-between px-4">
+        <div className="absolute top-0 left-0 -z-10 h-16 w-full bg-top-blur blur-2xl"></div>
         {/* Logo Section */}
         <Link
           href="/"
           className="flex items-center space-x-2 transition-opacity hover:opacity-90"
         >
-          <Rocket className="h-6 w-6 text-primary" />
+          <TreePalm className="h-6 w-6 text-primary" />
           <span className="text-xl font-bold tracking-tight text-foreground">
-            ANGARA
+            Playa<span className="text-blue-500">Cleaning</span>
           </span>
         </Link>
 
@@ -52,7 +54,7 @@ export function Navbar() {
                 <NavigationMenuItem key={item.title}>
                   <NavigationMenuLink
                     asChild
-                    className={navigationMenuTriggerStyle()}
+                    className={cn("text-lg", "nav-animation-underline")}
                   >
                     <Link href={item.href}>{item.title}</Link>
                   </NavigationMenuLink>
@@ -66,9 +68,9 @@ export function Navbar() {
         <div className="flex items-center space-x-3">
           <div className="hidden items-center space-x-2 sm:flex">
             <ThemeToggle />
-            <Button size="sm" className="px-5">
-              Get Started
-            </Button>
+            <AnimatedButton>
+              <ButtonShiny text="Get Price" size={"sm"}></ButtonShiny>
+            </AnimatedButton>
           </div>
 
           {/* Mobile Menu (Sheet) */}
@@ -76,14 +78,17 @@ export function Navbar() {
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="outline" size="icon" className="shrink-0">
-                  <Menu className="h-5 w-5" />
+                  <Menu className="h-6! w-6!" />
                   <span className="sr-only">Toggle navigation menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-75 sm:w-100">
+              <SheetContent
+                side="right"
+                className="flex w-75 flex-col gap-16 px-8 sm:w-100"
+              >
                 <SheetHeader className="mb-4 border-b pb-4">
                   <SheetTitle className="flex items-center gap-2 text-left">
-                    <Rocket className="h-5 w-5 text-primary" />
+                    <TreePalm className="h-6! w-6! text-primary" />
                     <span>Navigation</span>
                   </SheetTitle>
                 </SheetHeader>
@@ -99,7 +104,7 @@ export function Navbar() {
                   ))}
                   <div className="flex flex-col gap-3 pt-4">
                     <Button variant="outline" className="w-full justify-start">
-                      <Search className="mr-2 h-4 w-4" /> Search
+                      <Search className="mr-2 h-4 w-full" /> Search
                     </Button>
                     <Button className="w-full">Get Started</Button>
                   </div>
