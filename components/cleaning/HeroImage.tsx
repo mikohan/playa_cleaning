@@ -5,7 +5,7 @@ import HeroImg2 from "@/public/images/cleaning/hero-2.png"
 
 import { GoogleStars } from "./GoogleStars"
 import { AvatarGroup } from "./AvatarGroup"
-import { ModalDaisy } from "../common/ModalDaisy"
+import { CleaningModal } from "../common/CleaningModal"
 import { ModalVideo } from "../common/ModalVideo"
 import { RoughNotation, RoughNotationGroup } from "react-rough-notation"
 
@@ -43,7 +43,7 @@ export function HeroImage() {
                 home with the same care and precision I use in my own.
               </h2>
               <div className="mt-16 flex w-full items-center justify-center md:mt-20 md:gap-4">
-                <ModalDaisy />
+                <CleaningModal />
                 <ModalVideo />
               </div>
             </div>

@@ -39,10 +39,10 @@ export function ThemeToggle() {
       variant="ghost"
       size="icon"
       onClick={handleToggle}
-      className="relative cursor-pointer focus-visible:ring-0 focus-visible:ring-offset-0"
+      className="group relative cursor-pointer bg-transparent hover:bg-transparent focus-visible:ring-0"
     >
-      <Sun className="h-6! w-6! scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-      <Moon className="absolute h-6! w-6! scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+      <Sun className="h-6! w-6! scale-100 rotate-0 text-yellow-500 transition-all group-hover:text-orange-600 dark:scale-0 dark:-rotate-90" />
+      <Moon className="absolute h-6! w-6! scale-0 rotate-90 text-slate-400 transition-all group-hover:text-slate-300 dark:scale-100 dark:rotate-0" />
       <span className="sr-only">Toggle theme</span>
     </Button>
   )

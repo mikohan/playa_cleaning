@@ -3,6 +3,7 @@ import Image from "next/image"
 import VideoIcon from "@/public/images/cleaning/video-icon.svg"
 import { AnimatedButton } from "../SmallComponents/AnimatedButton"
 import { VideoComponent } from "../cleaning/VideoComponent"
+import { Play } from "lucide-react"
 
 export const ModalVideo = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -45,13 +46,18 @@ export const ModalVideo = () => {
     <>
       <div onClick={handleOpen}>
         <div className="group hidden cursor-pointer items-center gap-4 transition-transform duration-300 hover:scale-105 md:inline-flex">
-          <div className="border-couchBlue/50 items-ceter flex aspect-square h-[75px] w-[75px] justify-center rounded-full border-4 bg-transparent shadow-md">
-            <Image
+          <div className="flex aspect-square h-18 w-18 items-center justify-center rounded-full border-4 border-primary-blue/50 bg-transparent shadow-md">
+            {/* <Image
               src={VideoIcon}
               height={24}
               width={24}
               alt="button"
-              className="ml-1 block"
+              className="ml-1 block text-pink-200"
+            /> */}
+            <Play
+              size={24}
+              fill="var(--color-primary-blue)"
+              color="var(--color-primary-blue)"
             />
           </div>
           <div className="block">Watch Video</div>

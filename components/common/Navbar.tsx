@@ -42,7 +42,7 @@ export function Navbar() {
         >
           <TreePalm className="h-6 w-6 text-primary" />
           <span className="text-xl font-bold tracking-tight text-foreground">
-            Playa<span className="text-blue-500">Cleaning</span>
+            Playa<span className="text-primary-blue">Cleaning</span>
           </span>
         </Link>
 
@@ -66,7 +66,7 @@ export function Navbar() {
 
         {/* Action Buttons & Mobile Toggle */}
         <div className="flex items-center space-x-3">
-          <div className="hidden items-center space-x-2 sm:flex">
+          <div className="hidden items-center space-x-4 sm:flex">
             <ThemeToggle />
             <AnimatedButton>
               <ButtonShiny text="Get Price" size={"sm"}></ButtonShiny>

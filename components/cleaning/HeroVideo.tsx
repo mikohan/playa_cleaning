@@ -3,7 +3,7 @@ import dynamic from "next/dynamic"
 
 import { GoogleStars } from "./GoogleStars"
 import { AvatarGroup } from "./AvatarGroup"
-import { ModalDaisy } from "../common/ModalDaisy"
+import { CleaningModal } from "../common/CleaningModal"
 import { ModalVideo } from "../common/ModalVideo"
 import { RoughNotation, RoughNotationGroup } from "react-rough-notation"
 // import { VideoComponent } from "../VideoComponent";
@@ -48,7 +48,7 @@ function HeroVideo() {
                 home with the same care and precision I use in my own.
               </h2>
               <div className="mt-16 w-full md:mt-40 md:flex md:items-center md:gap-4">
-                <ModalDaisy />
+                <CleaningModal />
                 <ModalVideo />
               </div>
             </div>

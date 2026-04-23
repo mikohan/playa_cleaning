@@ -4,6 +4,7 @@ import { Tag } from "../SmallComponents/Tag"
 import Image from "next/image"
 import { GoogleStars } from "./GoogleStars"
 import { motion } from "framer-motion"
+import { WaveDivider } from "../common/WaveDivider"
 
 const TestimonialsColumn = (props: {
   className?: string
@@ -60,14 +61,16 @@ export function Testimonials() {
   const thirdCol = testimonials.slice(12, 18)
 
   return (
-    <section className="overflow-hidden bg-background py-24">
+    <section className="relative overflow-hidden pt-32">
+      <div className="absolute top-0 left-0 -z-10 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
+      <WaveDivider position="top" fill="white" />
       <div className="container mx-auto max-w-7xl px-6">
         <div className="flex flex-col items-center">
           <Tag text="Testimonials" />
-          <h2 className="h2-header mt-8 text-center font-bold">
+          <h2 className="mt-8 text-center text-3xl font-bold md:text-5xl">
             What our customers say
           </h2>
-          <p className="subheader mt-4 mb-16 max-w-md text-center">
+          <p className="mt-4 mb-16 max-w-md text-center text-xl text-foreground/70">
             Our customers love the results. All reviews are verified from our
             Google Business profile.{" "}
             <a
@@ -86,16 +89,16 @@ export function Testimonials() {
           {/* flex-1 min-w-0 forces all columns to share space equally */}
           <TestimonialsColumn
             testimonials={firstCol}
-            duration={20}
+            duration={85}
             className="min-w-0 flex-1"
           />
           <TestimonialsColumn
-            duration={25}
+            duration={112}
             testimonials={secondCol}
             className="hidden min-w-0 flex-1 md:block"
           />
           <TestimonialsColumn
-            duration={18}
+            duration={92}
             testimonials={thirdCol}
             className="hidden min-w-0 flex-1 lg:block"
           />

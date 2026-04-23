@@ -3,9 +3,8 @@ import { motion, HTMLMotionProps, TargetAndTransition } from "framer-motion"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
-// 1. Define the variants using CVA
 const shinyButtonVariants = cva(
-  "radial-gradient relative rounded-2xl transition-shadow focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+  "radial-gradient relative overflow-hidden transition-shadow focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
   {
     variants: {
       size: {
@@ -22,21 +21,36 @@ const shinyButtonVariants = cva(
   }
 )
 
-// 2. Extend Framer Motion props to allow standard div attributes
 interface Props
   extends HTMLMotionProps<"div">, VariantProps<typeof shinyButtonVariants> {
   text: string
+  // Pass any CSS color (hex, rgb, or tailwind variable)
+  bgColor?: string
 }
 
-export const ButtonShiny = ({ text, className, size, ...props }: Props) => {
+export const ButtonShiny = ({
+  text,
+  className,
+  size,
+  bgColor = "var(--color-primary-blue)", // Default Playa Cleaning Blue
+  style,
+  ...props
+}: Props) => {
   return (
     <motion.div
-      // Merge CVA variants with any custom className
+      // Merge CVA with custom classes
       className={cn(
         shinyButtonVariants({ size }),
         "font-blauerMedium",
         className
       )}
+      // Use inline styles to inject the dynamic color
+      style={
+        {
+          backgroundColor: bgColor,
+          ...style,
+        } as React.CSSProperties
+      }
       initial={{ "--x": "100%" } as TargetAndTransition}
       animate={{ "--x": "-100%" } as TargetAndTransition}
       whileTap={{ scale: 0.95 }}
@@ -49,11 +63,12 @@ export const ButtonShiny = ({ text, className, size, ...props }: Props) => {
         damping: 15,
         mass: 2,
       }}
-      {...props} // Spread remaining props (onClick, etc.)
+      {...props}
     >
-      <span className="linear-mask relative block h-full w-full cursor-pointer font-light tracking-wide text-white">
+      <span className="linear-mask relative z-10 block h-full w-full cursor-pointer font-light tracking-wide text-white">
         {text}
       </span>
+      {/* Overlay for the shimmer effect */}
       <span className="linear-overlay pointer-events-none absolute inset-0 block rounded-[inherit] p-1"></span>
     </motion.div>
   )

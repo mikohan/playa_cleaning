@@ -47,6 +47,9 @@
   --radius-4xl: calc(var(--radius) * 2.6);
   /* Custom settings */
   --color-top-blur: var(--top-blur);
+  --color-primary-blue: var(--primary-blue);
+  --color-footer: var(--footer);
+  --color-accent-yellow: var(--accent-yellow);
 }
 
 :root {
@@ -85,6 +88,9 @@
   /* Custom settings */
   --font-sans: var(--font-blauer-nue);
   --top-blur: oklch(0.9 0.034 259.597);
+  --primary-blue: oklch(0.5712 0.1434 254.62);
+  --footer: oklch(0.2077 0.0398 265.75);
+  --accent-yellow: oklch(0.7764 0.1631 75.75);
 }
 
 .dark {
@@ -121,6 +127,9 @@
   --sidebar-ring: oklch(0.556 0 0);
   /* custom settings */
   --top-blur: oklch(0.3 0.084 259.597);
+  --primary-blue: oklch(0.7137 0.1434 254.62);
+  --footer: oklch(0.2077 0.0398 265.75);
+  --accent-yellow: oklch(0.8147 0.1631 75.75);
 }
 
 @layer base {
@@ -172,10 +181,41 @@
 
 .nav-animation-underline {
   @apply relative font-medium transition-colors duration-300 hover:text-secondary-foreground;
-  
+
   /* The underline logic */
   @apply after:absolute after:-bottom-0.5 after:left-0 after:h-0.5 after:w-0 after:bg-secondary-foreground after:transition-all after:duration-300;
-  
+
   /* Fixed the typo from 'over' to 'hover' */
   @apply hover:after:w-full;
+}
+/* Styling the overlay/backdrop */
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+}
+
+/* The "Center-Everything" Reset */
+/* globals.css */
+
+/* Reset dialog browser defaults and center the content */
+dialog {
+  all: unset;
+  position: fixed;
+  inset: 0;
+  display: none;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+dialog[open] {
+  display: flex;
+}
+
+/* Premium Backdrop Styling */
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
 }
