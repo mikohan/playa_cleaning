@@ -11,7 +11,6 @@ import {
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
 import {
   Sheet,
@@ -25,7 +24,7 @@ import { ThemeToggle } from "./ThemeToggle"
 
 const navItems = [
   { title: "Home", href: "/" },
-  { title: "Services", href: "/services" },
+  { title: "Home Cleaning", href: "/home-cleaning-near-me" },
   { title: "Portfolio", href: "/portfolio" },
   { title: "Contact", href: "/contact" },
 ]
@@ -40,8 +39,8 @@ export function Navbar() {
           href="/"
           className="flex items-center space-x-2 transition-opacity hover:opacity-90"
         >
-          <TreePalm className="h-6 w-6 text-primary" />
-          <span className="text-xl font-bold tracking-tight text-foreground">
+          <TreePalm className="h-8 w-8 text-primary" />
+          <span className="text-2xl font-bold tracking-tight text-foreground">
             Playa<span className="text-primary-blue">Cleaning</span>
           </span>
         </Link>
@@ -77,10 +76,10 @@ export function Navbar() {
           <div className="md:hidden">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon" className="shrink-0">
-                  <Menu className="h-6! w-6!" />
+                <button className="shrink-0">
+                  <Menu className="h-8! w-8!" />
                   <span className="sr-only">Toggle navigation menu</span>
-                </Button>
+                </button>
               </SheetTrigger>
               <SheetContent
                 side="right"
@@ -88,8 +87,10 @@ export function Navbar() {
               >
                 <SheetHeader className="mb-4 border-b pb-4">
                   <SheetTitle className="flex items-center gap-2 text-left">
-                    <TreePalm className="h-6! w-6! text-primary" />
-                    <span>Navigation</span>
+                    <TreePalm className="h-8! w-8! text-primary-blue" />
+                    <span className="text-2xl">
+                      Playa<span className="text-primary-blue">Cleaning</span>
+                    </span>
                   </SheetTitle>
                 </SheetHeader>
                 <div className="mt-4 flex flex-col space-y-4">
@@ -97,16 +98,13 @@ export function Navbar() {
                     <Link
                       key={item.title}
                       href={item.href}
-                      className="border-b border-transparent py-2 text-lg font-semibold transition-colors hover:border-border hover:text-primary"
+                      className="border-b border-transparent py-2 text-2xl font-semibold transition-colors hover:border-border hover:text-primary"
                     >
                       {item.title}
                     </Link>
                   ))}
                   <div className="flex flex-col gap-3 pt-4">
-                    <Button variant="outline" className="w-full justify-start">
-                      <Search className="mr-2 h-4 w-full" /> Search
-                    </Button>
-                    <Button className="w-full">Get Started</Button>
+                    <ButtonShiny text="Order Cleaning" />
                   </div>
                 </div>
               </SheetContent>

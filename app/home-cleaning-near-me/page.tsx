@@ -7,6 +7,10 @@ import { WhyMe } from "@/components/cleaning/WhyMe"
 import { Footer } from "@/components/common/Footer"
 import { FAQSection } from "@/components/cleaning/FAQSection"
 import { BenefitsSection } from "@/components/cleaning/BenefitsSection"
+import { CallToAction } from "@/components/cleaning/CallToAction"
+import { CleaningCalculator } from "@/components/cleaning/CleaningCalculator"
+import { CleaningCalculatorAdons } from "@/components/cleaning/CleaningCalculatorAdons"
+import { ServiceComparison } from "@/components/cleaning/ServiceComparison"
 
 export default function Page() {
   return (
@@ -15,9 +19,12 @@ export default function Page() {
       <HeroImageGemini />
       <LogoTicker />
       <WhyMe />
+      <CleaningCalculatorAdons />
+      <ServiceComparison />
       <Testimonials />
       <BenefitsSection />
       <FAQSection />
+      <CallToAction />
       <Footer />
     </div>
   )

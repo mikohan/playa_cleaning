@@ -63,7 +63,7 @@ export function Testimonials() {
   return (
     <section className="relative overflow-hidden pt-32">
       <div className="absolute top-0 left-0 -z-10 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
-      <WaveDivider position="top" fill="white" />
+      <WaveDivider position="top" fill="var(--color-background)" />
       <div className="container mx-auto max-w-7xl px-6">
         <div className="flex flex-col items-center">
           <Tag text="Testimonials" />
