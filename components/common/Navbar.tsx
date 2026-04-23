@@ -5,6 +5,7 @@ import { Menu, Search, TreePalm } from "lucide-react"
 import { AnimatedButton } from "../SmallComponents/AnimatedButton"
 import { ButtonShiny } from "../SmallComponents/ButtonShiny"
 import { cn } from "@/lib/utils"
+import { useTheme } from "next-themes"
 
 import {
   NavigationMenu,
@@ -19,7 +20,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "./ThemeToggle"
 
 const navItems = [
@@ -30,6 +30,10 @@ const navItems = [
 ]
 
 export function Navbar() {
+  const { theme, setTheme } = useTheme()
+  const handleToggle = () => {
+    setTheme(theme === "dark" ? "light" : "dark")
+  }
   return (
     <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="relative container mx-auto flex h-16 items-center justify-between px-4">
@@ -103,6 +107,13 @@ export function Navbar() {
                       {item.title}
                     </Link>
                   ))}
+                  <div
+                    onClick={handleToggle}
+                    className="flex w-full flex-row items-center justify-center gap-3 rounded-2xl border border-primary-blue px-4 py-2"
+                  >
+                    <ThemeToggle />
+                    <p className="text-lg">Toggle Theme</p>
+                  </div>
                   <div className="flex flex-col gap-3 pt-4">
                     <ButtonShiny text="Order Cleaning" />
                   </div>

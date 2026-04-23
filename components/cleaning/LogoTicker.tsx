@@ -1,52 +1,50 @@
 "use client"
-import Image from "next/image"
+import React from "react"
 import { motion } from "framer-motion"
-import PetsKids1 from "@/public/images/cleaning/PetsKids-1.png"
-import PetsKids2 from "@/public/images/cleaning/PetsKids-2.png"
-import PetsKids3 from "@/public/images/cleaning/PetsKids-3.png"
-import PetsKids4 from "@/public/images/cleaning/PetsKids.png"
+import { ShieldCheck, Leaf, MapPin, Clock, Sparkles, Heart } from "lucide-react"
 
-const logos = [
-  { src: PetsKids1, alt: "Safe for Pets 1" },
-  { src: PetsKids2, alt: "Safe for Pets 2" },
-  { src: PetsKids3, alt: "Safe for Pets 3" },
-  { src: PetsKids4, alt: "Safe for Pets 4" },
+const ADVANTAGES = [
+  { icon: ShieldCheck, text: "Licensed & Insured" },
+  { icon: Leaf, text: "Eco-Friendly Solutions" },
+  { icon: MapPin, text: "Serving All of Los Angeles" },
+  { icon: Clock, text: "Reliable Scheduling" },
+  { icon: Heart, text: "Pet & Kid Safe" },
+  { icon: Sparkles, text: "Hospital-Grade Clean" },
 ]
 
 export const LogoTicker = () => {
   return (
-    <div className="overflow-hidden bg-white py-8 md:py-16">
+    <div className="overflow-hidden bg-background py-8">
       <div className="container mx-auto">
-        <div className="flex overflow-hidden mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+        <div className="flex overflow-hidden mask-[linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
           <motion.div
-            className="flex flex-none items-center gap-16 pr-16"
+            className="flex flex-none items-center gap-12 pr-12"
             animate={{
               x: "-50%",
             }}
             transition={{
-              duration: 30, // Slower is often smoother for tickers
+              duration: 25, // Adjusted speed for text readability
               repeat: Infinity,
               ease: "linear",
             }}
           >
-            {/* We render the array twice. 
-                The animation moves -50%, which is exactly one full set of logos.
-            */}
-            {[...logos, ...logos].map((logo, index) => (
-              <div
-                key={index}
-                className="flex flex-none items-center justify-center"
-              >
-                <Image
-                  src={logo.src}
-                  alt={logo.alt}
-                  className="h-10 w-auto object-contain opacity-80 transition-opacity hover:opacity-100 md:h-14"
-                  // width/height required for Next/Image but overridden by className h-10 w-auto
-                  width={200}
-                  height={60}
-                />
-              </div>
-            ))}
+            {/* Double the array for seamless infinite looping */}
+            {[...ADVANTAGES, ...ADVANTAGES].map((advantage, index) => {
+              const Icon = advantage.icon
+              return (
+                <div
+                  key={index}
+                  className="group flex flex-none items-center gap-3 px-4"
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100/50 text-blue-600 transition-colors group-hover:bg-blue-600 group-hover:text-white">
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <span className="text-lg font-semibold tracking-wide text-foreground/70 uppercase md:text-base">
+                    {advantage.text}
+                  </span>
+                </div>
+              )
+            })}
           </motion.div>
         </div>
       </div>

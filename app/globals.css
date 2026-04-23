@@ -50,6 +50,7 @@
   --color-primary-blue: var(--primary-blue);
   --color-footer: var(--footer);
   --color-accent-yellow: var(--accent-yellow);
+  --color-accent-green: var(--accent-green);
 }
 
 :root {
@@ -91,6 +92,7 @@
   --primary-blue: oklch(0.5712 0.1434 254.62);
   --footer: oklch(0.2077 0.0398 265.75);
   --accent-yellow: oklch(0.7764 0.1631 75.75);
+  --accent-green: oklch(0.75 0.2044 130.85);
 }
 
 .dark {
@@ -130,6 +132,7 @@
   --primary-blue: oklch(0.7137 0.1434 254.62);
   --footer: oklch(0.2077 0.0398 265.75);
   --accent-yellow: oklch(0.8147 0.1631 75.75);
+  --accent-green: oklch(0.8591 0.2044 130.85);
 }
 
 @layer base {

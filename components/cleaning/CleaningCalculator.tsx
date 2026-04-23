@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useMemo, useCallback } from "react"
+import { useRouter } from "next/navigation"
 import {
   Plus,
   Minus,
@@ -19,6 +20,7 @@ import {
 } from "lucide-react"
 import { Slider } from "@/components/ui/slider"
 import { cn } from "@/lib/utils"
+import { WaveDivider } from "../common/WaveDivider"
 
 // --- TYPES ---
 
@@ -67,7 +69,9 @@ const PRICING: PricingConfig = {
 
 type AddonKey = keyof typeof PRICING.addons
 
-export function CleaningCalculatorAdons() {
+export function CleaningCalculator() {
+  const router = useRouter()
+
   // --- STATE ---
   const [sqft, setSqft] = useState<number[]>([1200])
   const [beds, setBeds] = useState<string>("2")
@@ -116,6 +120,24 @@ export function CleaningCalculatorAdons() {
   }, [sqft, beds, baths, type, selectedToggles, counters, isIncluded])
 
   // --- HANDLERS ---
+
+  const handleRedirect = () => {
+    const params = new URLSearchParams({
+      price: totalPrice.toString(),
+      type: String(type),
+      sqft: sqft[0].toString(),
+      rooms: `${beds}BR/${baths}BA`,
+      addons: [
+        ...selectedToggles,
+        counters.windows > 0 ? `${counters.windows} Windows` : "",
+        counters.blinds > 0 ? `${counters.blinds} Blinds` : "",
+      ]
+        .filter(Boolean)
+        .join(", "),
+    })
+    router.push(`/booking/confirm?${params.toString()}`)
+  }
+
   const toggleAddon = (id: string): void => {
     if (isIncluded(id)) return
     setSelectedToggles((prev: string[]) =>
@@ -128,8 +150,27 @@ export function CleaningCalculatorAdons() {
   }
 
   return (
-    <section className="bg-background py-24">
-      <div className="container mx-auto max-w-6xl px-6">
+    <section className="relative py-24 md:pt-46">
+      <div className="absolute top-0 left-0 -z-10 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
+      <WaveDivider position="top" fill="var(--color-background)" />
+
+      <div className="container mx-auto hidden max-w-7xl px-6 md:block">
+        <div className="flex w-full flex-col items-center text-center">
+          <div className="mb-16 max-w-3xl">
+            <h2 className="text-center text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+              Get Instant Estimate
+              <span className="text-primary-blue"> Right Now</span>
+            </h2>
+            <p className="font-blauerRegular mt-6 text-lg text-muted-foreground">
+              Experience a specialized level of care that goes beyond
+              surface-level wiping. I focus on health, consistency, and the
+              details that others skip.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto mt-16 max-w-7xl rounded-2xl bg-primary-blue/10 p-16">
         <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12">
           {/* INPUTS COLUMN */}
           <div className="space-y-10 lg:col-span-7">
@@ -250,7 +291,6 @@ export function CleaningCalculatorAdons() {
               </label>
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {/* Windows */}
                 <div className="flex items-center justify-between rounded-2xl border-2 border-border bg-card p-4">
                   <div className="flex items-center gap-3">
                     <Waves size={20} className="text-primary" />
@@ -272,7 +312,7 @@ export function CleaningCalculatorAdons() {
                     >
                       <Minus size={14} />
                     </button>
-                    <span className="min-w-[20px] text-center text-sm font-bold">
+                    <span className="min-w-5 text-center text-sm font-bold">
                       {counters.windows}
                     </span>
                     <button
@@ -284,7 +324,6 @@ export function CleaningCalculatorAdons() {
                   </div>
                 </div>
 
-                {/* Blinds */}
                 <div className="flex items-center justify-between rounded-2xl border-2 border-border bg-card p-4">
                   <div className="flex items-center gap-3">
                     <Eye size={20} className="text-primary" />
@@ -299,7 +338,7 @@ export function CleaningCalculatorAdons() {
                     >
                       <Minus size={14} />
                     </button>
-                    <span className="min-w-[20px] text-center text-sm font-bold">
+                    <span className="min-w-5 text-center text-sm font-bold">
                       {counters.blinds}
                     </span>
                     <button
@@ -312,7 +351,6 @@ export function CleaningCalculatorAdons() {
                 </div>
               </div>
 
-              {/* Toggle Add-ons */}
               <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
                 {(
                   ["fridge", "oven", "moveAppliances", "pets"] as AddonKey[]
@@ -371,40 +409,49 @@ export function CleaningCalculatorAdons() {
                 </span>
               </div>
             </div>
-            <div className="space-y-8 rounded-b-[2.5rem] border-x border-b border-border bg-card p-10">
-              <ul className="space-y-5">
-                {[
-                  "Single-Expert Premium Service",
-                  "HEPA Industrial Filtration",
-                  "Eco-Friendly, Pet-Safe Supplies",
-                ].map((text, i) => (
-                  <li
-                    key={i}
-                    className="font-blauerRegular flex items-center gap-4 text-sm text-foreground"
-                  >
-                    <Check size={18} className="shrink-0 text-primary" /> {text}
-                  </li>
-                ))}
-              </ul>
-              <div className="border-t border-border pt-8">
-                <div className="font-blauerRegular mb-6 flex items-center gap-3 text-xs text-muted-foreground">
-                  <Zap
-                    size={16}
-                    className="animate-pulse fill-primary text-primary"
-                  />
-                  <span>
-                    Next Slot:{" "}
-                    <span className="font-bold text-foreground italic underline decoration-primary underline-offset-4">
-                      This Tuesday @ 9:00 AM
+
+            <div className="space-y-8 rounded-b-[2.5rem] border-x border-b border-border bg-card">
+              <div className="px-10 pt-8">
+                <ul className="space-y-5">
+                  {[
+                    "Single-Expert Premium Service",
+                    "HEPA Industrial Filtration",
+                    "Eco-Friendly, Pet-Safe Supplies",
+                  ].map((text, i) => (
+                    <li
+                      key={i}
+                      className="font-blauerRegular flex items-center gap-4 text-sm text-foreground"
+                    >
+                      <Check size={18} className="shrink-0 text-primary" />{" "}
+                      {text}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="border-t border-border px-2 pt-8 md:px-10">
+                <div className="px-10">
+                  <div className="font-blauerRegular mb-6 flex items-center gap-3 text-xs text-muted-foreground">
+                    <Zap
+                      size={16}
+                      className="animate-pulse fill-primary text-primary"
+                    />
+                    <span>
+                      Next Slot:{" "}
+                      <span className="font-bold text-foreground italic underline decoration-primary underline-offset-4">
+                        This Tuesday @ 9:00 AM
+                      </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
-                <button className="flex w-full items-center justify-center gap-3 rounded-2xl bg-primary py-7 text-xl font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
+                <button
+                  onClick={handleRedirect}
+                  className="flex w-full items-center justify-center gap-3 rounded-2xl bg-primary py-7 text-xl font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                >
                   Secure This Investment <ArrowRight size={22} />
                 </button>
               </div>
-              <div className="flex items-center justify-center gap-2 text-[10px] font-bold tracking-[0.2em] text-muted-foreground uppercase">
-                <Info size={12} /> Satisfaction Guaranteed
+              <div className="flex items-center justify-center gap-2 pb-10 text-xs font-bold tracking-[0.2em] text-muted-foreground uppercase">
+                <Info size={16} /> Quality Guaranteed
               </div>
             </div>
           </div>

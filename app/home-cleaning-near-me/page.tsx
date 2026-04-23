@@ -1,5 +1,4 @@
 import { Navbar } from "@/components/common/Navbar"
-import { HeroImage } from "@/components/cleaning/HeroImage"
 import { HeroImageGemini } from "@/components/cleaning/HeroImageGemini"
 import { LogoTicker } from "@/components/cleaning/LogoTicker"
 import { Testimonials } from "@/components/cleaning/Testimonials"
@@ -10,6 +9,7 @@ import { BenefitsSection } from "@/components/cleaning/BenefitsSection"
 import { CallToAction } from "@/components/cleaning/CallToAction"
 import { CleaningCalculatorAdons } from "@/components/cleaning/CleaningCalculatorAdons"
 import { ServiceComparison } from "@/components/cleaning/ServiceComparison"
+import { CleaningCalculator } from "@/components/cleaning/CleaningCalculator"
 
 export default function Page() {
   return (
@@ -17,9 +17,13 @@ export default function Page() {
       <Navbar />
       <HeroImageGemini />
       <LogoTicker />
+      <CallToAction />
+      <CleaningCalculator />
       <WhyMe />
       <CleaningCalculatorAdons />
-      <ServiceComparison />
+      <div className="hidden md:block">
+        <ServiceComparison />
+      </div>
       <Testimonials />
       <BenefitsSection />
       <FAQSection />

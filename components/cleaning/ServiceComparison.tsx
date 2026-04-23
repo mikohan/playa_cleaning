@@ -90,26 +90,26 @@ export function ServiceComparison() {
           </p>
         </div>
 
-        <div className="overflow-hidden rounded-[2.5rem] border border-border bg-card shadow-sm">
+        <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
           <div className="grid grid-cols-12 border-b border-border bg-muted/30">
-            <div className="col-span-6 p-8 text-xs font-bold tracking-widest text-primary uppercase">
+            <div className="col-span-6 p-8 text-sm font-bold tracking-widest text-primary uppercase">
               Service Features
             </div>
             <div className="col-span-2 flex flex-col items-center gap-2 p-8 text-center">
-              <Home size={18} className="text-muted-foreground" />
-              <span className="text-[10px] font-bold tracking-tighter uppercase">
+              <Home size={24} className="text-muted-foreground" />
+              <span className="text-sm font-bold tracking-tighter uppercase">
                 Maintenance
               </span>
             </div>
             <div className="col-span-2 flex flex-col items-center gap-2 border-x border-border bg-primary/5 p-8 text-center">
-              <Sparkles size={18} className="text-primary" />
-              <span className="text-[10px] font-bold tracking-tighter text-primary uppercase">
+              <Sparkles size={24} className="text-primary" />
+              <span className="text-sm font-bold tracking-tighter text-primary uppercase">
                 Deep Clean
               </span>
             </div>
             <div className="col-span-2 flex flex-col items-center gap-2 p-8 text-center">
-              <Zap size={18} className="text-muted-foreground" />
-              <span className="text-[10px] font-bold tracking-tighter uppercase">
+              <Zap size={24} className="text-muted-foreground" />
+              <span className="text-sm font-bold tracking-tighter uppercase">
                 Move In/Out
               </span>
             </div>
@@ -123,7 +123,7 @@ export function ServiceComparison() {
                 index % 2 === 0 ? "bg-transparent" : "bg-muted/5"
               )}
             >
-              <div className="font-blauerRegular col-span-6 flex items-center p-6 text-sm text-foreground">
+              <div className="font-blauerRegular text-md col-span-6 flex items-center p-6 text-foreground">
                 {row.feature}
               </div>
 
@@ -145,18 +145,18 @@ export function ServiceComparison() {
           ))}
         </div>
 
-        <div className="mt-8 flex items-center justify-center gap-6 text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
+        <div className="mt-8 flex items-center justify-center gap-6 text-sm font-bold tracking-widest text-muted-foreground uppercase">
           <div className="flex items-center gap-2">
-            <Star size={12} className="fill-primary text-primary" /> Premium
-            Results
+            <Star size={24} className="fill-primary-blue text-primary-blue" />{" "}
+            Premium Results
           </div>
           <div className="flex items-center gap-2">
-            <Star size={12} className="fill-primary text-primary" /> No
-            Shortcuts
+            <Star size={24} className="fill-primary-blue text-primary-blue" />{" "}
+            No Shortcuts
           </div>
           <div className="flex items-center gap-2">
-            <Star size={12} className="fill-primary text-primary" /> Price
-            Locked
+            <Star size={24} className="fill-primary-blue text-primary-blue" />{" "}
+            Price Locked
           </div>
         </div>
       </div>
@@ -165,16 +165,16 @@ export function ServiceComparison() {
 }
 
 function renderValue(val: boolean | string, isPrimary = false) {
-  if (val === true) return <Check className="h-5 w-5 text-primary" />
+  if (val === true) return <Check className="h-5 w-5 text-accent-green" />
   if (val === false || val === "N/A")
     return <Minus className="h-5 w-5 text-muted-foreground/30" />
 
   return (
     <span
       className={cn(
-        "rounded-full px-3 py-1 text-[10px] font-bold",
+        "rounded-full px-3 py-1 text-sm font-bold",
         val === "Included"
-          ? "bg-primary text-primary-foreground"
+          ? "bg-accent-green/50 text-primary/70"
           : "border border-border bg-muted text-muted-foreground"
       )}
     >

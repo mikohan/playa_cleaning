@@ -1,36 +1,49 @@
 "use client"
+
 import React from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { TreePalm } from "lucide-react"
 
-// Asset Imports
-import InstagramIcon from "@/public/images/social_icons/instagram-negative.svg"
-import YoutubeIcon from "@/public/images/social_icons/youtube-negative.svg"
-import FacebookIcon from "@/public/images/social_icons/facebook-negative.svg"
-import TikTokIcon from "@/public/images/social_icons/tiktok-negative.svg"
+// Optimized React Component Icons
+import { InstagramIcon } from "../icons/InstagramIcon"
+// import { YouTubeIcon } from "../icons/YoutubeIcon"
+import { FacebookIcon } from "@/components/icons/FacebookIcon"
+import { TikTokIcon } from "@/components/icons/TickTockIcon"
+import { NextdoorIcon } from "@/components/icons/NextdoorIcon"
+
 import { WaveDivider } from "./WaveDivider"
+import { YoutubeIcon } from "../icons/YoutubeIcon"
 
 const SOCIAL_LINKS = [
   {
     name: "Instagram",
     href: "https://www.instagram.com/playa_cleaning/",
     icon: InstagramIcon,
+    hoverColor: "hover:text-[#E4405F]",
   },
   {
     name: "YouTube",
     href: "https://www.youtube.com/@PlayaCleaningUS",
     icon: YoutubeIcon,
+    hoverColor: "hover:text-[#FF0000]",
   },
   {
     name: "Facebook",
     href: "https://www.facebook.com/playacleaning",
     icon: FacebookIcon,
+    hoverColor: "hover:text-[#1877F2]",
   },
   {
     name: "TikTok",
     href: "https://www.tiktok.com/@playacleaning",
     icon: TikTokIcon,
+    hoverColor: "hover:text-[#000000]",
+  },
+  {
+    name: "Nextdoor",
+    href: "https://nextdoor.com/page/playa-cleaning-playa-vista-ca/", // Update with your actual link
+    icon: NextdoorIcon,
+    hoverColor: "hover:text-[#00B53F]",
   },
 ]
 
@@ -41,9 +54,10 @@ export const Footer = () => {
     <footer className="relative pt-16">
       <div className="absolute top-0 left-0 -z-10 h-full w-full bg-linear-180 from-top-blur/50 to-background"></div>
       <WaveDivider position="top" fill="var(--background)" />
+
       <div className="container mx-auto px-6 py-12 md:py-16">
         <div className="flex flex-col items-center space-y-10 text-center">
-          {/* Brand Identity: Palm Icon + Text */}
+          {/* Brand Identity */}
           <Link
             href="/"
             className="group flex items-center gap-3 transition-opacity hover:opacity-90"
@@ -65,13 +79,22 @@ export const Footer = () => {
               </a>
             </p>
             <nav className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm font-medium text-primary/80">
-              <Link href="/privacy-policy" className="transition-colors">
+              <Link
+                href="/privacy-policy"
+                className="transition-colors hover:text-primary-blue"
+              >
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="transition-colors">
+              <Link
+                href="/terms"
+                className="transition-colors hover:text-primary-blue"
+              >
                 Terms of Service
               </Link>
-              <Link href="#services" className="transition-colors">
+              <Link
+                href="#services"
+                className="transition-colors hover:text-primary-blue"
+              >
                 Our Process
               </Link>
             </nav>
@@ -79,24 +102,21 @@ export const Footer = () => {
 
           {/* Social Media Grid */}
           <div className="flex justify-center gap-6 md:gap-10">
-            {SOCIAL_LINKS.map((social) => (
-              <a
-                key={social.name}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="transition-all duration-300 hover:scale-110 hover:brightness-125"
-                aria-label={`Follow us on ${social.name}`}
-              >
-                <Image
-                  src={social.icon}
-                  height={32}
-                  width={32}
-                  alt={social.name}
-                  className="opacity-80 hover:opacity-100"
-                />
-              </a>
-            ))}
+            {SOCIAL_LINKS.map((social) => {
+              const IconComponent = social.icon
+              return (
+                <a
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`text-primary/60 transition-all duration-300 hover:scale-110 ${social.hoverColor}`}
+                  aria-label={`Follow us on ${social.name}`}
+                >
+                  <IconComponent className="h-8 w-8" />
+                </a>
+              )
+            })}
           </div>
 
           {/* Bottom Bar */}

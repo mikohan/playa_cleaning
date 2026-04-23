@@ -1,82 +1,165 @@
 "use client"
-import React from "react"
+import React, { useActionState, useEffect } from "react"
 import Image from "next/image"
-import { CalendarDays, Phone } from "lucide-react"
+import { CalendarDays, Phone, CheckCircle2, PartyPopper } from "lucide-react"
+import { toast, ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
-// Replace with your actual path
+// --- IMPORTS FROM YOUR FILES ---
+import { sendEmail, FormState } from "@/lib/resend"
 import AliciaPortrait from "@/public/images/cleaning/hero-4.png"
 import { WaveDivider } from "../common/WaveDivider"
+import { cn } from "@/lib/utils"
 
 export const CallToAction = () => {
+  const [state, action, isLoading] = useActionState<FormState, FormData>(
+    async (prevState: FormState, formData: FormData) => {
+      const result = await sendEmail(prevState, formData, "manager")
+      return result
+    },
+    { success: false }
+  )
+
+  useEffect(() => {
+    if (state.success) {
+      toast.success("Quote request sent! We'll reach out shortly.")
+    } else if (state.message && !state.success) {
+      toast.error(state.message)
+    }
+  }, [state])
+
+  // Updated with theme variables for border and focus
+  const selectClass = `
+    w-full appearance-none rounded-2xl border-none bg-card p-5 pr-10 text-sm ring-1 ring-border outline-none 
+    focus:ring-2 focus:ring-primary-blue transition-all cursor-pointer
+    bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22M19%209l-7%207-7-7%22%2F%3E%3C%2Fsvg%3E')]
+    bg-[length:1.25rem] bg-[position:right_1.25rem_center] bg-no-repeat
+  `
+
   return (
-    <section className="relative py-24 md:pt-60">
+    <section className="relative overflow-hidden py-24 md:pt-60">
+      {/* Background using your top-blur variable */}
       <div className="absolute top-0 left-0 -z-10 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
       <WaveDivider position="top" fill="var(--color-background)" />
+
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-5 lg:gap-16">
-          {/* Column 1: Alicia's Portrait */}
-          {/* Added h-[500px] for mobile visibility and z-10 */}
-          <div className="group relative z-10 aspect-auto h-125 overflow-hidden rounded-3xl bg-muted md:col-span-2 md:aspect-4/5 md:h-full">
+        <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-5 lg:gap-20">
+          <div className="group relative z-10 h-[500px] overflow-hidden rounded-[2.5rem] bg-muted md:col-span-2 md:h-[650px]">
             <Image
               src={AliciaPortrait}
-              alt="Alicia Vostrikova - Playa Cleaning"
+              alt="Olesya Vostrikova - Playa Cleaning"
               fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
+              className="object-cover transition-transform duration-1000 group-hover:scale-110"
               priority
             />
-            {/* Theme-compatible gradient overlay */}
-            <div className="absolute inset-0 bg-linear-to-t from-primary/20 to-transparent"></div>
+            <div className="absolute inset-0 bg-linear-to-t from-primary-blue/30 via-transparent to-transparent"></div>
           </div>
 
-          {/* Column 2: Content */}
-          <div className="space-y-8 md:col-span-3">
+          <div className="space-y-10 md:col-span-3">
             <div className="space-y-4">
-              <span className="font-blauerMedium text-sm font-bold tracking-widest text-primary uppercase">
-                Ready to Experience the Difference?
+              <span className="font-blauerMedium inline-flex items-center gap-2 text-sm font-bold tracking-widest text-primary-blue uppercase">
+                <CheckCircle2 size={16} /> Instant Price Estimate
               </span>
-              <h2 className="font-blauerMedium text-4xl leading-[1.1] font-bold tracking-tight text-foreground md:text-5xl">
-                Reclaim Your Time. <span className="text-primary"></span>{" "}
-                <br className="hidden md:block" />
-                Invest in Your Transformation.
+              <h2 className="font-blauerMedium text-4xl leading-[1.1] font-bold tracking-tight text-foreground md:text-6xl">
+                Ready to Reclaim <br /> Your{" "}
+                <span className="text-primary-blue underline decoration-primary-blue/20">
+                  Time?
+                </span>
               </h2>
-              <p className="font-blauerRegular max-w-2xl pt-2 text-lg text-muted-foreground">
-                Stop trading your weekends for chores and start waking up in a
-                home that fuels your energy. By offloading the environmental
-                mental load to an expert, you gain more than a pristine
-                space—you gain the clarity, focus, and freedom to dedicate
-                yourself to what truly matters.
-              </p>
             </div>
 
-            {/* Action Buttons */}
-            <div className="sm:row flex flex-col gap-4 pt-4">
-              {/* Primary CTA - Themed */}
-              <button className="inline-flex items-center justify-center rounded-3xl bg-primary-blue px-8 py-5 text-lg font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-transform hover:scale-[1.02] active:scale-[0.98]">
-                Book Online Now
-              </button>
+            {state.success ? (
+              <div className="max-w-xl animate-in rounded-[2rem] border-2 border-dashed border-primary-blue/20 bg-primary-blue/5 p-10 text-center duration-500 fade-in zoom-in">
+                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent-green text-primary-foreground shadow-lg shadow-accent-green/20">
+                  <PartyPopper size={32} />
+                </div>
+                <h3 className="text-2xl font-bold text-foreground">
+                  Request Received!
+                </h3>
+                <p className="mt-2 text-muted-foreground">
+                  Thanks, we have got it! <br />
+                  We will text or call you shortly with your custom quote.
+                </p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="mt-6 text-sm font-bold text-primary-blue underline transition-colors hover:text-primary"
+                >
+                  Send another request
+                </button>
+              </div>
+            ) : (
+              <form
+                action={action}
+                className="relative z-20 max-w-xl space-y-4 rounded-[2rem] border border-border bg-card p-2 shadow-sm sm:p-4"
+              >
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <input
+                    required
+                    name="username"
+                    placeholder="Full Name"
+                    className="w-full rounded-2xl border-none bg-background p-5 text-base text-foreground shadow-sm ring-1 ring-border transition-all outline-none focus:ring-2 focus:ring-primary-blue"
+                  />
+                  <input
+                    required
+                    name="phone"
+                    type="tel"
+                    placeholder="Phone Number"
+                    className="w-full rounded-2xl border-none bg-background p-5 text-base text-foreground shadow-sm ring-1 ring-border transition-all outline-none focus:ring-2 focus:ring-primary-blue"
+                  />
+                </div>
 
-              {/* Secondary CTA - Phone - Fixed Closing Tags */}
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                  <select name="bedrooms" className={selectClass}>
+                    <option value="1">1 Bed</option>
+                    <option value="2">2 Bed</option>
+                    <option value="3">3 Bed</option>
+                    <option value="4+">4+ Bed</option>
+                  </select>
+                  <select name="bathrooms" className={selectClass}>
+                    <option value="1">1 Bath</option>
+                    <option value="2">2 Bath</option>
+                    <option value="3+">3+ Bath</option>
+                  </select>
+                  <select
+                    name="serviceType"
+                    className={cn(
+                      selectClass,
+                      "col-span-2 font-bold text-primary-blue sm:col-span-1"
+                    )}
+                  >
+                    <option value="deep">Deep Clean</option>
+                    <option value="standard">Standard</option>
+                    <option value="move">Move In/Out</option>
+                  </select>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="group relative w-full overflow-hidden rounded-2xl bg-primary-blue py-6 text-xl font-black tracking-tighter text-white uppercase shadow-2xl shadow-primary-blue/20 transition-all hover:bg-primary active:scale-[0.98] disabled:bg-muted disabled:text-muted-foreground"
+                >
+                  <span className="relative z-10">
+                    {isLoading ? "Sending..." : "Get My Price Estimate"}
+                  </span>
+                </button>
+              </form>
+            )}
+
+            <div className="flex flex-wrap items-center gap-6 pt-4">
               <a
                 href="tel:2135987763"
-                className="inline-flex items-center justify-center gap-3 rounded-3xl border border-border bg-background px-8 py-5 text-lg font-medium text-foreground transition hover:bg-accent hover:text-accent-foreground"
+                className="flex items-center gap-2 text-lg font-bold text-foreground transition-colors hover:text-primary-blue"
               >
-                <Phone className="h-5 w-5 text-primary" />
+                <div className="rounded-full bg-muted p-3">
+                  <Phone size={20} className="text-primary-blue" />
+                </div>
                 (213) 598-77-63
               </a>
-            </div>
-
-            {/* Micro-Benefit Bar */}
-            <div className="font-blauerRegular flex items-center gap-3 border-t border-border pt-6 text-sm text-muted-foreground">
-              <div className="rounded-xl bg-primary/10 p-2.5">
-                <CalendarDays className="h-5 w-5 text-primary" />
-              </div>
-              <span>
-                No long-term contracts. Consistent personalized service.
-              </span>
             </div>
           </div>
         </div>
       </div>
+      <ToastContainer />
     </section>
   )
 }

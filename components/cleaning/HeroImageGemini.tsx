@@ -77,7 +77,7 @@ export function HeroImageGemini() {
           </div>
         </div>
       </div>
-      <WaveDividerBottom fill="white" />
+      <WaveDividerBottom fill="var(--color-background)" />
     </section>
   )
 }

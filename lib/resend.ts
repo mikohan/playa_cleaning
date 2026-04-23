@@ -1,65 +1,90 @@
-"use server";
-import ManagerTable from "./../emails/ManagerTable";
-import { Resend } from "resend";
-import Manager from "@/emails/Manager";
-import Welcome from "@/emails/Welcome";
+"use server"
+import ManagerTable from "./../emails/Manager"
+import { Resend } from "resend"
+import Welcome from "@/emails/Welcome"
 
-const companyWebsite = process.env.NEXT_PUBLIC_COMPANY_WEBSITE;
-console.log(companyWebsite);
+const companyWebsite = process.env.NEXT_PUBLIC_COMPANY_WEBSITE || ""
 
 export type FormState = {
-  success?: boolean;
-  error?: string;
-  message?: string;
-};
+  success?: boolean
+  error?: string
+  message?: string
+}
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 export const sendEmail = async (
   prevState: FormState,
   formData: FormData,
   toWhom: "manager" | "customer" = "manager"
 ) => {
-  await new Promise((resolve) => {
-    setTimeout(resolve, 500);
-  });
+  // 1. Safe Data Extraction with Fallbacks
+  const username = (formData.get("username") as string) || "New Client"
+  const phone = (formData.get("phone") as string) || "No Phone Provided"
+  const customerEmail = (formData.get("email") as string) || ""
 
-  let email = process.env.COMPANY_EMAIL || "angaralabllc@gmail.com";
-  if (toWhom === "customer") {
-    email = formData.get("email") as string;
+  const bedrooms = (formData.get("bedrooms") as string) || "N/A"
+  const bathrooms = (formData.get("bathrooms") as string) || "N/A"
+  const serviceType = (formData.get("serviceType") as string) || "Standard"
+
+  // 2. Critical Check: Prevent crash if customer email is missing
+  if (toWhom === "customer" && !customerEmail) {
+    return { success: false, message: "No customer email provided." }
   }
-  const username = formData.get("username") as string;
-  const phone = formData.get("phone") as string;
-  const couch = formData.get("couch") as string;
-  // const fromEmail = "Acme <onboarding@resend.dev>"
-  const fromEmail = "Angara Steamers <info@angaracleaning.com>";
-  const nowDate = new Date();
-  const orderTime = nowDate.toLocaleString();
+
+  const managerEmail = process.env.COMPANY_EMAIL || "angaralabllc@gmail.com"
+  const targetEmail = toWhom === "customer" ? customerEmail : managerEmail
+  const price = (formData.get("price") as string) || "0"
+
+  // Ensure your domain is verified in Resend for this email
+  // const fromEmail = "Playa Cleaning <info@playacleaning.com>";
+  const fromEmail = "Playa Cleaning <info@angaracleaning.com>"
+
+  const orderTime = new Date().toLocaleString("en-US", {
+    timeZone: "America/Los_Angeles",
+  })
 
   try {
+    // 3. Execution without the artificial delay to prevent 408 timeouts
     const { data, error } = await resend.emails.send({
       from: fromEmail,
-      to: [email],
+      to: [targetEmail],
       subject:
         toWhom === "manager"
-          ? "Angara Steamers New Lead"
-          : "Angara Steamers Email Confirmation",
+          ? `NEW LEAD: $${price} ${bedrooms}BR/${bathrooms}BA - ${username}`
+          : "We received your cleaning quote request!",
       react:
         toWhom === "manager"
-          ? ManagerTable({ username, phone, email, couch, orderTime })
+          ? ManagerTable({
+              username,
+              phone,
+              email: customerEmail,
+              bedrooms,
+              bathrooms,
+              serviceType,
+              orderTime,
+              price,
+            })
           : Welcome({ username, companyWebsite }),
-    });
+    })
+
     if (error) {
-      console.error(error);
-      return { success: false, message: error.message };
+      console.error("Resend API Error:", error)
+      return { success: false, message: error.message }
     }
-    // console.log(data);
-    return { success: true, message: "Email sent successfully!" };
-  } catch (error) {
-    console.error(error);
+
+    return { success: true, message: "Email sent successfully!" }
+  } catch (err: unknown) {
+    console.error("Server Action Exception:", err)
+
+    const errorMessage =
+      err instanceof Error
+        ? err.message
+        : "An unexpected error occurred. Please try again!"
+
     return {
       success: false,
-      message: "An unexpected error occured!. Please try again!",
-    };
+      message: errorMessage,
+    }
   }
-};
+}

@@ -149,7 +149,7 @@ export function CleaningCalculatorAdons() {
         </div>
       </div>
 
-      <div className="container mx-auto mt-16 max-w-7xl px-6">
+      <div className="container mx-auto mt-16 max-w-7xl rounded-2xl bg-primary-blue/10 p-16">
         <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12">
           {/* INPUTS COLUMN */}
           <div className="space-y-10 lg:col-span-7">
@@ -409,7 +409,7 @@ export function CleaningCalculatorAdons() {
                   ))}
                 </ul>
               </div>
-              <div className="border-t border-border pt-8">
+              <div className="border-t border-border px-2 pt-8 md:px-10">
                 <div className="px-10">
                   <div className="font-blauerRegular mb-6 flex items-center gap-3 text-xs text-muted-foreground">
                     <Zap
@@ -428,8 +428,8 @@ export function CleaningCalculatorAdons() {
                   Secure This Investment <ArrowRight size={22} />
                 </button>
               </div>
-              <div className="flex items-center justify-center gap-2 pb-10 text-[10px] font-bold tracking-[0.2em] text-muted-foreground uppercase">
-                <Info size={12} /> Satisfaction Guaranteed
+              <div className="flex items-center justify-center gap-2 pb-10 text-xs font-bold tracking-[0.2em] text-muted-foreground uppercase">
+                <Info size={16} /> Quality Guaranteed
               </div>
             </div>
           </div>

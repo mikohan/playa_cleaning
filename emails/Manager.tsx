@@ -1,91 +1,165 @@
 import {
-  Html,
-  Head,
   Body,
-  Preview,
   Container,
-  Heading,
+  Head,
+  Html,
+  Preview,
   Section,
-  Row,
-  Column,
   Text,
-  Tailwind,
-} from "@react-email/components";
+  Link,
+  Hr,
+} from "@react-email/components"
+
 interface Props {
-  username?: string;
-  email?: string;
-  phone?: string;
-  couch?: string;
+  username: string
+  email: string
+  phone: string
+  bedrooms: string
+  bathrooms: string
+  serviceType: string
+  orderTime: string
+  price: string
 }
-export default function Manager({ username, email, phone, couch }: Props) {
+
+/**
+ * STRATEGY FOR PRIMARY TAB:
+ * 1. Minimalist layout (no heavy tables or buttons).
+ * 2. High text-to-HTML ratio.
+ * 3. Use standard system fonts.
+ * 4. No external images or tracking pixels (Disable tracking in Resend).
+ */
+export default function ManagerTable({
+  username,
+  email,
+  phone,
+  bedrooms,
+  bathrooms,
+  serviceType,
+  orderTime,
+  price,
+}: Props) {
+  const previewText = `Quote Request: ${username} (${bedrooms}BR/${bathrooms}BA)`
+
   return (
-    <Tailwind>
-      <Html>
-        <Head />
-        <Body>
-          <Preview>Customer information</Preview>
-          <Container className="mx-auto max-w-[600px] rounded-2 bg-white p-12">
-            <Heading className="mb-[42px] text-center text-[24px] leading-16">
-              Top 5 Features of Our Service
-            </Heading>
-            {[
-              {
-                number: 1,
-                name: "Customer Name",
-                title: username,
-              },
-              {
-                number: 2,
-                name: "Customer phone",
-                title: phone,
-              },
-              {
-                number: 3,
-                name: "Customer email",
-                title: email,
-              },
-              {
-                number: 4,
-                name: "Customer couch",
-                title: couch,
-              },
-            ].map((feature, i) => (
-              <Section key={i} className="mb-17">
-                <Row className="pr-16 pl-3">
-                  <Column
-                    width="24"
-                    height="24"
-                    align="center"
-                    valign="top"
-                    className="pr-[18px] h-12 w-12"
-                  >
-                    <Row>
-                      <Column
-                        align="center"
-                        valign="middle"
-                        width="24"
-                        height="24"
-                        className="h-12 w-12 rounded-full bg-indigo-600 font-semibold text-white text-[12px] leading-none"
-                      >
-                        {feature.number}
-                      </Column>
-                    </Row>
-                  </Column>
-                  <Column valign="top">
-                    <Text>{feature.name}</Text>
-                    <Heading
-                      as="h2"
-                      className="mt-0 mb-2 text-gray-900 text-[18px] leading-13"
-                    >
-                      {feature.title}
-                    </Heading>
-                  </Column>
-                </Row>
-              </Section>
-            ))}
-          </Container>
-        </Body>
-      </Html>
-    </Tailwind>
-  );
+    <Html>
+      <Head />
+      <Preview>{previewText}</Preview>
+      <Body style={main}>
+        <Container style={container}>
+          {/* Subtle Branding */}
+          <Text style={brand}>PLAYA CLEANING / INTERNAL</Text>
+
+          <Text style={greeting}>
+            New request received for a{" "}
+            <span style={highlight}>{serviceType}</span> cleaning.
+          </Text>
+
+          {/* Clean Data List - Avoids "Promotional" Table look */}
+          <Section style={dataSection}>
+            <Text style={item}>
+              <span style={label}>Client:</span> {username}
+            </Text>
+            <Text style={item}>
+              <span style={label}>Price:</span>
+              <b>${price}</b>
+            </Text>
+            <Text style={item}>
+              <span style={label}>Phone:</span>{" "}
+              <Link href={`tel:${phone}`} style={link}>
+                {phone}
+              </Link>
+            </Text>
+            <Text style={item}>
+              <span style={label}>Email:</span> {email}
+            </Text>
+            <Text style={item}>
+              <span style={label}>Property:</span> {bedrooms} Bed / {bathrooms}{" "}
+              Bath
+            </Text>
+          </Section>
+
+          <Text style={paragraph}>
+            Contact this lead immediately to finalize the booking.
+          </Text>
+
+          <Hr style={hr} />
+
+          <Text style={footer}>Logged at {orderTime} • LA Operations</Text>
+        </Container>
+      </Body>
+    </Html>
+  )
+}
+
+const main = {
+  backgroundColor: "#ffffff",
+  fontFamily:
+    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Ubuntu,sans-serif',
+}
+
+const container = {
+  margin: "40px auto",
+  padding: "0 20px",
+  maxWidth: "580px",
+}
+
+const brand = {
+  fontSize: "12px",
+  fontWeight: "700",
+  letterSpacing: "1px",
+  color: "#3b82f6", // Subtle blue accent
+  marginBottom: "16px",
+}
+
+const greeting = {
+  fontSize: "18px",
+  lineHeight: "1.4",
+  color: "#111827",
+  fontWeight: "500",
+}
+
+const highlight = {
+  color: "#3b82f6",
+  fontWeight: "700",
+}
+
+const dataSection = {
+  margin: "24px 0",
+  padding: "20px",
+  backgroundColor: "#f9fafb",
+  borderRadius: "8px",
+  border: "1px solid #f3f4f6",
+}
+
+const item = {
+  fontSize: "15px",
+  margin: "8px 0",
+  color: "#374151",
+}
+
+const label = {
+  fontWeight: "700",
+  color: "#6b7280",
+  width: "100px",
+  display: "inline-block",
+}
+
+const link = {
+  color: "#3b82f6",
+  textDecoration: "underline",
+}
+
+const paragraph = {
+  fontSize: "14px",
+  color: "#6b7280",
+}
+
+const hr = {
+  borderColor: "#f3f4f6",
+  margin: "30px 0",
+}
+
+const footer = {
+  fontSize: "12px",
+  color: "#9ca3af",
 }

@@ -1,11 +1,11 @@
 "use client"
 import { useState, useEffect, useRef, useActionState } from "react"
-import Link from "next/link"
 import { FormState, sendEmail } from "@/lib/resend"
 import { AnimatedButton } from "../SmallComponents/AnimatedButton"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { ButtonShiny } from "../SmallComponents/ButtonShiny"
+import { X } from "lucide-react"
 
 export const CleaningModal = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -15,15 +15,14 @@ export const CleaningModal = () => {
   const handleClose = () => setIsOpen(false)
 
   const notify = () =>
-    toast.success("Reservation sent! We'll contact you shortly.", {
+    toast.success("Request sent! We'll text/call you with a price shortly.", {
       position: "top-center",
-      autoClose: 5000,
+      autoClose: 4000,
       hideProgressBar: true,
     })
 
   const [state, action, isLoading] = useActionState<FormState, FormData>(
     async (prevState: FormState, formData: FormData) => {
-      // Sending to manager and customer
       const result = await sendEmail(prevState, formData, "manager")
       await sendEmail(prevState, formData, "customer")
 
@@ -39,30 +38,22 @@ export const CleaningModal = () => {
   useEffect(() => {
     const dialog = modalRef.current
     if (!dialog) return
-
     if (isOpen) {
       dialog.showModal()
-      document.body.style.overflow = "hidden" // Lock scroll
+      document.body.style.overflow = "hidden"
     } else {
       dialog.close()
-      document.body.style.overflow = "unset" // Unlock scroll
+      document.body.style.overflow = "unset"
     }
   }, [isOpen])
 
-  // Handle click on the backdrop to close
-  const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
-    if (e.target === modalRef.current) {
-      handleClose()
-    }
-  }
-
   return (
     <>
-      {/* TRIGGER: Div wrapper avoids hydration error with AnimatedButton/ButtonShiny */}
+      {/* TRIGGER */}
       <div onClick={handleOpen} className="group inline-block cursor-pointer">
         <AnimatedButton>
           <ButtonShiny
-            text="Schedule Cleaning Now"
+            text="Get My Price"
             size="lg"
             bgColor="var(--color-primary-blue)"
           />
@@ -71,103 +62,120 @@ export const CleaningModal = () => {
 
       <dialog
         ref={modalRef}
-        onClick={handleBackdropClick}
-        className="outline-none"
+        onClick={(e) => e.target === modalRef.current && handleClose()}
+        className="outline-none backdrop:bg-slate-900/60 backdrop:backdrop-blur-sm"
       >
-        {/* MODAL CONTENT CARD */}
         <div
-          className="w-[90%] max-w-md transform animate-in rounded-3xl bg-white p-8 shadow-2xl transition-all duration-300 fade-in zoom-in"
-          onClick={(e) => e.stopPropagation()} // Prevents clicks inside form from closing modal
+          className="relative w-[95%] max-w-md transform animate-in rounded-[2.5rem] bg-white p-8 shadow-2xl transition-all duration-300 fade-in zoom-in md:p-12"
+          onClick={(e) => e.stopPropagation()}
         >
-          <h2 className="font-blauerMedium mb-6 text-center text-2xl font-bold tracking-tight text-slate-900">
-            Steam Cleaning Reservation
-          </h2>
+          {/* Close Button */}
+          <button
+            onClick={handleClose}
+            className="absolute top-6 right-6 text-slate-300 transition-colors hover:text-slate-600"
+          >
+            <X size={24} />
+          </button>
+
+          <div className="mb-8 text-center">
+            <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase italic">
+              Playa<span className="text-primary-blue">Cleaning</span>
+            </h2>
+            <p className="mt-2 text-xs font-semibold tracking-widest text-slate-500 uppercase">
+              Fast Quote • Los Angeles, CA
+            </p>
+          </div>
 
           <form action={action} className="space-y-4">
-            <div className="space-y-1">
-              <label className="text-sm font-semibold text-slate-700">
-                Full Name *
-              </label>
+            {/* Essential Contact info only */}
+            <div className="grid grid-cols-1 gap-3">
               <input
                 required
                 name="username"
                 type="text"
-                placeholder="John Doe"
-                className="w-full rounded-xl border border-slate-200 px-4 py-3 transition outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                placeholder="Your Name"
+                className="input-style"
               />
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-sm font-semibold text-slate-700">
-                Email *
-              </label>
-              <input
-                required
-                name="email"
-                type="email"
-                placeholder="vlad@example.com"
-                className="w-full rounded-xl border border-slate-200 px-4 py-3 transition outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
-              />
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-sm font-semibold text-slate-700">
-                Phone Number *
-              </label>
               <input
                 required
                 name="phone"
                 type="tel"
-                placeholder="+1 (310) 000-0000"
-                className="w-full rounded-xl border border-slate-200 px-4 py-3 transition outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
+                placeholder="Phone Number (for quote)"
+                className="input-style"
               />
             </div>
 
-            <div className="space-y-1">
-              <label className="text-sm font-semibold text-slate-700">
-                What needs cleaning?
-              </label>
-              <input
-                name="couch"
-                type="text"
-                placeholder="e.g. 3-seater couch and 8x10 rug"
-                className="w-full rounded-xl border border-slate-200 px-4 py-3 transition outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10"
-              />
+            {/* Quick Selectors - No typing needed */}
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <select
+                  name="bedrooms"
+                  className="input-style appearance-none bg-white"
+                >
+                  <option value="1">1 Bedroom</option>
+                  <option value="2">2 Bedrooms</option>
+                  <option value="3">3 Bedrooms</option>
+                  <option value="4+">4+ Bedrooms</option>
+                </select>
+                <select
+                  name="bathrooms"
+                  className="input-style appearance-none bg-white"
+                >
+                  <option value="1">1 Bath</option>
+                  <option value="2">2 Baths</option>
+                  <option value="3+">3+ Baths</option>
+                </select>
+              </div>
+
+              <select
+                name="serviceType"
+                className="input-style appearance-none bg-white font-bold text-primary-blue"
+              >
+                <option value="deep">Deep Cleaning (Recommended)</option>
+                <option value="standard">Standard Maintenance</option>
+                <option value="move">Move In / Move Out</option>
+              </select>
             </div>
 
-            <div className="flex flex-col gap-3 pt-6">
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full rounded-xl bg-primary-blue py-4 font-bold text-white transition hover:bg-blue-700 disabled:bg-blue-400"
-              >
-                {isLoading ? "Sending..." : "Confirm Reservation"}
-              </button>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full rounded-2xl bg-primary-blue py-5 text-xl font-black tracking-tight text-white uppercase shadow-xl shadow-blue-500/30 transition-all hover:bg-blue-700 active:scale-95 disabled:bg-blue-300"
+            >
+              {isLoading ? "Sending..." : "Get My Price"}
+            </button>
 
-              <button
-                type="button"
-                onClick={handleClose}
-                className="w-full py-2 text-sm font-medium text-slate-500 hover:text-slate-800"
-              >
-                Cancel
-              </button>
-            </div>
-
-            <p className="text-center text-[12px] text-slate-400">
-              By clicking confirm, you agree to our{" "}
-              <Link
-                href="/privacy-policy"
-                className="underline hover:text-slate-600"
-              >
-                Privacy Policy
-              </Link>
-              .
+            <p className="px-4 text-center text-[10px] font-medium text-slate-400">
+              By requesting a quote, you agree to be contacted via call/text
+              regarding your request.
             </p>
           </form>
         </div>
       </dialog>
 
-      <ToastContainer position="top-center" autoClose={5000} hideProgressBar />
+      <ToastContainer />
+
+      <style jsx>{`
+        .input-style {
+          width: 100%;
+          border-radius: 16px;
+          border: 2px solid #f1f5f9;
+          background-color: #f8fafc;
+          padding: 16px 20px;
+          font-size: 16px;
+          font-weight: 500;
+          transition: all 0.2s ease;
+          outline: none;
+        }
+        .input-style:focus {
+          border-color: var(--color-primary-blue);
+          background-color: #fff;
+          box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
+        }
+        .input-style::placeholder {
+          color: #94a3b8;
+        }
+      `}</style>
     </>
   )
 }
