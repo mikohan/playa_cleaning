@@ -31,7 +31,7 @@ export function HeroImageGemini() {
                 Residential{" "}
                 <RoughNotation
                   type="circle"
-                  color="var(--color-primary-blue)"
+                  color="var(--color-accent-yellow)"
                   padding={6}
                   strokeWidth={3}
                 >

@@ -45,8 +45,9 @@ export function BenefitsSection() {
   return (
     <section className="relative py-24 md:pt-60">
       <div className="absolute top-0 left-0 -z-10 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
+
       <WaveDivider position="top" fill="var(--color-background)" />
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto max-w-7xl px-6">
         {/* Header Section */}
         <div className="flex w-full flex-col items-center text-center">
           <div className="mb-16 max-w-3xl">
