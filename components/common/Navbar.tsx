@@ -6,6 +6,7 @@ import { AnimatedButton } from "../SmallComponents/AnimatedButton"
 import { ButtonShiny } from "../SmallComponents/ButtonShiny"
 import { cn } from "@/lib/utils"
 import { useTheme } from "next-themes"
+import React, { useSyncExternalStore } from "react"
 
 import {
   NavigationMenu,
@@ -21,6 +22,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { ThemeToggle } from "./ThemeToggle"
+import { useEffect, useState } from "react"
 
 const navItems = [
   { title: "Home", href: "/" },
@@ -33,6 +35,18 @@ export function Navbar() {
   const { theme, setTheme } = useTheme()
   const handleToggle = () => {
     setTheme(theme === "dark" ? "light" : "dark")
+  }
+  // Helper function to detect if we are in the browser
+  function subscribe() {
+    return () => {} // No-op
+  }
+
+  function getSnapshot() {
+    return true // We are on the client
+  }
+
+  function getServerSnapshot() {
+    return false // We are on the server
   }
   return (
     <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
