@@ -7,7 +7,6 @@ import { Footer } from "@/components/common/Footer"
 import { FAQSection } from "@/components/cleaning/FAQSection"
 import { BenefitsSection } from "@/components/cleaning/BenefitsSection"
 import { CallToAction } from "@/components/cleaning/CallToAction"
-import { CleaningCalculatorAdons } from "@/components/cleaning/CleaningCalculatorAdons"
 import { ServiceComparison } from "@/components/cleaning/ServiceComparison"
 import { CleaningCalculator } from "@/components/cleaning/CleaningCalculator"
 
@@ -18,9 +17,8 @@ export default function Page() {
       <HeroImageGemini />
       <LogoTicker />
       <CallToAction />
-      <CleaningCalculator />
       <WhyMe />
-      <CleaningCalculatorAdons />
+      <CleaningCalculator />
       <div className="hidden md:block">
         <ServiceComparison />
       </div>

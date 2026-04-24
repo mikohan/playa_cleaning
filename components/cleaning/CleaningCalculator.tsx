@@ -384,7 +384,7 @@ export function CleaningCalculator() {
                         {item.label}
                       </span>
                       <span className="text-[10px] font-bold opacity-80">
-                        {included ? "FREE" : `+$${item.price}`}
+                        {included ? "INCUDED" : `+$${item.price}`}
                       </span>
                     </button>
                   )

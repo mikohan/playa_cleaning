@@ -25,7 +25,7 @@ import { ThemeToggle } from "./ThemeToggle"
 const navItems = [
   { title: "Home", href: "/" },
   { title: "Home Cleaning", href: "/home-cleaning-near-me" },
-  { title: "Portfolio", href: "/portfolio" },
+  { title: "Qlean", href: "/cleaning-service" },
   { title: "Contact", href: "/contact" },
 ]
 
