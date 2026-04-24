@@ -1,6 +1,7 @@
 import { blauerNue } from "@/app/fonts"
 import ReactLenis from "lenis/react"
 import "lenis/dist/lenis.css"
+import { GoogleTagManager } from "@next/third-parties/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -21,6 +22,8 @@ const inter = Inter({
   display: "swap",
 })
 
+const gtmId = process.env.NEXT_PUBLIC_TAG_MANAGER_ID || "GTM-PQNQ5K5R"
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -38,6 +41,7 @@ export default function RootLayout({
         "font-sans"
       )}
     >
+      <GoogleTagManager gtmId={gtmId} />
       <ReactLenis root>
         <body>
           <ThemeProvider>{children}</ThemeProvider>
