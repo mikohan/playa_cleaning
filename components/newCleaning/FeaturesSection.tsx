@@ -64,13 +64,13 @@ const features: Feature[] = [
 
 export const FeaturesSection = () => {
   return (
-    <section className="relative py-24">
+    <section className="relative py-16">
       <div className="absolute top-0 left-0 -z-10 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
       <WaveDivider position="top" fill="var(--color-background)" />
       <div className="container mx-auto max-w-7xl px-6">
         {/* SECTION HEADER */}
         <div className="mb-16 max-w-2xl">
-          <h2 className="text-3xl font-black tracking-tighter text-foreground uppercase md:text-5xl">
+          <h2 className="text-3xl font-black tracking-tighter text-foreground uppercase [word-spacing:0.75rem] md:text-5xl">
             The Service Standard.
           </h2>
           <div className="mt-4 h-1.5 w-24 bg-primary-blue" />

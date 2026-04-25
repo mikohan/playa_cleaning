@@ -3,14 +3,27 @@ import Image from "next/image"
 import { Check, Sparkles, ShieldCheck, Zap } from "lucide-react"
 import AliciaPortrait from "@/public/images/cleaning/hero-4.webp"
 import { BookingCalculator } from "./BookingCalculator"
+import { BookingCalculatorCarpet } from "./BookingCalculatorCarpet"
+import CarpetHero from "@/public/images/cleaning/capret-1.png"
 
-type Props = {
-  city?: string
+interface HeroProps {
+  city: string
+  serviceName?: string // Adding ? makes it optional so you don't break other pages
+  slug?: string
 }
 
-export const HeroSection = ({ city }: Props) => {
+export const HeroSection = ({ city, serviceName, slug }: HeroProps) => {
+  const headline = serviceName
+    ? `${serviceName} in ${city}`
+    : `Professional Cleaning in ${city}`
+  let carpet = false
+  let src = AliciaPortrait
+  if (slug) {
+    carpet = slug.includes("upholstery") || slug.includes("carpet")
+    src = CarpetHero
+  }
   return (
-    <section className="relative flex min-h-screen items-center bg-background py-16 md:py-32">
+    <section className="relative flex items-center bg-background py-16 md:pb-32">
       <div className="container mx-auto grid grid-cols-1 items-center gap-12 px-6 lg:grid-cols-12">
         {/* LEFT CONTENT */}
         <div className="space-y-8 lg:col-span-7">
@@ -19,11 +32,7 @@ export const HeroSection = ({ city }: Props) => {
           </div>
 
           <h1 className="text-4xl leading-tight font-black tracking-tight text-foreground md:text-6xl">
-            Regular <br />
-            <span className="text-primary-blue">
-              Flat-Rate Clean
-              {city ? ` in ${city}` : ""}
-            </span>
+            {headline}
           </h1>
 
           <p className="max-w-xl text-xl font-semibold text-muted-foreground">
@@ -32,7 +41,7 @@ export const HeroSection = ({ city }: Props) => {
           </p>
 
           {/* REUSABLE CALCULATOR */}
-          <BookingCalculator />
+          {carpet ? <BookingCalculatorCarpet /> : <BookingCalculator />}
 
           <div className="flex flex-wrap gap-6 pt-4">
             <div className="flex items-center gap-2 text-sm font-bold text-muted-foreground">
@@ -50,7 +59,7 @@ export const HeroSection = ({ city }: Props) => {
         <div className="relative lg:col-span-5">
           <div className="relative aspect-square overflow-hidden rounded-3xl border-8 border-card bg-muted shadow-2xl">
             <Image
-              src={AliciaPortrait}
+              src={src}
               alt={`Professional cleaning service in ${city || "Los Angeles"}`}
               fill
               priority

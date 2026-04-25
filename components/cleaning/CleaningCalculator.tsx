@@ -66,10 +66,14 @@ const PRICING: PricingConfig = {
     blinds: { label: "Hand-Wipe Blinds", price: 12, icon: Eye },
   },
 }
-
+type CleaningCalculatorProps = {
+  showHeader?: boolean
+}
 type AddonKey = keyof typeof PRICING.addons
 
-export function CleaningCalculator() {
+export function CleaningCalculator({
+  showHeader = true,
+}: CleaningCalculatorProps) {
   const router = useRouter()
 
   // --- STATE ---
@@ -150,25 +154,27 @@ export function CleaningCalculator() {
   }
 
   return (
-    <section className="relative py-24 md:pt-46">
+    <section className="relative py-4 md:pb-32">
       <div className="absolute top-0 left-0 -z-10 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
       <WaveDivider position="top" fill="var(--color-background)" />
 
-      <div className="container mx-auto hidden max-w-7xl px-6 md:block">
-        <div className="flex w-full flex-col items-center text-center">
-          <div className="mb-16 max-w-3xl">
-            <h2 className="text-center text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-              Get Instant Estimate
-              <span className="text-primary-blue"> Right Now</span>
-            </h2>
-            <p className="font-blauerRegular mt-6 text-lg text-muted-foreground">
-              Experience a specialized level of care that goes beyond
-              surface-level wiping. I focus on health, consistency, and the
-              details that others skip.
-            </p>
+      {showHeader && (
+        <div className="container mx-auto mt-32 hidden max-w-7xl px-6 md:block">
+          <div className="flex w-full flex-col items-center text-center">
+            <div className="mb-16 max-w-3xl">
+              <h2 className="text-center text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+                Get Instant Estimate
+                <span className="text-primary-blue"> Right Now</span>
+              </h2>
+              <p className="font-blauerRegular mt-6 text-lg text-muted-foreground">
+                Experience a specialized level of care that goes beyond
+                surface-level wiping. I focus on health, consistency, and the
+                details that others skip.
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       <div className="container mx-auto mt-16 max-w-7xl rounded-2xl bg-primary-blue/10 p-16">
         <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12">

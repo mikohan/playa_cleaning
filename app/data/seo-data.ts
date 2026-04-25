@@ -3,6 +3,8 @@ export const servicePages = [
     slug: "move-out-cleaning",
     page: "Move In / Move Out Cleaning",
     intent: "Critical/Transactional",
+    bodyText:
+      "Moving in Los Angeles is a major undertaking. Whether you’re settling into a new bungalow in Venice or handing back the keys to an apartment in Santa Monica, our move-out cleaning specialists ensure the transition is seamless. We focus on the deep-scrub details that property managers look for—inside cabinets, baseboards, and appliances—to help you secure your full security deposit. Start your next chapter in a pristine home without the heavy lifting.",
     target_keywords: [
       "move out cleaning",
       "apartment move out cleaning",
@@ -37,6 +39,8 @@ export const servicePages = [
     slug: "deep-cleaning",
     page: "Deep Cleaning Services",
     intent: "High/Transactional",
+    bodyText:
+      'Sometimes a standard tidy isn’t enough. Our Los Angeles deep cleaning service is a floor-to-ceiling restoration of your living space. We target the areas that daily cleaning misses: built-up grime behind kitchen appliances, dust on ceiling fans, and sanitized surfaces throughout your home. Perfect for seasonal "spring cleaning" or simply hitting the reset button on your environment, we bring a level of detail that makes your home feel brand new again.',
     target_keywords: [
       "deep cleaning services near me",
       "professional deep cleaning",
@@ -67,6 +71,8 @@ export const servicePages = [
     slug: "house-cleaning",
     page: "Maid & House Cleaning Service",
     intent: "High/Recurring",
+    bodyText:
+      "Maintaining a clean home shouldn't be a second job. Our recurring maid services in LA are designed to fit your busy lifestyle, providing reliable weekly, bi-weekly, or monthly visits. Each of our professional housekeepers is vetted and trained to deliver a consistent, high-quality clean every time. From making the beds to sanitizing the bathrooms, we handle the chores so you can spend your weekends enjoying the California sun instead of scrubbing floors.",
     target_keywords: [
       "house cleaning",
       "maid service near me",
@@ -96,6 +102,8 @@ export const servicePages = [
     slug: "upholstery-cleaning",
     page: "Upholstery & Sofa Cleaning",
     intent: "High/Specialty",
+    bodyText:
+      "Your furniture is one of your home's biggest investments. Over time, sofas and armchairs trap Los Angeles dust, pet dander, and oils. As Playa Cleaning, we specialize in professional upholstery steam cleaning that penetrates deep into fabrics to lift stains and neutralize odors. Using safe, high-grade solutions for everything from linen to microfiber, we revive the color and comfort of your favorite furniture while extending its lifespan.",
     target_keywords: [
       "upholstery cleaning near me",
       "sofa cleaning service",
@@ -120,7 +128,7 @@ export const servicePages = [
       name: "Upholstery Cleaning",
       provider: {
         "@type": "LocalBusiness",
-        name: "Angara Streamers",
+        name: "Playa Cleaning",
       },
       areaServed: "Los Angeles",
     },
@@ -129,6 +137,8 @@ export const servicePages = [
     slug: "carpet-cleaning",
     page: "Carpet Steam Cleaning",
     intent: "High/Transactional",
+    bodyText:
+      "High-traffic areas in LA homes often hide deep-seated dirt and allergens that standard vacuums can’t reach. Our carpet steam cleaning process uses hot water extraction to sanitize fibers and remove stubborn stains. Whether you’re dealing with pet accidents, wine spills, or just general wear, our deep-cleaning technology leaves your carpets refreshed, fast-drying, and significantly softer underfoot.",
     target_keywords: [
       "carpet cleaning near me",
       "carpet steam cleaning",
@@ -157,6 +167,8 @@ export const servicePages = [
     slug: "office-cleaning",
     page: "Commercial & Office Cleaning",
     intent: "High/B2B",
+    bodyText:
+      "A pristine workspace is essential for your team's productivity and your clients' first impressions. We provide customized commercial cleaning for Los Angeles businesses, ranging from tech offices in Silicon Beach to retail spaces and medical facilities. Our janitorial teams are discreet, reliable, and thorough, ensuring your high-touch surfaces are sanitized and your office remains a healthy, professional environment for everyone.",
     target_keywords: [
       "commercial cleaning company",
       "office cleaning services",
@@ -186,6 +198,8 @@ export const servicePages = [
     slug: "airbnb-cleaning",
     page: "Short-Term Rental & Airbnb Cleaning",
     intent: "High/Recurring",
+    bodyText:
+      "In the competitive LA rental market, cleanliness is the difference between a 3-star and a 5-star review. Our Airbnb turnover service is optimized for speed and perfection. We manage the tight window between guests, handling laundry, restocks, and a comprehensive staging of the space. Never worry about a check-in again; we ensure your property is guest-ready every single time.",
     target_keywords: [
       "airbnb cleaning service",
       "vacation rental cleaning",
@@ -213,6 +227,8 @@ export const servicePages = [
     slug: "post-construction-cleaning",
     page: "Post-Construction Cleaning",
     intent: "High/Specific",
+    bodyText:
+      'Renovation is exciting, but the leftover construction dust is a nightmare. Our post-construction cleanup team specializes in the final "white-glove" polish required after a remodel. We handle the heavy-duty debris removal and the fine-particle dusting that settles on every ledge, vent, and window sill. Don\'t let dust ruin your new space—we’ll make sure the only thing you notice is your beautiful new home.',
     target_keywords: [
       "post construction cleaning",
       "renovation cleanup",

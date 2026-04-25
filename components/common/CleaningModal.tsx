@@ -21,8 +21,36 @@ export const CleaningModal = () => {
       hideProgressBar: true,
     })
 
+  // 1. Phone Masking Logic (Client Side UX)
+  const handlePhoneInput = (e: React.FormEvent<HTMLInputElement>) => {
+    const target = e.currentTarget
+    let value = target.value.replace(/\D/g, "")
+    if (value.length > 10) value = value.slice(0, 10)
+
+    const areaCode = value.slice(0, 3)
+    const middle = value.slice(3, 6)
+    const last = value.slice(6, 10)
+
+    if (value.length > 6) {
+      target.value = `(${areaCode}) ${middle}-${last}`
+    } else if (value.length > 3) {
+      target.value = `(${areaCode}) ${middle}`
+    } else if (value.length > 0) {
+      target.value = `(${areaCode}`
+    }
+  }
+
   const [state, action, isLoading] = useActionState<FormState, FormData>(
     async (prevState: FormState, formData: FormData) => {
+      // 2. Phone Regex Validation
+      const phone = formData.get("phone") as string
+      const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/
+
+      if (!phoneRegex.test(phone)) {
+        toast.error("Please enter a valid phone: (XXX) XXX-XXXX")
+        return { success: false, message: "Invalid phone format" }
+      }
+
       const result = await sendEmail(prevState, formData, "manager")
       await sendEmail(prevState, formData, "customer")
 
@@ -87,7 +115,6 @@ export const CleaningModal = () => {
           </div>
 
           <form action={action} className="space-y-4">
-            {/* Essential Contact info only */}
             <div className="grid grid-cols-1 gap-3">
               <input
                 required
@@ -100,12 +127,12 @@ export const CleaningModal = () => {
                 required
                 name="phone"
                 type="tel"
-                placeholder="Phone Number (for quote)"
+                placeholder="(213) 598-77-63"
+                onInput={handlePhoneInput} // Added Masking
                 className="input-style"
               />
             </div>
 
-            {/* Quick Selectors - No typing needed */}
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <select

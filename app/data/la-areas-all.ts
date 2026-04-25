@@ -4,713 +4,1301 @@ export const LOS_ANGELES_AREAS = [
     slug: "agoura-hills",
     type: "city",
     region: "Ventura-Border",
-    zipCodes: ["91301"]
+    zipCodes: ["91301"],
+    neighborSlugs: [
+      "westlake-village",
+      "calabasas",
+      "hidden-hills",
+      "malibu",
+      "woodland-hills",
+    ],
   },
   {
     name: "Alhambra",
     slug: "alhambra",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91801, 91803"]
+    zipCodes: ["91801, 91803"],
+    neighborSlugs: [
+      "monterey-park",
+      "san-gabriel",
+      "south-pasadena",
+      "san-marino",
+      "rosemead",
+    ],
   },
   {
     name: "Arcadia",
     slug: "arcadia",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91006, 91007"]
+    zipCodes: ["91006, 91007"],
+    neighborSlugs: [
+      "sierra-madre",
+      "monrovia",
+      "temple-city",
+      "pasadena",
+      "san-marino",
+    ],
   },
   {
     name: "Artesia",
     slug: "artesia",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90701"]
+    zipCodes: ["90701"],
+    neighborSlugs: [
+      "cerritos",
+      "norwalk",
+      "hawaiian-gardens",
+      "lakewood",
+      "la-mirada",
+    ],
   },
   {
     name: "Avalon",
     slug: "avalon",
     type: "city",
     region: "Catalina Island",
-    zipCodes: ["90704"]
+    zipCodes: ["90704"],
+    neighborSlugs: [
+      "long-beach",
+      "san-pedro",
+      "rancho-palos-verdes",
+      "manhattan-beach",
+      "redondo-beach",
+    ],
   },
   {
     name: "Azusa",
     slug: "azusa",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91702"]
+    zipCodes: ["91702"],
+    neighborSlugs: [
+      "glendora",
+      "covina",
+      "irwindale",
+      "duarte",
+      "baldwin-park",
+    ],
   },
   {
     name: "Baldwin Park",
     slug: "baldwin-park",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91706"]
+    zipCodes: ["91706"],
+    neighborSlugs: ["irwindale", "west-covina", "el-monte", "azusa", "covina"],
   },
   {
     name: "Bell",
     slug: "bell",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90201"]
+    zipCodes: ["90201"],
+    neighborSlugs: [
+      "cudahy",
+      "maywood",
+      "huntington-park",
+      "bell-gardens",
+      "commerce",
+    ],
   },
   {
     name: "Bell Gardens",
     slug: "bell-gardens",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90201"]
+    zipCodes: ["90201"],
+    neighborSlugs: ["commerce", "downey", "bell", "cudahy", "south-gate"],
   },
   {
     name: "Bellflower",
     slug: "bellflower",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90706"]
+    zipCodes: ["90706"],
+    neighborSlugs: ["paramount", "downey", "lakewood", "cerritos", "norwalk"],
   },
   {
     name: "Beverly Hills",
     slug: "beverly-hills",
     type: "city",
     region: "Westside",
-    zipCodes: ["90210, 90211, 90212"]
+    zipCodes: ["90210, 90211, 90212"],
+    neighborSlugs: [
+      "west-hollywood",
+      "bel-air",
+      "culver-city",
+      "brentwood",
+      "hollywood",
+    ],
   },
   {
     name: "Bradbury",
     slug: "bradbury",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91008"]
+    zipCodes: ["91008"],
+    neighborSlugs: ["duarte", "monrovia", "azusa", "irwindale", "glendora"],
   },
   {
     name: "Burbank",
     slug: "burbank",
     type: "city",
     region: "San Fernando Valley",
-    zipCodes: ["91501-91506"]
+    zipCodes: ["91501-91506"],
+    neighborSlugs: [
+      "glendale",
+      "studio-city",
+      "hollywood",
+      "north-hollywood",
+      "sun-valley",
+    ],
   },
   {
     name: "Calabasas",
     slug: "calabasas",
     type: "city",
     region: "San Fernando Valley",
-    zipCodes: ["91302, 91372"]
+    zipCodes: ["91302, 91372"],
+    neighborSlugs: [
+      "hidden-hills",
+      "agoura-hills",
+      "woodland-hills",
+      "malibu",
+      "westlake-village",
+    ],
   },
   {
     name: "Carson",
     slug: "carson",
     type: "city",
     region: "South Bay",
-    zipCodes: ["90745, 90746, 90810"]
+    zipCodes: ["90745, 90746, 90810"],
+    neighborSlugs: ["long-beach", "torrance", "gardena", "compton", "lomita"],
   },
   {
     name: "Cerritos",
     slug: "cerritos",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90703"]
+    zipCodes: ["90703"],
+    neighborSlugs: [
+      "artesia",
+      "lakewood",
+      "la-mirada",
+      "norwalk",
+      "bellflower",
+    ],
   },
   {
     name: "Claremont",
     slug: "claremont",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91711"]
+    zipCodes: ["91711"],
+    neighborSlugs: ["la-verne", "pomona", "san-dimas", "glendora", "upland"],
   },
   {
     name: "Commerce",
     slug: "commerce",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90040"]
+    zipCodes: ["90040"],
+    neighborSlugs: [
+      "montebello",
+      "vernon",
+      "bell-gardens",
+      "maywood",
+      "pico-rivera",
+    ],
   },
   {
     name: "Compton",
     slug: "compton",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90220-90222"]
+    zipCodes: ["90220-90222"],
+    neighborSlugs: ["carson", "lynwood", "paramount", "gardena", "long-beach"],
   },
   {
     name: "Covina",
     slug: "covina",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91722-91724"]
+    zipCodes: ["91722-91724"],
+    neighborSlugs: [
+      "west-covina",
+      "azusa",
+      "glendora",
+      "charter-oak",
+      "baldwin-park",
+    ],
   },
   {
     name: "Cudahy",
     slug: "cudahy",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90201"]
+    zipCodes: ["90201"],
+    neighborSlugs: [
+      "bell",
+      "bell-gardens",
+      "south-gate",
+      "maywood",
+      "huntington-park",
+    ],
   },
   {
     name: "Culver City",
     slug: "culver-city",
     type: "city",
     region: "Westside",
-    zipCodes: ["90230, 90232"]
+    zipCodes: ["90230, 90232"],
+    neighborSlugs: [
+      "playa-vista",
+      "venice",
+      "beverly-hills",
+      "santa-monica",
+      "west-hollywood",
+    ],
   },
   {
     name: "Diamond Bar",
     slug: "diamond-bar",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91765"]
+    zipCodes: ["91765"],
+    neighborSlugs: ["walnut", "pomona", "industry", "rowland-heights", "brea"],
   },
   {
     name: "Downey",
     slug: "downey",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90239-90242"]
+    zipCodes: ["90239-90242"],
+    neighborSlugs: [
+      "norwalk",
+      "paramount",
+      "bellflower",
+      "pico-rivera",
+      "bell-gardens",
+    ],
   },
   {
     name: "Duarte",
     slug: "duarte",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91008, 91010"]
+    zipCodes: ["91008, 91010"],
+    neighborSlugs: ["monrovia", "bradbury", "azusa", "irwindale", "arcadia"],
   },
   {
     name: "El Monte",
     slug: "el-monte",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91731-91735"]
+    zipCodes: ["91731-91735"],
+    neighborSlugs: [
+      "south-el-monte",
+      "temple-city",
+      "baldwin-park",
+      "arcadia",
+      "rosemead",
+    ],
   },
   {
     name: "El Segundo",
     slug: "el-segundo",
     type: "city",
     region: "South Bay",
-    zipCodes: ["90245"]
+    zipCodes: ["90245"],
+    neighborSlugs: [
+      "manhattan-beach",
+      "hawthorne",
+      "playa-del-rey",
+      "westchester",
+      "hermosa-beach",
+    ],
   },
   {
     name: "Gardena",
     slug: "gardena",
     type: "city",
     region: "South Bay",
-    zipCodes: ["90247-90249"]
+    zipCodes: ["90247-90249"],
+    neighborSlugs: ["torrance", "lawndale", "hawthorne", "carson", "compton"],
   },
   {
     name: "Glendale",
     slug: "glendale",
     type: "city",
     region: "San Fernando Valley",
-    zipCodes: ["91201-91210"]
+    zipCodes: ["91201-91210"],
+    neighborSlugs: [
+      "burbank",
+      "pasadena",
+      "la-canada-flintridge",
+      "hollywood",
+      "los-angeles",
+    ],
   },
   {
     name: "Glendora",
     slug: "glendora",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91740, 91741"]
+    zipCodes: ["91740, 91741"],
+    neighborSlugs: ["azusa", "san-dimas", "la-verne", "covina", "charter-oak"],
   },
   {
     name: "Hawaiian Gardens",
     slug: "hawaiian-gardens",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90716"]
+    zipCodes: ["90716"],
+    neighborSlugs: ["lakewood", "cerritos", "artesia", "long-beach", "cypress"],
   },
   {
     name: "Hawthorne",
     slug: "hawthorne",
     type: "city",
     region: "South Bay",
-    zipCodes: ["90250"]
+    zipCodes: ["90250"],
+    neighborSlugs: [
+      "lawndale",
+      "inglewood",
+      "gardena",
+      "el-segundo",
+      "manhattan-beach",
+    ],
   },
   {
     name: "Hermosa Beach",
     slug: "hermosa-beach",
     type: "city",
     region: "South Bay",
-    zipCodes: ["90254"]
+    zipCodes: ["90254"],
+    neighborSlugs: [
+      "manhattan-beach",
+      "redondo-beach",
+      "torrance",
+      "lawndale",
+      "el-segundo",
+    ],
   },
   {
     name: "Hidden Hills",
     slug: "hidden-hills",
     type: "city",
     region: "San Fernando Valley",
-    zipCodes: ["91302"]
+    zipCodes: ["91302"],
+    neighborSlugs: [
+      "calabasas",
+      "woodland-hills",
+      "agoura-hills",
+      "westlake-village",
+      "canoga-park",
+    ],
   },
   {
     name: "Huntington Park",
     slug: "huntington-park",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90255"]
+    zipCodes: ["90255"],
+    neighborSlugs: ["south-gate", "maywood", "bell", "vernon", "cudahy"],
   },
   {
     name: "Industry",
     slug: "industry",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91714"]
+    zipCodes: ["91714"],
+    neighborSlugs: [
+      "la-puente",
+      "walnut",
+      "rowland-heights",
+      "west-covina",
+      "diamond-bar",
+    ],
   },
   {
     name: "Inglewood",
     slug: "inglewood",
     type: "city",
     region: "South Bay",
-    zipCodes: ["90301-90305"]
+    zipCodes: ["90301-90305"],
+    neighborSlugs: [
+      "culver-city",
+      "hawthorne",
+      "gardena",
+      "los-angeles",
+      "westchester",
+    ],
   },
   {
     name: "Irwindale",
     slug: "irwindale",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91010, 91706"]
+    zipCodes: ["91010, 91706"],
+    neighborSlugs: ["azusa", "baldwin-park", "duarte", "monrovia", "el-monte"],
   },
   {
     name: "La Cañada Flintridge",
     slug: "la-canada-flintridge",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91011, 91012"]
+    zipCodes: ["91011, 91012"],
+    neighborSlugs: [
+      "pasadena",
+      "glendale",
+      "altadena",
+      "la-crescenta",
+      "burbank",
+    ],
   },
   {
     name: "La Habra Heights",
     slug: "la-habra-heights",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90631"]
+    zipCodes: ["90631"],
+    neighborSlugs: [
+      "whittier",
+      "la-mirada",
+      "rowland-heights",
+      "hacienda-heights",
+      "la-habra",
+    ],
   },
   {
     name: "La Mirada",
     slug: "la-mirada",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90637, 90638"]
+    zipCodes: ["90637, 90638"],
+    neighborSlugs: [
+      "santa-fe-springs",
+      "cerritos",
+      "norwalk",
+      "whittier",
+      "buena-park",
+    ],
   },
   {
     name: "La Puente",
     slug: "la-puente",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91744"]
+    zipCodes: ["91744"],
+    neighborSlugs: [
+      "west-covina",
+      "industry",
+      "walnut",
+      "baldwin-park",
+      "hacienda-heights",
+    ],
   },
   {
     name: "La Verne",
     slug: "la-verne",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91750"]
+    zipCodes: ["91750"],
+    neighborSlugs: [
+      "san-dimas",
+      "claremont",
+      "pomona",
+      "glendora",
+      "montclair",
+    ],
   },
   {
     name: "Lakewood",
     slug: "lakewood",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90711-90715"]
+    zipCodes: ["90711-90715"],
+    neighborSlugs: [
+      "long-beach",
+      "bellflower",
+      "cerritos",
+      "artesia",
+      "cypress",
+    ],
   },
   {
     name: "Lancaster",
     slug: "lancaster",
     type: "city",
     region: "Antelope Valley",
-    zipCodes: ["93534-93536"]
+    zipCodes: ["93534-93536"],
+    neighborSlugs: [
+      "palmdale",
+      "santa-clarita",
+      "rosamond",
+      "quartz-hill",
+      "edwards",
+    ],
   },
   {
     name: "Lawndale",
     slug: "lawndale",
     type: "city",
     region: "South Bay",
-    zipCodes: ["90260, 90261"]
+    zipCodes: ["90260, 90261"],
+    neighborSlugs: [
+      "gardena",
+      "hawthorne",
+      "torrance",
+      "redondo-beach",
+      "manhattan-beach",
+    ],
   },
   {
     name: "Lomita",
     slug: "lomita",
     type: "city",
     region: "South Bay",
-    zipCodes: ["90717"]
+    zipCodes: ["90717"],
+    neighborSlugs: [
+      "torrance",
+      "rolling-hills-estates",
+      "rancho-palos-verdes",
+      "carson",
+      "harbor-city",
+    ],
   },
   {
     name: "Long Beach",
     slug: "long-beach",
     type: "city",
     region: "South Bay",
-    zipCodes: ["90802-90815"]
+    zipCodes: ["90802-90815"],
+    neighborSlugs: [
+      "lakewood",
+      "signal-hill",
+      "seal-beach",
+      "carson",
+      "compton",
+    ],
   },
   {
     name: "Los Angeles",
     slug: "los-angeles",
     type: "city",
     region: "Central",
-    zipCodes: ["90001-90099"]
+    zipCodes: ["90001-90099"],
+    neighborSlugs: [
+      "dtla",
+      "hollywood",
+      "silver-lake",
+      "culver-city",
+      "beverly-hills",
+    ],
   },
   {
     name: "Lynwood",
     slug: "lynwood",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90262"]
+    zipCodes: ["90262"],
+    neighborSlugs: ["south-gate", "compton", "paramount", "downey", "gardena"],
   },
   {
     name: "Malibu",
     slug: "malibu",
     type: "city",
     region: "Santa Monica Mountains",
-    zipCodes: ["90263-90265"]
+    zipCodes: ["90263-90265"],
+    neighborSlugs: [
+      "santa-monica",
+      "agoura-hills",
+      "calabasas",
+      "pacific-palisades",
+      "westlake-village",
+    ],
   },
   {
     name: "Manhattan Beach",
     slug: "manhattan-beach",
     type: "city",
     region: "South Bay",
-    zipCodes: ["90266"]
+    zipCodes: ["90266"],
+    neighborSlugs: [
+      "hermosa-beach",
+      "el-segundo",
+      "redondo-beach",
+      "hawthorne",
+      "lawndale",
+    ],
   },
   {
     name: "Maywood",
     slug: "maywood",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90270"]
+    zipCodes: ["90270"],
+    neighborSlugs: ["commerce", "bell", "vernon", "huntington-park", "cudahy"],
   },
   {
     name: "Monrovia",
     slug: "monrovia",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91016, 91017"]
+    zipCodes: ["91016, 91017"],
+    neighborSlugs: [
+      "duarte",
+      "arcadia",
+      "bradbury",
+      "sierra-madre",
+      "irwindale",
+    ],
   },
   {
     name: "Montebello",
     slug: "montebello",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90640"]
+    zipCodes: ["90640"],
+    neighborSlugs: [
+      "commerce",
+      "pico-rivera",
+      "monterey-park",
+      "rosemead",
+      "east-los-angeles",
+    ],
   },
   {
     name: "Monterey Park",
     slug: "monterey-park",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91754-91756"]
+    zipCodes: ["91754-91756"],
+    neighborSlugs: [
+      "alhambra",
+      "monterey-park",
+      "montebello",
+      "rosemead",
+      "east-los-angeles",
+    ],
   },
   {
     name: "Norwalk",
     slug: "norwalk",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90650-90652"]
+    zipCodes: ["90650-90652"],
+    neighborSlugs: [
+      "downey",
+      "santa-fe-springs",
+      "bellflower",
+      "cerritos",
+      "artesia",
+    ],
   },
   {
     name: "Palmdale",
     slug: "palmdale",
     type: "city",
     region: "Antelope Valley",
-    zipCodes: ["93550-93552"]
+    zipCodes: ["93550-93552"],
+    neighborSlugs: [
+      "lancaster",
+      "santa-clarita",
+      "quartz-hill",
+      "littlerock",
+      "acton",
+    ],
   },
   {
     name: "Palos Verdes Estates",
     slug: "palos-verdes-estates",
     type: "city",
     region: "South Bay",
-    zipCodes: ["90274"]
+    zipCodes: ["90274"],
+    neighborSlugs: [
+      "rancho-palos-verdes",
+      "rolling-hills-estates",
+      "redondo-beach",
+      "torrance",
+      "rolling-hills",
+    ],
   },
   {
     name: "Paramount",
     slug: "paramount",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90723"]
+    zipCodes: ["90723"],
+    neighborSlugs: ["bellflower", "downey", "lynwood", "compton", "south-gate"],
   },
   {
     name: "Pasadena",
     slug: "pasadena",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91101-91109"]
+    zipCodes: ["91101-91109"],
+    neighborSlugs: [
+      "south-pasadena",
+      "san-marino",
+      "glendale",
+      "altadena",
+      "la-canada-flintridge",
+    ],
   },
   {
     name: "Pico Rivera",
     slug: "pico-rivera",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90660-90662"]
+    zipCodes: ["90660-90662"],
+    neighborSlugs: [
+      "montebello",
+      "downey",
+      "santa-fe-springs",
+      "whittier",
+      "commerce",
+    ],
   },
   {
     name: "Pomona",
     slug: "pomona",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91766-91769"]
+    zipCodes: ["91766-91769"],
+    neighborSlugs: ["claremont", "la-verne", "diamond-bar", "walnut", "chino"],
   },
   {
     name: "Rancho Palos Verdes",
     slug: "rancho-palos-verdes",
     type: "city",
     region: "South Bay",
-    zipCodes: ["90275"]
+    zipCodes: ["90275"],
+    neighborSlugs: [
+      "rolling-hills",
+      "rolling-hills-estates",
+      "palos-verdes-estates",
+      "san-pedro",
+      "lomita",
+    ],
   },
   {
     name: "Redondo Beach",
     slug: "redondo-beach",
     type: "city",
     region: "South Bay",
-    zipCodes: ["90277, 90278"]
+    zipCodes: ["90277, 90278"],
+    neighborSlugs: [
+      "hermosa-beach",
+      "manhattan-beach",
+      "torrance",
+      "palos-verdes-estates",
+      "lawndale",
+    ],
   },
   {
     name: "Rolling Hills",
     slug: "rolling-hills",
     type: "city",
     region: "South Bay",
-    zipCodes: ["90274"]
+    zipCodes: ["90274"],
+    neighborSlugs: [
+      "rancho-palos-verdes",
+      "rolling-hills-estates",
+      "palos-verdes-estates",
+      "lomita",
+      "san-pedro",
+    ],
   },
   {
     name: "Rolling Hills Estates",
     slug: "rolling-hills-estates",
     type: "city",
     region: "South Bay",
-    zipCodes: ["90274"]
+    zipCodes: ["90274"],
+    neighborSlugs: [
+      "rolling-hills",
+      "rancho-palos-verdes",
+      "palos-verdes-estates",
+      "torrance",
+      "lomita",
+    ],
   },
   {
     name: "Rosemead",
     slug: "rosemead",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91770-91772"]
+    zipCodes: ["91770-91772"],
+    neighborSlugs: [
+      "san-gabriel",
+      "temple-city",
+      "monterey-park",
+      "el-monte",
+      "alhambra",
+    ],
   },
   {
     name: "San Dimas",
     slug: "san-dimas",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91773"]
+    zipCodes: ["91773"],
+    neighborSlugs: ["la-verne", "glendora", "claremont", "covina", "walnut"],
   },
   {
     name: "San Fernando",
     slug: "san-fernando",
     type: "city",
     region: "San Fernando Valley",
-    zipCodes: ["91340, 91341"]
+    zipCodes: ["91340, 91341"],
+    neighborSlugs: [
+      "sylmar",
+      "pacoima",
+      "mission-hills",
+      "granada-hills",
+      "north-hills",
+    ],
   },
   {
     name: "San Gabriel",
     slug: "san-gabriel",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91775, 91776, 91778"]
+    zipCodes: ["91775, 91776, 91778"],
+    neighborSlugs: [
+      "alhambra",
+      "san-marino",
+      "temple-city",
+      "rosemead",
+      "pasadena",
+    ],
   },
   {
     name: "San Marino",
     slug: "san-marino",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91108, 91118"]
+    zipCodes: ["91108, 91118"],
+    neighborSlugs: [
+      "pasadena",
+      "south-pasadena",
+      "san-gabriel",
+      "alhambra",
+      "arcadia",
+    ],
   },
   {
     name: "Santa Clarita",
     slug: "santa-clarita",
     type: "city",
     region: "Santa Clarita Valley",
-    zipCodes: ["91321, 91322, 91350-91390"]
+    zipCodes: ["91321, 91322, 91350-91390"],
+    neighborSlugs: [
+      "palmdale",
+      "lancaster",
+      "sylmar",
+      "granada-hills",
+      "chatsworth",
+    ],
   },
   {
     name: "Santa Fe Springs",
     slug: "santa-fe-springs",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90605, 90670, 90671"]
+    zipCodes: ["90605, 90670, 90671"],
+    neighborSlugs: [
+      "norwalk",
+      "whittier",
+      "pico-rivera",
+      "la-mirada",
+      "downey",
+    ],
   },
   {
     name: "Santa Monica",
     slug: "santa-monica",
     type: "city",
     region: "Westside",
-    zipCodes: ["90401-90405"]
+    zipCodes: ["90401-90405"],
+    neighborSlugs: [
+      "venice",
+      "brentwood",
+      "pacific-palisades",
+      "culver-city",
+      "malibu",
+    ],
   },
   {
     name: "Sierra Madre",
     slug: "sierra-madre",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91024, 91025"]
+    zipCodes: ["91024, 91025"],
+    neighborSlugs: ["pasadena", "arcadia", "monrovia", "altadena", "bradbury"],
   },
   {
     name: "Signal Hill",
     slug: "signal-hill",
     type: "city",
     region: "South Bay",
-    zipCodes: ["90755"]
+    zipCodes: ["90755"],
+    neighborSlugs: [
+      "long-beach",
+      "lakewood",
+      "seal-beach",
+      "carson",
+      "paramount",
+    ],
   },
   {
     name: "South El Monte",
     slug: "south-el-monte",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91733"]
+    zipCodes: ["91733"],
+    neighborSlugs: [
+      "el-monte",
+      "rosemead",
+      "montebello",
+      "pico-rivera",
+      "industry",
+    ],
   },
   {
     name: "South Gate",
     slug: "south-gate",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90280"]
+    zipCodes: ["90280"],
+    neighborSlugs: [
+      "lynwood",
+      "huntington-park",
+      "paramount",
+      "downey",
+      "cudahy",
+    ],
   },
   {
     name: "South Pasadena",
     slug: "south-pasadena",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91030, 91031"]
+    zipCodes: ["91030, 91031"],
+    neighborSlugs: [
+      "pasadena",
+      "san-marino",
+      "alhambra",
+      "los-angeles",
+      "monterey-park",
+    ],
   },
   {
     name: "Temple City",
     slug: "temple-city",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91780"]
+    zipCodes: ["91780"],
+    neighborSlugs: [
+      "arcadia",
+      "san-gabriel",
+      "rosemead",
+      "el-monte",
+      "san-marino",
+    ],
   },
   {
     name: "Torrance",
     slug: "torrance",
     type: "city",
     region: "South Bay",
-    zipCodes: ["90501-90510"]
+    zipCodes: ["90501-90510"],
+    neighborSlugs: [
+      "redondo-beach",
+      "gardena",
+      "lomita",
+      "rolling-hills-estates",
+      "palos-verdes-estates",
+    ],
   },
   {
     name: "Vernon",
     slug: "vernon",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90058"]
+    zipCodes: ["90058"],
+    neighborSlugs: [
+      "maywood",
+      "commerce",
+      "dtla",
+      "huntington-park",
+      "los-angeles",
+    ],
   },
   {
     name: "Walnut",
     slug: "walnut",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91788, 91789, 91795"]
+    zipCodes: ["91788, 91789, 91795"],
+    neighborSlugs: [
+      "diamond-bar",
+      "san-dimas",
+      "pomona",
+      "industry",
+      "west-covina",
+    ],
   },
   {
     name: "West Covina",
     slug: "west-covina",
     type: "city",
     region: "San Gabriel Valley",
-    zipCodes: ["91790-91793"]
+    zipCodes: ["91790-91793"],
+    neighborSlugs: [
+      "covina",
+      "baldwin-park",
+      "la-puente",
+      "walnut",
+      "industry",
+    ],
   },
   {
     name: "West Hollywood",
     slug: "west-hollywood",
     type: "city",
     region: "Westside",
-    zipCodes: ["90069"]
+    zipCodes: ["90069"],
+    neighborSlugs: [
+      "beverly-hills",
+      "hollywood",
+      "los-angeles",
+      "studio-city",
+      "culver-city",
+    ],
   },
   {
     name: "Westlake Village",
     slug: "westlake-village",
     type: "city",
     region: "Ventura-Border",
-    zipCodes: ["91359-91362"]
+    zipCodes: ["91359-91362"],
+    neighborSlugs: [
+      "agoura-hills",
+      "thousand-oaks",
+      "calabasas",
+      "malibu",
+      "hidden-hills",
+    ],
   },
   {
     name: "Whittier",
     slug: "whittier",
     type: "city",
     region: "Gateway Cities",
-    zipCodes: ["90601-90608"]
+    zipCodes: ["90601-90608"],
+    neighborSlugs: [
+      "santa-fe-springs",
+      "pico-rivera",
+      "la-habra-heights",
+      "la-mirada",
+      "hacienda-heights",
+    ],
   },
   {
     name: "Playa Vista",
     slug: "playa-vista",
     type: "neighborhood",
     region: "Westside",
-    zipCodes: ["90094"]
+    zipCodes: ["90094"],
+    neighborSlugs: [
+      "culver-city",
+      "venice",
+      "marina-del-rey",
+      "westchester",
+      "el-segundo",
+    ],
   },
   {
     name: "Venice",
     slug: "venice",
     type: "neighborhood",
     region: "Westside",
-    zipCodes: ["90291"]
+    zipCodes: ["90291"],
+    neighborSlugs: [
+      "santa-monica",
+      "marina-del-rey",
+      "playa-vista",
+      "culver-city",
+      "brentwood",
+    ],
   },
   {
     name: "Silver Lake",
     slug: "silver-lake",
     type: "neighborhood",
     region: "Central",
-    zipCodes: ["90026, 90039"]
+    zipCodes: ["90026, 90039"],
+    neighborSlugs: ["echo-park", "los-feliz", "hollywood", "dtla", "glendale"],
   },
   {
     name: "Hollywood",
     slug: "hollywood",
     type: "neighborhood",
     region: "Central",
-    zipCodes: ["90028, 90038"]
+    zipCodes: ["90028, 90038"],
+    neighborSlugs: [
+      "west-hollywood",
+      "los-feliz",
+      "silver-lake",
+      "beverly-hills",
+      "studio-city",
+    ],
   },
   {
     name: "Echo Park",
     slug: "echo-park",
     type: "neighborhood",
     region: "Central",
-    zipCodes: ["90026"]
+    zipCodes: ["90026"],
+    neighborSlugs: [
+      "silver-lake",
+      "dtla",
+      "los-feliz",
+      "koreatown",
+      "hollywood",
+    ],
   },
   {
     name: "Brentwood",
     slug: "brentwood",
     type: "neighborhood",
     region: "Westside",
-    zipCodes: ["90049"]
+    zipCodes: ["90049"],
+    neighborSlugs: [
+      "bel-air",
+      "santa-monica",
+      "beverly-hills",
+      "pacific-palisades",
+      "westwood",
+    ],
   },
   {
     name: "Bel Air",
     slug: "bel-air",
     type: "neighborhood",
     region: "Westside",
-    zipCodes: ["90077"]
+    zipCodes: ["90077"],
+    neighborSlugs: [
+      "brentwood",
+      "beverly-hills",
+      "sherman-oaks",
+      "studio-city",
+      "westwood",
+    ],
   },
   {
     name: "Sherman Oaks",
     slug: "sherman-oaks",
     type: "neighborhood",
     region: "San Fernando Valley",
-    zipCodes: ["91403, 91423"]
+    zipCodes: ["91403, 91423"],
+    neighborSlugs: [
+      "studio-city",
+      "encino",
+      "bel-air",
+      "van-nuys",
+      "valley-village",
+    ],
   },
   {
     name: "Encino",
     slug: "encino",
     type: "neighborhood",
     region: "San Fernando Valley",
-    zipCodes: ["91316, 91436"]
+    zipCodes: ["91316, 91436"],
+    neighborSlugs: [
+      "sherman-oaks",
+      "tarzana",
+      "woodland-hills",
+      "bel-air",
+      "van-nuys",
+    ],
   },
   {
     name: "Studio City",
     slug: "studio-city",
     type: "neighborhood",
     region: "San Fernando Valley",
-    zipCodes: ["91604"]
+    zipCodes: ["91604"],
+    neighborSlugs: [
+      "sherman-oaks",
+      "hollywood",
+      "west-hollywood",
+      "burbank",
+      "valley-village",
+    ],
   },
   {
     name: "Northridge",
     slug: "northridge",
     type: "neighborhood",
     region: "San Fernando Valley",
-    zipCodes: ["91324-91330"]
+    zipCodes: ["91324-91330"],
+    neighborSlugs: [
+      "porter-ranch",
+      "granada-hills",
+      "chatsworth",
+      "reseda",
+      "north-hills",
+    ],
   },
   {
     name: "Woodland Hills",
     slug: "woodland-hills",
     type: "neighborhood",
     region: "San Fernando Valley",
-    zipCodes: ["91364-91367"]
+    zipCodes: ["91364-91367"],
+    neighborSlugs: [
+      "calabasas",
+      "tarzana",
+      "canoga-park",
+      "west-hills",
+      "encino",
+    ],
   },
   {
     name: "Downtown LA",
     slug: "dtla",
     type: "neighborhood",
     region: "Central",
-    zipCodes: ["90012-90015"]
+    zipCodes: ["90012-90015"],
+    neighborSlugs: [
+      "echo-park",
+      "koreatown",
+      "silver-lake",
+      "vernon",
+      "boyle-heights",
+    ],
   },
   {
     name: "Koreatown",
     slug: "koreatown",
     type: "neighborhood",
     region: "Central",
-    zipCodes: ["90005, 90010, 90020"]
+    zipCodes: ["90005, 90010, 90020"],
+    neighborSlugs: [
+      "dtla",
+      "hancock-park",
+      "echo-park",
+      "hollywood",
+      "silver-lake",
+    ],
   },
-];
+]

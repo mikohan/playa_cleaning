@@ -1,4 +1,5 @@
-export const cleaningScope = {
+// Define the base scope used for Standard/Deep/Move-Out cleaning
+export const baseCleaningScope = {
   general: {
     title: "Entire Apartment",
     included: [
@@ -52,4 +53,58 @@ export const cleaningScope = {
       { name: "Clean Pet Litter Box", price: 15, unit: "" },
     ],
   },
+}
+
+// Define the specialized scope for Upholstery (Angara Streamers style)
+export const upholsteryScope = {
+  sofa: {
+    title: "Sofa & Sectional",
+    included: [
+      "High-pressure steam extraction",
+      "Eco-friendly pre-treatment",
+      "Fabric-safe stain removal",
+      "Deodorizing treatment",
+    ],
+    extras: [
+      { name: "Fabric Protector (Scotchgard)", price: 45, unit: "per sofa" },
+      { name: "Deep Pet Odor Treatment", price: 50, unit: "" },
+    ],
+  },
+  mattress: {
+    title: "Mattresses & Rugs",
+    included: [
+      "UV Sanitization",
+      "Dust mite removal",
+      "Steam cleaning",
+      "Anti-allergen finish",
+    ],
+    extras: [{ name: "Pillow Sanitization", price: 15, unit: "per pc" }],
+  },
+  technical: {
+    title: "Equipment & Tech",
+    included: [
+      "Industrial Mytee Solution Hose",
+      "High-heat steam (210°F)",
+      "Non-toxic cleaning agents",
+    ],
+    extras: [],
+  },
+}
+
+/**
+ * Helper function to select the right data based on the URL slug
+ */
+export function getScopeBySlug(slug: string) {
+  switch (slug) {
+    case "upholstery-cleaning":
+    case "carpet-cleaning":
+      return upholsteryScope
+
+    // You can add more specific cases here as you build out your 8 services
+    // case "commercial-cleaning":
+    //   return commercialScope;
+
+    default:
+      return baseCleaningScope
+  }
 }

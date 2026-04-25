@@ -61,7 +61,7 @@ export function Testimonials() {
   const thirdCol = testimonials.slice(12, 18)
 
   return (
-    <section className="relative overflow-hidden pt-32">
+    <section className="relative overflow-hidden pt-32 pb-24">
       <div className="absolute top-0 left-0 -z-10 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
       <WaveDivider position="top" fill="var(--color-background)" />
       <div className="container mx-auto max-w-7xl px-6">
@@ -70,22 +70,22 @@ export function Testimonials() {
           <h2 className="mt-8 text-center text-3xl font-bold md:text-5xl">
             What our customers say
           </h2>
-          <p className="mt-4 mb-16 max-w-md text-center text-xl text-foreground/70">
+          <p className="mt-4 max-w-md text-center text-xl text-foreground/70">
             Our customers love the results. All reviews are verified from our
             Google Business profile.{" "}
-            <a
-              href="https://share.google/oDULc3KpCXQC52z9f"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-primary underline"
-            >
-              Check it here.
-            </a>
           </p>
+          <a
+            href="https://share.google/oDULc3KpCXQC52z9f"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mb-24 text-sm font-medium text-primary-blue underline"
+          >
+            Check it here.
+          </a>
         </div>
 
         {/* 3. Columns Container - Exact same width logic */}
-        <div className="flex max-h-[730px] justify-center gap-6 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]">
+        <div className="flex max-h-182 justify-center gap-6 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]">
           {/* flex-1 min-w-0 forces all columns to share space equally */}
           <TestimonialsColumn
             testimonials={firstCol}

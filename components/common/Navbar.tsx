@@ -1,18 +1,18 @@
 "use client"
 
+import React from "react"
 import Link from "next/link"
-import { Menu, Search, TreePalm } from "lucide-react"
-import { AnimatedButton } from "../SmallComponents/AnimatedButton"
-import { ButtonShiny } from "../SmallComponents/ButtonShiny"
-import { cn } from "@/lib/utils"
 import { useTheme } from "next-themes"
-import React, { useSyncExternalStore } from "react"
+import { Menu, TreePalm } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuContent,
 } from "@/components/ui/navigation-menu"
 import {
   Sheet,
@@ -21,115 +21,166 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
+
+import { AnimatedButton } from "../SmallComponents/AnimatedButton"
+import { ButtonShiny } from "../SmallComponents/ButtonShiny"
 import { ThemeToggle } from "./ThemeToggle"
-import { useEffect, useState } from "react"
 
 const navItems = [
   { title: "Home", href: "/" },
-  { title: "Home Cleaning", href: "/home-cleaning-near-me" },
-  { title: "Qlean", href: "/cleaning-service" },
-  { title: "Contact", href: "/contact" },
+  {
+    title: "Services",
+    href: "/services",
+    isDropdown: true,
+    subItems: [
+      { name: "Regular Cleaning", href: "/services/house-cleaning" },
+      { name: "Deep Cleaning", href: "/services/deep-cleaning" },
+      { name: "Commercial & Office", href: "/services/office-cleaning" },
+      { name: "Move Out Cleaning", href: "/services/move-out-cleaning" },
+      { name: "Airbnb Cleaning", href: "/services/airbnb-cleaning" },
+      { name: "Carpet & Upholstery", href: "/services/upholstery-cleaning" },
+    ],
+  },
+  { title: "Locations", href: "/locations" },
+  { title: "Estimator", href: "/cleaning-calculator" },
 ]
 
 export function Navbar() {
   const { theme, setTheme } = useTheme()
-  const handleToggle = () => {
-    setTheme(theme === "dark" ? "light" : "dark")
-  }
-  // Helper function to detect if we are in the browser
-  function subscribe() {
-    return () => {} // No-op
-  }
+  const handleToggle = () => setTheme(theme === "dark" ? "light" : "dark")
 
-  function getSnapshot() {
-    return true // We are on the client
-  }
-
-  function getServerSnapshot() {
-    return false // We are on the server
-  }
   return (
-    <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
-      <div className="relative container mx-auto flex h-16 items-center justify-between px-4">
-        <div className="absolute top-0 left-0 -z-10 h-16 w-full bg-top-blur blur-2xl"></div>
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container mx-auto flex h-20 items-center justify-between px-6">
         {/* Logo Section */}
         <Link
           href="/"
           className="flex items-center space-x-2 transition-opacity hover:opacity-90"
         >
-          <TreePalm className="h-8 w-8 text-primary" />
-          <span className="text-2xl font-bold tracking-tight text-foreground">
+          <TreePalm className="h-7 w-7 text-primary-blue" />
+          <span className="text-xl font-black tracking-tighter text-foreground">
             Playa<span className="text-primary-blue">Cleaning</span>
           </span>
         </Link>
 
-        {/* Desktop Navigation - Hidden on Mobile */}
-        <nav className="hidden items-center md:flex">
+        {/* Desktop Navigation */}
+        <nav className="hidden items-center lg:flex">
           <NavigationMenu>
-            <NavigationMenuList>
+            <NavigationMenuList className="gap-2">
               {navItems.map((item) => (
                 <NavigationMenuItem key={item.title}>
-                  <NavigationMenuLink
-                    asChild
-                    className={cn("text-lg", "nav-animation-underline")}
-                  >
-                    <Link href={item.href}>{item.title}</Link>
-                  </NavigationMenuLink>
+                  {item.isDropdown ? (
+                    <>
+                      <NavigationMenuTrigger className="bg-transparent text-[10px] font-black tracking-[0.2em] uppercase transition-colors hover:text-primary-blue">
+                        {item.title}
+                      </NavigationMenuTrigger>
+                      <NavigationMenuContent>
+                        <ul className="grid w-[400px] gap-3 rounded-2xl border border-border bg-background p-6 shadow-xl md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                          {item.subItems?.map((sub) => (
+                            <li key={sub.name}>
+                              <NavigationMenuLink asChild>
+                                <Link
+                                  href={sub.href}
+                                  className="block space-y-1 rounded-xl p-3 leading-none no-underline transition-colors outline-none select-none hover:bg-muted hover:text-primary-blue"
+                                >
+                                  <div className="text-[11px] font-black tracking-wider uppercase">
+                                    {sub.name}
+                                  </div>
+                                  <p className="line-clamp-2 text-[10px] leading-snug font-medium tracking-tight text-muted-foreground uppercase opacity-70">
+                                    Professional {sub.name.toLowerCase()} for
+                                    your home.
+                                  </p>
+                                </Link>
+                              </NavigationMenuLink>
+                            </li>
+                          ))}
+                        </ul>
+                      </NavigationMenuContent>
+                    </>
+                  ) : (
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href={item.href}
+                        className={cn(
+                          "px-4 py-2 text-[10px] font-black tracking-[0.2em] uppercase transition-colors hover:text-primary-blue",
+                          "nav-animation-underline"
+                        )}
+                      >
+                        {item.title}
+                      </Link>
+                    </NavigationMenuLink>
+                  )}
                 </NavigationMenuItem>
               ))}
             </NavigationMenuList>
           </NavigationMenu>
         </nav>
 
-        {/* Action Buttons & Mobile Toggle */}
-        <div className="flex items-center space-x-3">
+        {/* Action Buttons */}
+        <div className="flex items-center space-x-4">
           <div className="hidden items-center space-x-4 sm:flex">
             <ThemeToggle />
-            <AnimatedButton>
-              <ButtonShiny text="Get Price" size={"sm"}></ButtonShiny>
-            </AnimatedButton>
+            <Link href="/cleaning-calculator">
+              <AnimatedButton>
+                <ButtonShiny text="Get Price" size="sm" />
+              </AnimatedButton>
+            </Link>
           </div>
 
           {/* Mobile Menu (Sheet) */}
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <Sheet>
               <SheetTrigger asChild>
-                <button className="shrink-0">
-                  <Menu className="h-8! w-8!" />
-                  <span className="sr-only">Toggle navigation menu</span>
+                <button className="p-2 outline-none">
+                  <Menu className="h-6 w-6" />
+                  <span className="sr-only">Toggle menu</span>
                 </button>
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="flex w-75 flex-col gap-16 px-8 sm:w-100"
+                className="flex flex-col gap-8 px-8 py-12"
               >
-                <SheetHeader className="mb-4 border-b pb-4">
+                <SheetHeader>
                   <SheetTitle className="flex items-center gap-2 text-left">
-                    <TreePalm className="h-8! w-8! text-primary-blue" />
-                    <span className="text-2xl">
+                    <TreePalm className="h-6 w-6 text-primary-blue" />
+                    <span className="text-xl font-black tracking-tighter uppercase">
                       Playa<span className="text-primary-blue">Cleaning</span>
                     </span>
                   </SheetTitle>
                 </SheetHeader>
-                <div className="mt-4 flex flex-col space-y-4">
+
+                <div className="flex flex-col space-y-6 pt-10">
                   {navItems.map((item) => (
-                    <Link
-                      key={item.title}
-                      href={item.href}
-                      className="border-b border-transparent py-2 text-2xl font-semibold transition-colors hover:border-border hover:text-primary"
-                    >
-                      {item.title}
-                    </Link>
+                    <div key={item.title} className="flex flex-col gap-4">
+                      <Link
+                        href={item.href}
+                        className="text-2xl font-black tracking-tight text-foreground uppercase hover:text-primary-blue"
+                      >
+                        {item.title}
+                      </Link>
+                      {item.isDropdown &&
+                        item.subItems?.map((sub) => (
+                          <Link
+                            key={sub.name}
+                            href={sub.href}
+                            className="pl-4 text-sm font-bold tracking-widest text-muted-foreground uppercase hover:text-primary-blue"
+                          >
+                            — {sub.name}
+                          </Link>
+                        ))}
+                    </div>
                   ))}
+                </div>
+
+                <div className="mt-auto space-y-4">
+                  <Link href="/calculator">
+                    <ButtonShiny text="Order Cleaning" />
+                  </Link>
                   <div
                     onClick={handleToggle}
-                    className="flex w-full flex-row items-center justify-center gap-3 rounded-2xl border border-primary-blue px-4 py-2"
+                    className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border border-border p-3 text-[10px] font-black tracking-widest uppercase transition-colors hover:bg-muted"
                   >
-                    <ThemeToggle />
-                    <p className="text-lg">Toggle Theme</p>
-                  </div>
-                  <div className="flex flex-col gap-3 pt-4">
-                    <ButtonShiny text="Order Cleaning" />
+                    <ThemeToggle /> Toggle Theme
                   </div>
                 </div>
               </SheetContent>
