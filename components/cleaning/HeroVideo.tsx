@@ -57,7 +57,7 @@ function HeroVideo() {
           <div className="mt-16 flex items-center justify-center md:mt-0 md:flex-1">
             <div className="relative aspect-1080/1350 w-full md:w-[80%]">
               <VideoComponent
-                source="/videos/LandPage1.mp4"
+                source="/videos/ol-deep.mp4"
                 width="1080"
                 heigh="1350"
               />
