@@ -18,8 +18,8 @@ export const HeroSection = ({ city, serviceName, slug }: HeroProps) => {
     : `Professional Cleaning in ${city}`
   let carpet = false
   let src = AliciaPortrait
-  if (slug) {
-    carpet = slug.includes("upholstery") || slug.includes("carpet")
+  if (slug?.includes("upholstery") || slug?.includes("carpet")) {
+    carpet = true
     src = CarpetHero
   }
   return (

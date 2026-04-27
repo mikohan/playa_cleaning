@@ -67,7 +67,7 @@ export const PRICING_ADDONS = {
 }
 
 // Define helper types based on the matrix keys
-type BedCount = keyof typeof PRICING_MATRICES.STANDARD
+type BedCount = string //keyof typeof PRICING_MATRICES.STANDARD
 type BathCount = string // We use string here to allow for "5+"
 
 export const FREQUENCY_DISCOUNTS = {
