@@ -3,13 +3,17 @@
 import React from "react"
 import { Check, Plus, Sparkles } from "lucide-react"
 // Assuming your data file can handle slug-based lookups
-import { upholsteryScope, getScopeBySlug } from "@/app/data/cleaning-details"
+import { upholsteryScope, getScopeBySlug } from "@/app/data/pricing"
+import Image from "next/image"
+import AliciaImage from "@/public/images/cleaning/hero-4.webp"
 
 interface ServiceScopeProps {
   serviceSlug?: string // Consistent naming with your new routes
 }
 
-export const ServiceScope = ({ serviceSlug }: ServiceScopeProps) => {
+export const ServiceScope = ({
+  serviceSlug = "house-cleaning",
+}: ServiceScopeProps) => {
   // Use a helper to get specific data for Upholstery, Move-out, etc.
   // Falls back to the general scope if no slug matches
   const displayScope = serviceSlug
@@ -19,7 +23,7 @@ export const ServiceScope = ({ serviceSlug }: ServiceScopeProps) => {
   const sections = Object.entries(displayScope)
 
   return (
-    <section className="mx-auto max-w-7xl pt-24">
+    <section className="mx-auto max-w-7xl py-24">
       <div className="container mx-auto px-6">
         <div className="mb-20 text-center">
           <h2 className="mb-4 text-4xl font-black text-foreground md:text-5xl">
@@ -67,7 +71,14 @@ export const ServiceScope = ({ serviceSlug }: ServiceScopeProps) => {
           </div>
 
           {/* BOTTOM ROW: Add-ons Only */}
-          <div className="grid grid-cols-1 gap-12 border-t border-border/50 pt-12 md:grid-cols-3">
+          <div className="mb-4 font-semibold text-destructive">
+            What does NOT included
+            <span className="text-foreground">
+              {" "}
+              in Regular/Standard Cleaning
+            </span>
+          </div>
+          <div className="grid grid-cols-1 gap-12 border-t border-border/50 pt-4 md:grid-cols-3">
             {sections.map(([key, section]) => (
               <div key={`${key}-bottom`} className="space-y-4">
                 {section.extras && section.extras.length > 0 && (

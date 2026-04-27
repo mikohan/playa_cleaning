@@ -1,23 +1,30 @@
 "use client"
 
 import React from "react"
-import { Check, Info, Zap, CalendarDays, Star } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { Check, Zap, CalendarDays, Star } from "lucide-react"
+import {
+  getRegularPricingRow,
+  PRICING_MATRICES,
+  DEEP_CLEANING_ADDONS,
+} from "@/app/data/pricing" // Adjust this path to where your source of truth lives
+import Image from "next/image"
+import AliciaImage from "@/public/images/cleaning/hero-4.webp"
 
-const regularPricing = [
-  { rooms: "1 Bed 1 Bath", weekly: 110, biweekly: 125, monthly: 140 },
-  { rooms: "2 Bed 1 Bath", weekly: 135, biweekly: 155, monthly: 175 },
-  { rooms: "2 Bed 2 Bath", weekly: 150, biweekly: 175, monthly: 195 },
-  { rooms: "3 Bed 2 Bath", weekly: 180, biweekly: 210, monthly: 240 },
-  { rooms: "4 Bed 3 Bath", weekly: 220, biweekly: 255, monthly: 290 },
+// Define the rows you want to display for the Regular Table
+const regularRows = [
+  getRegularPricingRow("1", "1"),
+  getRegularPricingRow("2", "1"),
+  getRegularPricingRow("2", "2"),
+  getRegularPricingRow("3", "2"),
+  getRegularPricingRow("4", "3"),
 ]
 
-const deepCleaningAddons = [
-  { item: "Inside Oven", price: "$35", desc: "Heavy degreasing & scrub" },
-  { item: "Inside Fridge", price: "$35", desc: "Sanitization & organization" },
-  { item: "Inside Cabinets", price: "$45", desc: "Vacuum & hand-wipe" },
-  { item: "Interior Windows", price: "$5/ea", desc: "Streak-free detail" },
-  { item: "Baseboard Wiping", price: "$50+", desc: "Hand-scrubbed finish" },
+// Extract specific rows for the Deep Cleaning table from the DEEP matrix
+const deepRows = [
+  { label: "1 Bed 1 Bath", price: PRICING_MATRICES.DEEP["1"]["1"] },
+  { label: "2 Bed 2 Bath", price: PRICING_MATRICES.DEEP["2"]["2"] },
+  { label: "3 Bed 2 Bath", price: PRICING_MATRICES.DEEP["3"]["2"] },
+  { label: "4 Bed 3 Bath", price: PRICING_MATRICES.DEEP["4"]["3"] },
 ]
 
 export default function CleaningPricing() {
@@ -25,24 +32,38 @@ export default function CleaningPricing() {
     <div className="space-y-32 py-20">
       {/* 1. REGULAR CLEANING - RECURRING FREQUENCY TABLE */}
       <section className="container mx-auto max-w-6xl px-6">
-        <div className="mb-12 text-center">
+        <div className="relative mb-12 text-center">
           <div className="inline-flex items-center gap-2 rounded-full bg-primary-blue/10 px-4 py-1.5 text-[10px] font-black tracking-[0.2em] text-primary-blue uppercase">
             <CalendarDays size={14} /> Subscription Maintenance
           </div>
-          <h2 className="mt-6 text-5xl font-bold tracking-tighter [word-spacing:0.15em] md:text-6xl">
-            Regular <span className="text-primary-blue italic">Maid</span> Plans
+          <h2 className="mt-6 text-3xl font-bold tracking-tighter [word-spacing:0.15em] md:text-5xl">
+            Regular <span className="text-primary-blue">Maid</span> Plans
           </h2>
+          {/* The Round Image with Double Border */}
+          <div className="absolute hidden md:-top-8 md:right-1/5 md:block md:h-24 md:w-24">
+            <div className="relative h-full w-full rounded-full border-2 border-white shadow-xl md:border-4">
+              {/* Outer Border Ring */}
+              <div className="absolute -inset-2 rounded-full border-2 border-primary-blue/30" />
+
+              {/* The Image */}
+              <Image
+                src={AliciaImage}
+                alt="Cleaning Professional"
+                className="h-full w-full rounded-full object-cover"
+                priority
+              />
+            </div>
+          </div>
         </div>
 
-        <div className="relative overflow-hidden rounded-[2.5rem] border border-border bg-card shadow-2xl">
+        <div className="relative overflow-hidden rounded-xl bg-muted-foreground/5 shadow-md">
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-left">
               <thead>
                 <tr className="bg-muted/30 text-[10px] font-black tracking-widest text-muted-foreground uppercase">
                   <th className="px-8 py-8">Home Size</th>
                   <th className="px-6 py-8">Weekly (Save 20%)</th>
-                  {/* Default/Featured Column Header */}
-                  <th className="relative bg-primary-blue/[0.02] px-6 py-8 text-primary-blue">
+                  <th className="relative bg-primary-blue/5 px-6 py-8 text-primary-blue">
                     <div className="absolute top-0 right-0 left-0 h-1 bg-primary-blue" />
                     <span className="flex items-center gap-1.5">
                       Bi-Weekly <Star size={10} className="fill-primary-blue" />
@@ -55,19 +76,18 @@ export default function CleaningPricing() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/60">
-                {regularPricing.map((row) => (
+                {regularRows.map((row) => (
                   <tr
-                    key={row.rooms}
+                    key={row.label}
                     className="group transition-colors hover:bg-muted/20"
                   >
                     <td className="px-8 py-6 font-bold text-foreground">
-                      {row.rooms}
+                      {row.label}
                     </td>
                     <td className="px-6 py-6 font-medium text-muted-foreground">
                       ${row.weekly}
                     </td>
-                    {/* Default/Featured Column Body */}
-                    <td className="bg-primary-blue/[0.02] px-6 py-6 font-black text-primary-blue">
+                    <td className="bg-primary-blue/5 px-6 py-6 text-lg font-black text-primary-blue">
                       ${row.biweekly}
                     </td>
                     <td className="px-6 py-6 pr-8 text-right font-medium text-muted-foreground">
@@ -103,9 +123,33 @@ export default function CleaningPricing() {
 
             <p className="text-lg leading-relaxed text-muted-foreground [word-spacing:0.05em]">
               Ideal for homes that haven’t been professionally cleaned in 30+
-              days. We move beyond the surface, focusing on vertical grime,
-              buildup in wet areas, and deep-dust extraction.
+              days. We focus on vertical grime, buildup in wet areas, and
+              deep-dust extraction.
             </p>
+
+            {/* NEW: Deep Cleaning Base Price Table */}
+            <div className="overflow-hidden rounded-3xl border border-border bg-card/50 shadow-sm">
+              <table className="w-full text-left">
+                <thead className="bg-muted/50 text-[9px] font-black tracking-widest uppercase">
+                  <tr>
+                    <th className="px-6 py-4">Home Size</th>
+                    <th className="px-6 py-4 text-right">Deep Clean Base</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border/40">
+                  {deepRows.map((row) => (
+                    <tr key={row.label}>
+                      <td className="px-6 py-4 text-xs font-bold uppercase">
+                        {row.label}
+                      </td>
+                      <td className="px-6 py-4 text-right text-xs font-black text-primary-blue">
+                        ${row.price}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {[
@@ -113,8 +157,6 @@ export default function CleaningPricing() {
                 "Grout Refresh",
                 "Vent Sanitization",
                 "Light Fixture Detail",
-                "Door Frame Wiping",
-                "High-Dust Removal",
               ].map((feature) => (
                 <div key={feature} className="flex items-center gap-3">
                   <div className="flex h-6 w-6 items-center justify-center rounded-full bg-accent-green/10 text-accent-green">
@@ -129,7 +171,6 @@ export default function CleaningPricing() {
           </div>
 
           <div className="relative">
-            {/* Alicia Quote Overlay (Optional styling touch) */}
             <div className="absolute -top-6 -right-6 z-10 hidden rounded-2xl bg-footer p-4 shadow-xl lg:block">
               <p className="text-[10px] font-bold text-white italic">
                 {"Perfect for seasonal refreshes."}
@@ -141,7 +182,7 @@ export default function CleaningPricing() {
                 Essential Add-ons
               </h3>
               <div className="space-y-6">
-                {deepCleaningAddons.map((addon) => (
+                {DEEP_CLEANING_ADDONS.map((addon) => (
                   <div
                     key={addon.item}
                     className="group flex items-center justify-between border-b border-border pb-6 last:border-0"
@@ -155,12 +196,12 @@ export default function CleaningPricing() {
                       </p>
                     </div>
                     <span className="rounded-xl bg-primary-blue/5 px-4 py-2 text-xs font-black text-primary-blue">
-                      {addon.price}
+                      {addon.displayPrice}
                     </span>
                   </div>
                 ))}
               </div>
-              <button className="mt-10 w-full rounded-2xl bg-primary-blue py-5 text-xs font-black tracking-[0.3em] text-white uppercase shadow-lg transition-all hover:scale-[1.02] hover:shadow-primary-blue/20 active:scale-95">
+              <button className="mt-10 w-full rounded-2xl bg-primary-blue py-5 text-xs font-black tracking-[0.3em] text-white uppercase shadow-lg transition-all hover:scale-[1.02] active:scale-95">
                 Book Detailed Clean
               </button>
             </div>
