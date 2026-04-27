@@ -1,3 +1,5 @@
+# my own stuff
+public/sitemap*.xml
 # dependencies
 /node_modules
 /.pnp
