@@ -11,7 +11,7 @@ import {
   Calculator as CalcIcon,
 } from "lucide-react"
 import OlesyaImage from "@/public/images/cleaning/ol-2.png"
-import { CleaningCalculator } from "@/components/cleaning/CleaningCalculator"
+import { CleaningCalculator } from "@/components/cleaning/CleaningCalculatorOffer"
 
 export const metadata: Metadata = {
   title:

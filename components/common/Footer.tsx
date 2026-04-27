@@ -160,10 +160,16 @@ export const Footer = () => {
                 Terms of Service
               </Link>
               <Link
-                href="#services"
+                href="/services"
                 className="transition-colors hover:text-primary-blue"
               >
                 Our Process
+              </Link>
+              <Link
+                href="/pricing"
+                className="transition-colors hover:text-primary-blue"
+              >
+                Pricing{" "}
               </Link>
               <p className="mt-4 max-w-50 text-xs leading-relaxed text-background italic opacity-70">
                 Proudly serving a 50-mile radius around Los Angeles, CA.

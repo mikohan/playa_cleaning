@@ -10,13 +10,13 @@ import {
   Cookie,
   Eye,
   Move,
-  PawPrint,
   Waves,
   Zap,
   ShieldCheck,
   ArrowRight,
   Info,
   LucideIcon,
+  TreePine,
 } from "lucide-react"
 import { Slider } from "@/components/ui/slider"
 import { cn } from "@/lib/utils"
@@ -42,26 +42,45 @@ interface PricingConfig {
 // --- CONSTANTS ---
 
 const INCLUSIONS: Record<string, string[]> = {
-  maintenance: [],
-  deep: ["oven", "windows"],
+  standard: [],
+  deep: ["oven", "windows", "fridge"],
   move: ["oven", "windows", "fridge", "moveAppliances"],
 }
 
+// const PRICING: PricingConfig = {
+//   base: 60,
+//   sqftRate: 0.05,
+//   bedRate: 25,
+//   bathRate: 35,
+//   multipliers: {
+//     standard: 0.8,
+//     deep: 1.6,
+//     move: 2.1,
+//   },
+//   addons: {
+//     fridge: { label: "Inside Fridge", price: 35, icon: Refrigerator },
+//     oven: { label: "Inside Oven", price: 35, icon: Cookie },
+//     moveAppliances: { label: "Move Fridge/Oven", price: 60, icon: Move },
+//     pets: { label: "Patio/Balcony", price: 45, icon: TreePine },
+//     windows: { label: "Interior Windows", price: 15, icon: Waves },
+//     blinds: { label: "Hand-Wipe Blinds", price: 12, icon: Eye },
+//   },
+// }
 const PRICING: PricingConfig = {
-  base: 90,
-  sqftRate: 0.08,
-  bedRate: 30,
-  bathRate: 50,
+  base: 25, // Adjusted to hit the $165 floor
+  sqftRate: 0.1, // Standard $0.10 per sqft
+  bedRate: 20, // Flat rate per bedroom
+  bathRate: 20, // Flat rate per bathroom
   multipliers: {
-    maintenance: 1,
-    deep: 1.6,
-    move: 2.1,
+    standard: 1, // This ensures 1BR/1BA/1000sqft stays at exactly $165
+    deep: 1.5,
+    move: 1.8,
   },
   addons: {
     fridge: { label: "Inside Fridge", price: 35, icon: Refrigerator },
     oven: { label: "Inside Oven", price: 35, icon: Cookie },
     moveAppliances: { label: "Move Fridge/Oven", price: 60, icon: Move },
-    pets: { label: "Heavy Pet Hair", price: 45, icon: PawPrint },
+    pets: { label: "Patio/Balcony", price: 45, icon: TreePine },
     windows: { label: "Interior Windows", price: 15, icon: Waves },
     blinds: { label: "Hand-Wipe Blinds", price: 12, icon: Eye },
   },
@@ -77,10 +96,10 @@ export function CleaningCalculator({
   const router = useRouter()
 
   // --- STATE ---
-  const [sqft, setSqft] = useState<number[]>([1200])
+  const [sqft, setSqft] = useState<number[]>([1000])
   const [beds, setBeds] = useState<string>("2")
   const [baths, setBaths] = useState<string>("2")
-  const [type, setType] = useState<keyof typeof INCLUSIONS>("maintenance")
+  const [type, setType] = useState<keyof typeof INCLUSIONS>("standard")
   const [selectedToggles, setSelectedToggles] = useState<string[]>([])
   const [counters, setCounters] = useState<{ windows: number; blinds: number }>(
     {
@@ -279,7 +298,7 @@ export function CleaningCalculator({
                       {k === "move" ? "Move In/Out" : k}
                     </p>
                     <p className="font-blauerRegular mt-1 text-[10px] leading-tight text-muted-foreground">
-                      {k === "maintenance"
+                      {k === "standard"
                         ? "Regular upkeep for clean homes."
                         : k === "deep"
                           ? "Deep reset + Oven + 5 Windows."

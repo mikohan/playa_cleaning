@@ -71,9 +71,13 @@ export function Navbar() {
                 <NavigationMenuItem key={item.title}>
                   {item.isDropdown ? (
                     <>
-                      <NavigationMenuTrigger className="bg-transparent text-[10px] font-black tracking-[0.2em] uppercase transition-colors hover:text-primary-blue">
-                        {item.title}
-                      </NavigationMenuTrigger>
+                      <Link href={item.href} passHref>
+                        <div className="cursor-pointer">
+                          <NavigationMenuTrigger className="cursor-pointer bg-transparent text-[10px] font-black tracking-[0.2em] uppercase transition-colors hover:text-primary-blue">
+                            {item.title}
+                          </NavigationMenuTrigger>
+                        </div>
+                      </Link>
                       <NavigationMenuContent>
                         <ul className="grid w-[400px] gap-3 rounded-2xl border border-border bg-background p-6 shadow-xl md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                           {item.subItems?.map((sub) => (
