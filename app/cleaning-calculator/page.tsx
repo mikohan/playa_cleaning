@@ -63,6 +63,7 @@ export default function CalculatorPage() {
                   alt="Alicia, Lead Coordinator"
                   fill
                   className="object-cover"
+                  priority
                 />
               </div>
               <div className="absolute right-12 -bottom-2 rounded-2xl bg-foreground p-4 shadow-xl">

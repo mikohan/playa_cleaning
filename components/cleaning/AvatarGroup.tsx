@@ -21,7 +21,13 @@ function AvatarGroup({ className }: { className?: string }) {
           className="h-8 w-8 border-2 border-blue-100 md:h-12 md:w-12"
         >
           <AvatarImage asChild src={avatar.src.src}>
-            <Image src={avatar.src} alt={avatar.alt} width={48} height={48} />
+            <Image
+              src={avatar.src}
+              alt={avatar.alt}
+              width={48}
+              height={48}
+              priority
+            />
           </AvatarImage>
           <AvatarFallback>AS</AvatarFallback>
         </Avatar>

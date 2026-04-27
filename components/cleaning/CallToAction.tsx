@@ -73,7 +73,7 @@ export const CallToAction = () => {
 
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-5 lg:gap-20">
-          <div className="group relative z-10 h-[500px] overflow-hidden rounded-[2.5rem] bg-muted md:col-span-2 md:h-[650px]">
+          <div className="group relative z-10 h-125 overflow-hidden rounded-[2.5rem] bg-muted md:col-span-2 md:h-[650px]">
             <Image
               src={AliciaPortrait}
               alt="Olesya Vostrikova - Playa Cleaning"
