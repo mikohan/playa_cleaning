@@ -9,6 +9,7 @@ import ServicesList from "@/components/newCleaning/ServicesList"
 import Image from "next/image"
 import AliciaImage from "@/public/images/cleaning/hero-4.png"
 import { Star } from "lucide-react"
+import { CalculatorCTA } from "@/components/newCleaning/CalculatorCTA"
 
 // 1. FULL METADATA ENGINE
 export const metadata: Metadata = {
@@ -202,7 +203,7 @@ export default function ServicesListPage() {
           </div>
         </div>
       </div>
-
+      <CalculatorCTA />
       <div className="mt-20">
         <Footer />
       </div>

@@ -10,6 +10,7 @@ import OlesyaImage from "@/public/images/cleaning/ol-2.png"
 import { CarpetCallToAction } from "@/components/cleaning/CarpetCallToAction"
 import { CallToAction } from "@/components/cleaning/CallToAction"
 import HeroMeColor from "@/public/images/cleaning/hero-me-color.png"
+import { CalculatorCTA } from "@/components/newCleaning/CalculatorCTA"
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -195,7 +196,7 @@ export default async function ServicePage({ params }: Props) {
           </div>
         </div>
       </section>
-
+      <CalculatorCTA />
       <Footer />
     </main>
   )

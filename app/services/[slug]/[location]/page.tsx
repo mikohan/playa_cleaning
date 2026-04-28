@@ -17,6 +17,7 @@ import { FeaturesSection } from "@/components/newCleaning/FeaturesSection"
 import { Testimonials } from "@/components/cleaning/Testimonials"
 import { CallToAction } from "@/components/cleaning/CallToAction"
 import { CarpetCallToAction } from "@/components/cleaning/CarpetCallToAction"
+import { CalculatorCTA } from "@/components/newCleaning/CalculatorCTA"
 
 interface Props {
   params: Promise<{ slug: string; location: string }>
@@ -206,7 +207,7 @@ export default async function CityServicePage({ params }: Props) {
           {carpet ? <CarpetCallToAction /> : <CallToAction />}
         </div>
       </section>
-
+      <CalculatorCTA />
       <Footer />
     </main>
   )

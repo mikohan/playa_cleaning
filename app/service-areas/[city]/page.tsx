@@ -11,7 +11,7 @@ import { Metadata } from "next"
 import { ServiceScope } from "@/components/newCleaning/ServiceScope"
 import { ServiceExclusions } from "@/components/newCleaning/ServiceExclusion"
 import { TeamBentoGrid } from "@/components/newCleaning/TeamBentoGrid"
-import { ServiceAreasSection } from "@/components/newCleaning/ServiceAreasSection"
+import { CalculatorCTA } from "@/components/newCleaning/CalculatorCTA"
 
 export async function generateMetadata({
   params,
@@ -128,6 +128,7 @@ export default async function CityPage({
         <Testimonials />
         <GeoSection city={cityName} />
       </div>
+      <CalculatorCTA />
       <Footer />
     </main>
   )

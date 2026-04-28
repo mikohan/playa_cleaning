@@ -6,6 +6,7 @@ import { FeaturesSection } from "@/components/newCleaning/FeaturesSection"
 import { Footer } from "@/components/common/Footer"
 import { CallToAction } from "@/components/cleaning/CallToAction"
 import { Metadata } from "next"
+import { CalculatorCTA } from "@/components/newCleaning/CalculatorCTA"
 
 export const metadata: Metadata = {
   title: "Professional House Cleaning Los Angeles | Playa Cleaning",
@@ -76,6 +77,7 @@ export default function Page() {
         <FeaturesSection />
         <Testimonials />
         <CallToAction />
+        <CalculatorCTA />
         <Footer />
       </div>
     </div>
