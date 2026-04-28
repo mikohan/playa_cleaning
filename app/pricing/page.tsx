@@ -7,7 +7,7 @@ import { FAQSection } from "@/components/cleaning/FAQSection"
 import { BenefitsSection } from "@/components/cleaning/BenefitsSection"
 import { CallToAction } from "@/components/cleaning/CallToAction"
 import { ServiceComparison } from "@/components/cleaning/ServiceComparison"
-import CleaningPriceTable from "@/components/newCleaning/CleainingPricingTable"
+import { CleaningPricing } from "@/components/newCleaning/CleaningPricing"
 import { ServiceScope } from "@/components/newCleaning/ServiceScope"
 import { Metadata } from "next"
 
@@ -61,7 +61,7 @@ export default function Page() {
   return (
     <div className="font-jakarta">
       <Navbar />
-      <CleaningPriceTable />
+      <CleaningPricing />
       <LogoTicker />
       <ServiceScope />
       <BenefitsSection />

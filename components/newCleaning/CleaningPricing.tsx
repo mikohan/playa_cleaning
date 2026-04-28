@@ -27,7 +27,7 @@ const deepRows = [
   { label: "4 Bed 3 Bath", price: PRICING_MATRICES.DEEP["4"]["3"] },
 ]
 
-export default function CleaningPricing() {
+export function CleaningPricing() {
   return (
     <div className="space-y-32 py-20">
       {/* 1. REGULAR CLEANING - RECURRING FREQUENCY TABLE */}

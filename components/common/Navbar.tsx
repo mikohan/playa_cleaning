@@ -50,8 +50,9 @@ export function Navbar() {
   const handleToggle = () => setTheme(theme === "dark" ? "light" : "dark")
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-20 items-center justify-between px-6">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
+      <div className="relative container mx-auto flex h-20 items-center justify-between px-6">
+        <div className="absolute h-full w-full bg-top-blur/40 blur-2xl"></div>
         {/* Logo Section */}
         <Link
           href="/"
@@ -79,7 +80,7 @@ export function Navbar() {
                         </div>
                       </Link>
                       <NavigationMenuContent>
-                        <ul className="grid w-[400px] gap-3 rounded-2xl border border-border bg-background p-6 shadow-xl md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                        <ul className="grid w-100 gap-3 rounded-2xl border border-border bg-background p-6 shadow-xl md:w-125 md:grid-cols-2 lg:w-150">
                           {item.subItems?.map((sub) => (
                             <li key={sub.name}>
                               <NavigationMenuLink asChild>
