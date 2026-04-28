@@ -1,4 +1,6 @@
+"use client"
 import React, { useState, Suspense } from "react"
+
 import { useSearchParams, useRouter } from "next/navigation"
 import {
   User,
@@ -15,21 +17,6 @@ import {
 import { cn } from "@/lib/utils"
 // 1. Import your action and the type
 import { sendEmail } from "@/lib/resend"
-import { Metadata } from "next"
-
-export const metadata: Metadata = {
-  title: "Finalize Your Booking | Playa Cleaning",
-  description: "Secure your professional cleaning service in Los Angeles.",
-  robots: {
-    index: false,
-    follow: false,
-    nocache: true,
-    googleBot: {
-      index: false,
-      follow: false,
-    },
-  },
-}
 
 function BookingContent() {
   const searchParams = useSearchParams()
