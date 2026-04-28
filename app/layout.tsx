@@ -6,85 +6,22 @@ import type { Metadata } from "next"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
-import { Plus_Jakarta_Sans, Inter, Geist } from "next/font/google"
+import { Plus_Jakarta_Sans, Inter } from "next/font/google"
 
-// const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 export const metadata: Metadata = {
-  title: "Playa Cleaning | Professional House & Deep Cleaning Los Angeles",
-  description:
-    "Top-rated house cleaning and deep cleaning services in Playa Vista, Santa Monica, and Los Angeles. Book your professional cleaner online in 60 seconds.",
-  keywords: [
-    "house cleaning Los Angeles",
-    "deep cleaning Playa Vista",
-    "maid service Santa Monica",
-    "apartment cleaning 90094",
-  ],
+  // Add this line here:
+  metadataBase: new URL("https://playacleaning.com"),
 
-  // SEO & Geo-Targeting
-  authors: [{ name: "Playa Cleaning" }],
-  creator: "Playa Cleaning",
-  publisher: "Playa Cleaning",
-  formatDetection: {
-    email: false,
-    address: true,
-    telephone: true, // This highlights your 213-598-7763 number for mobile users
+  title: {
+    default: "Playa Cleaning | Professional House Cleaning Los Angeles",
+    template: "%s | Playa Cleaning",
   },
-
-  // Open Graph (Facebook/Instagram)
+  description: "Premium flat-rate house cleaning services in Los Angeles.",
   openGraph: {
-    title: "Playa Cleaning | Top-Rated Home Cleaning in LA",
-    description:
-      "Eco-friendly and reliable professional cleaning services tailored for your home.",
-    url: "https://playacleaning.com",
-    siteName: "Playa Cleaning",
-    images: [
-      {
-        url: "https://playacleaning.com/og-image.jpg", // Ensure this file exists in /public
-        width: 1200,
-        height: 630,
-        alt: "Playa Cleaning Professional Staff",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-
-  // Twitter
-  twitter: {
-    card: "summary_large_image",
-    title: "Playa Cleaning | Los Angeles House Cleaning",
-    description:
-      "Professional cleaning services in Playa Vista and Santa Monica.",
-    images: ["https://playacleaning.com/og-image.jpg"],
-  },
-
-  // Robots & Canonical
-  alternates: {
-    canonical: "https://playacleaning.com",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-  other: {
-    rel: "preconnect",
-    url: "https://fonts.googleapis.com",
+    images: "/og-image.jpg", // Now correctly resolves to https://playacleaning.com/og-image.jpg
   },
 }
-// Separate Viewport Export (Required in newer Next.js versions)
-export const viewport = {
-  themeColor: "#ffffff",
-  width: "device-width",
-  initialScale: 1,
-}
-
+// const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-jakarta",

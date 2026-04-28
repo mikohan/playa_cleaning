@@ -11,6 +11,7 @@ import { Metadata } from "next"
 import { ServiceScope } from "@/components/newCleaning/ServiceScope"
 import { ServiceExclusions } from "@/components/newCleaning/ServiceExclusion"
 import { TeamBentoGrid } from "@/components/newCleaning/TeamBentoGrid"
+import { ServiceAreasSection } from "@/components/newCleaning/ServiceAreasSection"
 
 export async function generateMetadata({
   params,

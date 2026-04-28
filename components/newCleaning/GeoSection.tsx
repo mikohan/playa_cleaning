@@ -1,21 +1,31 @@
 "use client"
 import React from "react"
 import { MapPin, Clock, CheckCircle2 } from "lucide-react"
-import { WaveDivider } from "../common/WaveDivider"
+import Link from "next/link"
+import { LOS_ANGELES_AREAS } from "@/app/data/la-areas-all"
 
 interface GeoSectionProps {
   city?: string
-  neighborhoods?: string[]
+  // Removing neighborhoods from props as we will now derive them dynamically
 }
 
-export const GeoSection = ({
-  city = "Playa Vista",
-  neighborhoods = ["Culver City", "Marina Del Rey", "Mar Vista", "Venice"],
-}: GeoSectionProps) => {
+export const GeoSection = ({ city = "Playa Vista" }: GeoSectionProps) => {
+  // 1. Find the current area object based on the city name or slug
+  const currentArea = LOS_ANGELES_AREAS.find(
+    (a) =>
+      a.name.toLowerCase() === city.toLowerCase() ||
+      a.slug === city.toLowerCase()
+  )
+
+  // 2. Get the neighbor data objects so we have both the Name and the Slug
+  const neighborAreas = currentArea
+    ? LOS_ANGELES_AREAS.filter((a) =>
+        currentArea.neighborSlugs.includes(a.slug)
+      )
+    : []
+
   return (
     <section className="relative py-20 md:py-40">
-      {/* <WaveDivider position="top" fill="var(--color-background)" />
-      <div className="absolute top-0 left-0 -z-10 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div> */}
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 items-start gap-16 lg:grid-cols-12">
           {/* LEFT: SEO COPY */}
@@ -25,28 +35,35 @@ export const GeoSection = ({
             </div>
 
             <h2 className="text-4xl font-black tracking-tight text-foreground uppercase md:text-5xl">
-              Professional Cleaning in {city}.
+              Professional Cleaning in {currentArea?.name || city}.
             </h2>
 
             <p className="max-w-xl text-lg leading-relaxed font-semibold text-muted-foreground">
-              Serving {city} and surrounding areas with verified flat-rate
-              cleaning. Our teams are dispatched locally to ensure same-day
-              availability and punctual arrivals for every scheduled visit.
+              Serving {currentArea?.name || city} and surrounding areas with
+              verified flat-rate cleaning. Our teams are dispatched locally to
+              ensure same-day availability and punctual arrivals.
             </p>
 
-            {/* NEIGHBORHOOD TAGS */}
+            {/* DYNAMIC NEIGHBORHOOD LINKS */}
             <div className="pt-4">
               <p className="mb-4 text-xs font-black tracking-widest text-foreground uppercase">
-                Neighborhoods Served:
+                Nearby Service Areas:
               </p>
               <div className="flex flex-wrap gap-2">
-                {neighborhoods.map((area) => (
-                  <span
-                    key={area}
-                    className="rounded-lg border border-border bg-background px-4 py-2 text-sm font-bold text-foreground"
+                {/* Always include the current city as a static, non-linkable tag */}
+                <span className="rounded-lg border border-primary-blue/20 bg-primary-blue/5 px-4 py-2 text-sm font-bold text-primary-blue opacity-80">
+                  {currentArea?.name || city}
+                </span>
+
+                {/* Map through the actual neighbors found in your data file */}
+                {neighborAreas.map((neighbor) => (
+                  <Link
+                    key={neighbor.slug}
+                    href={`/service-areas/${neighbor.slug}`}
+                    className="rounded-lg border border-border bg-background px-4 py-2 text-sm font-bold text-foreground transition-all hover:border-primary-blue hover:text-primary-blue hover:shadow-md"
                   >
-                    {area}
-                  </span>
+                    {neighbor.name}
+                  </Link>
                 ))}
               </div>
             </div>
@@ -71,8 +88,8 @@ export const GeoSection = ({
                 Vetted Teams
               </h3>
               <p className="mt-2 text-sm font-semibold text-muted-foreground">
-                All cleaners assigned to {city} have passed local background
-                checks and technical proficiency tests.
+                All cleaners assigned to {currentArea?.name || city} have passed
+                local background checks and technical proficiency tests.
               </p>
             </div>
           </div>

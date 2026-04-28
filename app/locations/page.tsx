@@ -8,6 +8,7 @@ import { BreadCrumbs } from "@/components/common/BreadCrumbs"
 import { LOS_ANGELES_AREAS } from "@/app/data/la-areas-all"
 import { MapPin, Star, ShieldCheck, Clock } from "lucide-react"
 import OlesyaImage from "@/public/images/cleaning/ol-6.png"
+import { ServiceAreasSection } from "@/components/newCleaning/ServiceAreasSection"
 
 export const metadata: Metadata = {
   title:
@@ -203,6 +204,7 @@ export default function LocationsPage() {
           </div>
         </section>
       </div>
+      <ServiceAreasSection />
 
       <Footer />
     </main>
