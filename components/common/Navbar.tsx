@@ -50,16 +50,16 @@ export function Navbar() {
   const handleToggle = () => setTheme(theme === "dark" ? "light" : "dark")
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
+    <header className="sticky top-0 z-50 w-full overflow-hidden border-b border-border/40 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="relative container mx-auto flex h-20 items-center justify-between px-6">
-        <div className="absolute h-full w-full bg-top-blur/40 blur-2xl"></div>
+        <div className="pointer-events-none absolute -z-10 h-full w-full overflow-hidden bg-top-blur/40 blur-2xl"></div>
         {/* Logo Section */}
         <Link
           href="/"
           className="flex items-center space-x-2 transition-opacity hover:opacity-90"
         >
           <TreePalm className="h-7 w-7 text-primary-blue" />
-          <span className="text-xl font-black tracking-tighter text-foreground">
+          <span className="traking-tighter text-xl font-black text-foreground">
             Playa<span className="text-primary-blue">Cleaning</span>
           </span>
         </Link>
@@ -80,7 +80,7 @@ export function Navbar() {
                         </div>
                       </Link>
                       <NavigationMenuContent>
-                        <ul className="grid w-100 gap-3 rounded-2xl border border-border bg-background p-6 shadow-xl md:w-125 md:grid-cols-2 lg:w-150">
+                        <ul className="grid max-w-[100vw] gap-3 rounded-2xl border border-border bg-background p-6 shadow-xl md:w-125 md:grid-cols-2 lg:w-150">
                           {item.subItems?.map((sub) => (
                             <li key={sub.name}>
                               <NavigationMenuLink asChild>
