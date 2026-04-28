@@ -1,5 +1,3 @@
-"use client"
-
 import React from "react"
 import Image from "next/image"
 import Link from "next/link"
@@ -7,6 +5,38 @@ import { PartyPopper, ArrowRight, CheckCircle2, Phone } from "lucide-react"
 import AliciaPortrait from "@/public/images/cleaning/hero-4.png"
 import { Navbar } from "@/components/common/Navbar"
 import { Footer } from "@/components/common/Footer"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Thank You | Playa Cleaning",
+  description:
+    "Your cleaning quote request has been received. Alicia and the team will reach out shortly with your estimate.",
+
+  // CRITICAL: Prevent this page from showing up in Google search results
+  robots: {
+    index: false,
+    follow: false,
+  },
+
+  // Open Graph
+  openGraph: {
+    title: "Request Received | Playa Cleaning",
+    description:
+      "We've received your details and are preparing your custom cleaning estimate.",
+    url: "https://playacleaning.com/thank-you",
+    siteName: "Playa Cleaning",
+    images: [
+      {
+        url: "/og-thank-you.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Playa Cleaning Confirmation",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+}
 
 export default function ThankYouPage() {
   return (

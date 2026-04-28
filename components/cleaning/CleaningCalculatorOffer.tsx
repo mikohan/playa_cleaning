@@ -137,14 +137,14 @@ export function CleaningCalculator({
         </div>
       )}
 
-      <div className="container mx-auto mt-16 max-w-7xl rounded-2xl bg-primary-blue/10 p-16">
+      <div className="container mx-auto mt-16 max-w-7xl rounded-2xl bg-primary-blue/10 p-4 md:p-16">
         <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12">
           <div className="space-y-10 lg:col-span-7">
             <header>
-              <h2 className="mb-2 text-3xl font-bold tracking-tight uppercase">
+              <h2 className="mb-2 text-xl font-bold tracking-tight uppercase md:text-3xl">
                 Estimate Your Transformation
               </h2>
-              <p className="text-muted-foreground italic">
+              <p className="text-sm text-muted-foreground italic md:text-base">
                 Our Price Lock Guarantee ensures no surprises at the door.
               </p>
             </header>
@@ -314,8 +314,8 @@ export function CleaningCalculator({
 
           {/* SIDEBAR */}
           <div className="sticky top-24 lg:col-span-5">
-            <div className="rounded-t-[2.5rem] bg-primary p-10 text-primary-foreground shadow-2xl">
-              <div className="mb-8 flex items-center justify-between">
+            <div className="rounded-t-2xl bg-primary px-4 py-6 text-primary-foreground shadow-2xl md:px-10 md:py-10">
+              <div className="mb-4 flex items-center justify-between md:mb-8">
                 <span className="text-[10px] font-bold tracking-[0.3em] uppercase opacity-80">
                   Price Lock Active
                 </span>
@@ -323,12 +323,12 @@ export function CleaningCalculator({
               </div>
               <div className="flex items-baseline gap-1">
                 <span className="text-xl font-bold opacity-70">$</span>
-                <span className="text-8xl font-bold tracking-tighter">
+                <span className="text-5xl font-bold tracking-tighter md:text-8xl">
                   {totalPrice}
                 </span>
               </div>
             </div>
-            <div className="space-y-8 rounded-b-[2.5rem] border-x border-b border-border bg-card p-10">
+            <div className="space-y-8 rounded-b-2xl border-x border-b border-border bg-card p-4 md:p-10">
               <ul className="space-y-5">
                 {[
                   "Single-Expert Premium Service",
@@ -352,13 +352,13 @@ export function CleaningCalculator({
                   <span>
                     Next Slot:{" "}
                     <span className="font-bold text-foreground italic underline decoration-primary underline-offset-4">
-                      This Tuesday @ 9:00 AM
+                      Tomorrow @ 9:00 AM
                     </span>
                   </span>
                 </div>
                 <button
                   onClick={handleRedirect}
-                  className="flex w-full items-center justify-center gap-3 rounded-2xl bg-primary py-7 text-xl font-bold text-primary-foreground shadow-lg transition-all hover:scale-[1.02]"
+                  className="flex w-full items-center justify-center gap-3 rounded-2xl bg-primary py-2 font-bold text-primary-foreground shadow-lg transition-all hover:scale-[1.02] md:py-7 md:text-xl"
                 >
                   Secure This Investment <ArrowRight size={22} />
                 </button>

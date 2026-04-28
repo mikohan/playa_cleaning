@@ -7,12 +7,10 @@ import {
   Phone,
   Mail,
   MapPin,
-  ShieldCheck,
   CreditCard,
   ChevronLeft,
   Calendar,
   MessageSquare,
-  CheckCircle2,
   ArrowRight,
   Sparkles,
 } from "lucide-react"

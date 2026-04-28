@@ -14,11 +14,58 @@ import OlesyaImage from "@/public/images/cleaning/ol-2.png"
 import { CleaningCalculator } from "@/components/cleaning/CleaningCalculatorOffer"
 
 export const metadata: Metadata = {
-  title:
-    "Instant Cleaning Quote | Price Estimator Los Angeles | Playa Cleaning",
+  title: "Instant Cleaning Quote | Playa Cleaning Los Angeles",
   description:
-    "Get an instant cleaning estimate for your LA home. Our transparent calculator covers deep cleaning, move-out services, and specialized upholstery care.",
-  alternates: { canonical: "https://playacleaning.com/calculator" },
+    "Get an instant price for your home cleaning in Los Angeles. Select your bedrooms and bathrooms to see our flat-rate pricing for Standard, Deep, and Move-Out cleans.",
+  keywords: [
+    "cleaning calculator LA",
+    "maid service price estimator",
+    "house cleaning cost Los Angeles",
+    "Angara Steamers pricing",
+    "Playa Cleaning quote",
+  ],
+
+  // Open Graph (Facebook, LinkedIn, Discord)
+  openGraph: {
+    title: "Instant Home Cleaning Calculator | Playa Cleaning",
+    description:
+      "Calculate your cleaning cost in seconds. Transparent, flat-rate pricing for professional maid services in Los Angeles.",
+    url: "https://playacleaning.com/cleaning-calculator",
+    siteName: "Playa Cleaning",
+    images: [
+      {
+        url: "/og-image.jpg", // Create a high-quality 1200x630 image
+        width: 1200,
+        height: 630,
+        alt: "Playa Cleaning Instant Quote Tool",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+
+  // Twitter (X)
+  twitter: {
+    card: "summary_large_image",
+    title: "How much does house cleaning cost in LA?",
+    description:
+      "Use our instant calculator to get a flat-rate quote for your apartment or house in seconds.",
+    images: ["/og-calculator-preview.jpg"],
+    creator: "@playacleaning",
+  },
+
+  // Search Engine Specifics
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 }
 
 export default function CalculatorPage() {

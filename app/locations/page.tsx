@@ -13,8 +13,48 @@ export const metadata: Metadata = {
   title:
     "Service Areas | Professional Cleaning Across Los Angeles | Playa Cleaning",
   description:
-    "Playa Cleaning provides premium house, deep, and move-out cleaning services throughout Los Angeles. From Santa Monica to Pasadena, find a professional cleaner near you.",
-  alternates: { canonical: "https://playacleaning.com/locations" },
+    "Playa Cleaning provides premium house, deep, and move-out cleaning services throughout Los Angeles. From Santa Monica and Venice to Pasadena and Silver Lake, find a professional cleaner in your neighborhood.",
+  keywords: [
+    "cleaning services Los Angeles",
+    "maid service Santa Monica",
+    "house cleaning Pasadena",
+    "West Hollywood cleaning company",
+    "Culver City maid service",
+    "Beverly Hills house cleaners",
+    "Playa Vista cleaning services",
+    "South Bay cleaning",
+  ],
+  alternates: {
+    canonical: "https://playacleaning.com/locations",
+  },
+
+  // Open Graph
+  openGraph: {
+    title: "Playa Cleaning Service Areas | Local LA House Cleaners",
+    description:
+      "Reliable, professional home cleaning available across all major Los Angeles neighborhoods. Check if we serve your zip code today!",
+    url: "https://playacleaning.com/locations",
+    siteName: "Playa Cleaning",
+    images: [
+      {
+        url: "/og-image.jpg", // A map-style graphic or a clean home shot
+        width: 1200,
+        height: 630,
+        alt: "Map of Playa Cleaning service areas in Los Angeles",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+
+  // Twitter Card
+  twitter: {
+    card: "summary_large_image",
+    title: "Where We Clean: Playa Cleaning Service Locations",
+    description:
+      "Serving Santa Monica, Culver City, West LA, and beyond. Professional cleaning you can trust, right in your neighborhood.",
+    images: ["/og-image.jpg"],
+  },
 }
 
 export default function LocationsPage() {

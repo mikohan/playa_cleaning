@@ -1,7 +1,47 @@
-"use client"
 import React from "react"
 import Link from "next/link"
 import { ShieldCheck, Lock, Eye, FileText, ArrowLeft } from "lucide-react"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Privacy Policy | Playa Cleaning Los Angeles",
+  description:
+    "Learn how Playa Cleaning (Angara Steamers) collects, uses, and protects your personal data. We are committed to your privacy and the security of your information.",
+  keywords: [
+    "Playa Cleaning privacy policy",
+    "data protection",
+    "cleaning service legal",
+    "privacy terms Los Angeles",
+  ],
+  alternates: {
+    canonical: "https://playacleaning.com/privacy-policy",
+  },
+
+  // Open Graph
+  openGraph: {
+    title: "Privacy Policy | Playa Cleaning",
+    description:
+      "Our commitment to protecting your privacy and personal information at Playa Cleaning.",
+    url: "https://playacleaning.com/privacy-policy",
+    siteName: "Playa Cleaning",
+    images: [
+      {
+        url: "/og-image.jpg", // A neutral, professional legal-themed image
+        width: 1200,
+        height: 630,
+        alt: "Playa Cleaning Legal and Privacy Policy",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+
+  // Robots - We want it indexed as a trust signal, but not a priority for snippets
+  robots: {
+    index: true,
+    follow: true,
+  },
+}
 
 export default function PrivacyPolicy() {
   const lastUpdated = new Date().toLocaleDateString("en-US", {

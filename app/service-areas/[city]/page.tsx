@@ -19,28 +19,35 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { city } = await params
 
-  // Find the area data from your list to get the correct Name and Zip Codes
   const area = LOS_ANGELES_AREAS.find((a) => a.slug === city)
-  const cityName = area ? area.name : city.replace("-", " ").toUpperCase()
-  const zipPreview = area?.zipCodes[0] || ""
+  const cityName = area
+    ? area.name
+    : city
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ")
+  const zipPreview = area?.zipCodes?.slice(0, 3).join(", ") || ""
 
   return {
-    title: `Professional Cleaning Services in ${cityName} | Flat-Rate House Cleaning`,
-    description: `Book a verified, flat-rate house cleaning in ${cityName}${zipPreview ? ` (${zipPreview})` : ""}. Same-day availability, vetted cleaners, and 100% quality guarantee.`,
+    title: `Professional House Cleaning in ${cityName}, CA | Playa Cleaning`,
+    description: `Need a reliable cleaner in ${cityName}? We offer flat-rate house cleaning, deep cleaning, and move-out services ${zipPreview ? `across ${zipPreview}` : ""}. Book your 5-star clean in 60 seconds!`,
+    keywords: [
+      `${cityName} house cleaning`,
+      `maid service ${cityName}`,
+      `apartment cleaning ${cityName}`,
+      `best cleaners in ${cityName} CA`,
+      `Playa Cleaning ${cityName}`,
+    ],
     alternates: {
       canonical: `https://playacleaning.com/service-areas/${city}`,
     },
     openGraph: {
-      title: `${cityName} House Cleaning | Playa Cleaning`,
-      description: `Trusted maid service in ${cityName}. Pay by the room, not the hour. Book in 60 seconds.`,
+      title: `Top-Rated House Cleaning in ${cityName} | Playa Cleaning`,
+      description: `Trusted local maid service in ${cityName}. Flat-rate pricing, background-checked cleaners, and all supplies included.`,
       url: `https://playacleaning.com/service-areas/${city}`,
       siteName: "Playa Cleaning",
+      images: [{ url: "/og-local-service.jpg" }], // Use a generic high-quality cleaning shot
       type: "website",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `Cleaning Services in ${cityName}`,
-      description: `Premium flat-rate cleaning for ${cityName} residents.`,
     },
   }
 }
@@ -56,16 +63,60 @@ export async function generateStaticParams() {
 export default async function CityPage({
   params,
 }: {
-  params: Promise<{ city: string }> // 1. Define params as a Promise
+  params: Promise<{ city: string }>
 }) {
-  // 2. Resolve the promise first
   const resolvedParams = await params
+  const area = LOS_ANGELES_AREAS.find((a) => a.slug === resolvedParams.city)
+  const cityName = area
+    ? area.name
+    : resolvedParams.city.replace("-", " ").toUpperCase()
 
-  // 3. Now you can safely use .replace() on the string
-  const cityName = resolvedParams.city.replace("-", " ").toUpperCase()
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CleaningService",
+    name: `Playa Cleaning ${cityName}`,
+    description: `Professional residential cleaning services in ${cityName}, California. Specializing in standard, deep, and move-out cleaning.`,
+    provider: {
+      "@type": "LocalBusiness",
+      name: "Playa Cleaning",
+      image: "https://playacleaning.com/logo.png",
+      telephone: "+13105550123", // Replace with actual
+      priceRange: "$$",
+    },
+    areaServed: {
+      "@type": "City",
+      name: cityName,
+      containsPlace: area?.zipCodes?.map((zip) => ({
+        "@type": "PostalCode",
+        name: zip,
+      })),
+    },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Cleaning Services",
+      itemListElement: [
+        {
+          "@type": "Offer",
+          itemOffered: { "@type": "Service", name: "Standard House Cleaning" },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: { "@type": "Service", name: "Deep Tissue Cleaning" },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: { "@type": "Service", name: "Move-Out Cleaning" },
+        },
+      ],
+    },
+  }
 
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navbar />
       <div className="font-jakarta">
         <HeroSection city={cityName} />
@@ -75,7 +126,6 @@ export default async function CityPage({
         <TeamBentoGrid />
         <Testimonials />
         <GeoSection city={cityName} />
-        {/* Other components */}
       </div>
       <Footer />
     </main>

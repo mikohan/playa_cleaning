@@ -176,16 +176,16 @@ export function Navbar() {
                   ))}
                 </div>
 
-                <div className="mt-auto space-y-4">
-                  <Link href="/calculator">
-                    <ButtonShiny text="Order Cleaning" />
-                  </Link>
+                <div className="mt-auto flex flex-col gap-8 space-y-4">
                   <div
                     onClick={handleToggle}
                     className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border border-border p-3 text-[10px] font-black tracking-widest uppercase transition-colors hover:bg-muted"
                   >
                     <ThemeToggle /> Toggle Theme
                   </div>
+                  <Link href="/calculator">
+                    <ButtonShiny text="Order Cleaning" />
+                  </Link>
                 </div>
               </SheetContent>
             </Sheet>
