@@ -67,129 +67,131 @@ export const CallToAction = () => {
   `
 
   return (
-    <section className="relative overflow-hidden py-24 md:pt-40">
-      <div className="absolute top-0 left-0 -z-10 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
-      <WaveDivider position="top" fill="var(--color-background)" />
+    <section className="relative overflow-hidden">
+      <div className="relative py-24">
+        <div className="absolute top-0 left-0 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
+        <WaveDivider position="top" fill="var(--color-background)" />
 
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-5 lg:gap-20">
-          <div className="group relative z-10 h-125 overflow-hidden rounded-[2.5rem] bg-muted md:col-span-2 md:h-[650px]">
-            <Image
-              src={AliciaPortrait}
-              alt="Olesya Vostrikova - Playa Cleaning"
-              fill
-              className="object-cover transition-transform duration-1000 group-hover:scale-110"
-              priority
-            />
-            <div className="absolute inset-0 bg-linear-to-t from-primary-blue/30 via-transparent to-transparent"></div>
-          </div>
-
-          <div className="space-y-10 md:col-span-3">
-            <div className="space-y-4">
-              <span className="font-blauerMedium inline-flex items-center gap-2 text-sm font-bold tracking-widest text-primary-blue uppercase">
-                <CheckCircle2 size={16} /> Instant Price Estimate
-              </span>
-              <h2 className="font-blauerMedium text-4xl leading-[1.1] font-bold tracking-tight text-foreground md:text-6xl">
-                Ready to Reclaim <br /> Your{" "}
-                <span className="text-primary-blue underline decoration-primary-blue/20">
-                  Time?
-                </span>
-              </h2>
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-5 lg:gap-20">
+            <div className="group relative z-10 h-125 overflow-hidden rounded-[2.5rem] bg-muted md:col-span-2 md:h-[650px]">
+              <Image
+                src={AliciaPortrait}
+                alt="Olesya Vostrikova - Playa Cleaning"
+                fill
+                className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                priority
+              />
+              <div className="absolute inset-0 bg-linear-to-t from-primary-blue/30 via-transparent to-transparent"></div>
             </div>
 
-            {state.success ? (
-              <div className="max-w-xl animate-in rounded-[2rem] border-2 border-dashed border-primary-blue/20 bg-primary-blue/5 p-10 text-center duration-500 fade-in zoom-in">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary-blue text-white shadow-lg shadow-primary-blue/20">
-                  <PartyPopper size={32} />
-                </div>
-                <h3 className="text-2xl font-bold text-foreground">
-                  Request Received!
-                </h3>
-                <p className="mt-2 text-muted-foreground">
-                  Thanks, we have got it! <br />
-                  We will text or call you shortly with your custom quote.
-                </p>
-                <button
-                  onClick={() => window.location.reload()}
-                  className="mt-6 text-sm font-bold text-primary-blue underline transition-colors hover:text-primary"
-                >
-                  Send another request
-                </button>
-              </div>
-            ) : (
-              <form
-                action={action}
-                className="relative z-20 max-w-xl space-y-4 rounded-[2rem] border border-border bg-card p-2 shadow-sm sm:p-4"
-              >
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <input
-                    required
-                    name="username"
-                    placeholder="Full Name"
-                    className="w-full rounded-2xl border-none bg-background p-5 text-base text-foreground shadow-sm ring-1 ring-border transition-all outline-none focus:ring-2 focus:ring-primary-blue"
-                  />
-                  <input
-                    required
-                    name="phone"
-                    type="tel"
-                    placeholder="(213) 598-77-63"
-                    onInput={handlePhoneInput}
-                    className="w-full rounded-2xl border-none bg-background p-5 text-base text-foreground shadow-sm ring-1 ring-border transition-all outline-none focus:ring-2 focus:ring-primary-blue"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                  <select name="bedrooms" className={selectClass}>
-                    <option value="1">1 Bed</option>
-                    <option value="2">2 Bed</option>
-                    <option value="3">3 Bed</option>
-                    <option value="4+">4+ Bed</option>
-                  </select>
-                  <select name="bathrooms" className={selectClass}>
-                    <option value="1">1 Bath</option>
-                    <option value="2">2 Bath</option>
-                    <option value="3+">3+ Bath</option>
-                  </select>
-                  <select
-                    name="serviceType"
-                    className={cn(
-                      selectClass,
-                      "col-span-2 font-bold text-primary-blue sm:col-span-1"
-                    )}
-                  >
-                    <option value="deep">Deep Clean</option>
-                    <option value="standard">Standard</option>
-                    <option value="move">Move In/Out</option>
-                  </select>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="group relative w-full overflow-hidden rounded-2xl bg-primary-blue py-6 text-xl font-black text-white shadow-2xl shadow-primary-blue/20 transition-all hover:bg-primary-blue/90 active:scale-[0.98] disabled:opacity-50"
-                >
-                  <span className="relative z-10">
-                    {isLoading ? "Sending..." : "Get Price"}
+            <div className="z-30 space-y-10 md:col-span-3">
+              <div className="space-y-4">
+                <span className="font-blauerMedium inline-flex items-center gap-2 text-sm font-bold tracking-widest text-primary-blue uppercase">
+                  <CheckCircle2 size={16} /> Instant Price Estimate
+                </span>
+                <h2 className="font-blauerMedium text-4xl leading-[1.1] font-bold tracking-tight text-foreground md:text-6xl">
+                  Ready to Reclaim <br /> Your{" "}
+                  <span className="text-primary-blue underline decoration-primary-blue/20">
+                    Time?
                   </span>
-                </button>
-              </form>
-            )}
+                </h2>
+              </div>
 
-            <div className="flex flex-wrap items-center gap-6 pt-4">
-              <a
-                href="tel:2135987763"
-                className="flex items-center gap-2 text-lg font-bold text-foreground transition-colors hover:text-primary-blue"
-              >
-                <div className="rounded-full bg-muted p-3">
-                  <Phone size={20} className="text-primary-blue" />
+              {state.success ? (
+                <div className="max-w-xl animate-in rounded-[2rem] border-2 border-dashed border-primary-blue/20 bg-primary-blue/5 p-10 text-center duration-500 fade-in zoom-in">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary-blue text-white shadow-lg shadow-primary-blue/20">
+                    <PartyPopper size={32} />
+                  </div>
+                  <h3 className="text-2xl font-bold text-foreground">
+                    Request Received!
+                  </h3>
+                  <p className="mt-2 text-muted-foreground">
+                    Thanks, we have got it! <br />
+                    We will text or call you shortly with your custom quote.
+                  </p>
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="mt-6 text-sm font-bold text-primary-blue underline transition-colors hover:text-primary"
+                  >
+                    Send another request
+                  </button>
                 </div>
-                (213) 598-77-63
-              </a>
+              ) : (
+                <form
+                  action={action}
+                  className="relative z-20 max-w-xl space-y-4 rounded-[2rem] border border-border bg-card p-2 shadow-sm sm:p-4"
+                >
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <input
+                      required
+                      name="username"
+                      placeholder="Full Name"
+                      className="w-full rounded-2xl border-none bg-background p-5 text-base text-foreground shadow-sm ring-1 ring-border transition-all outline-none focus:ring-2 focus:ring-primary-blue"
+                    />
+                    <input
+                      required
+                      name="phone"
+                      type="tel"
+                      placeholder="(213) 598-77-63"
+                      onInput={handlePhoneInput}
+                      className="w-full rounded-2xl border-none bg-background p-5 text-base text-foreground shadow-sm ring-1 ring-border transition-all outline-none focus:ring-2 focus:ring-primary-blue"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                    <select name="bedrooms" className={selectClass}>
+                      <option value="1">1 Bed</option>
+                      <option value="2">2 Bed</option>
+                      <option value="3">3 Bed</option>
+                      <option value="4+">4+ Bed</option>
+                    </select>
+                    <select name="bathrooms" className={selectClass}>
+                      <option value="1">1 Bath</option>
+                      <option value="2">2 Bath</option>
+                      <option value="3+">3+ Bath</option>
+                    </select>
+                    <select
+                      name="serviceType"
+                      className={cn(
+                        selectClass,
+                        "col-span-2 font-bold text-primary-blue sm:col-span-1"
+                      )}
+                    >
+                      <option value="deep">Deep Clean</option>
+                      <option value="standard">Standard</option>
+                      <option value="move">Move In/Out</option>
+                    </select>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="group relative w-full overflow-hidden rounded-2xl bg-primary-blue py-6 text-xl font-black text-white shadow-2xl shadow-primary-blue/20 transition-all hover:bg-primary-blue/90 active:scale-[0.98] disabled:opacity-50"
+                  >
+                    <span className="relative z-10">
+                      {isLoading ? "Sending..." : "Get Price"}
+                    </span>
+                  </button>
+                </form>
+              )}
+
+              <div className="flex flex-wrap items-center gap-6 pt-4">
+                <a
+                  href="tel:2135987763"
+                  className="flex items-center gap-2 text-lg font-bold text-foreground transition-colors hover:text-primary-blue"
+                >
+                  <div className="rounded-full bg-muted p-3">
+                    <Phone size={20} className="text-primary-blue" />
+                  </div>
+                  (213) 598-77-63
+                </a>
+              </div>
             </div>
           </div>
         </div>
+        <ToastContainer position="bottom-right" />
       </div>
-      <ToastContainer position="bottom-right" />
     </section>
   )
 }
