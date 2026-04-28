@@ -10,6 +10,9 @@ import {
   Zap,
   ShieldCheck,
   Fence,
+  BedDouble,
+  Wind,
+  Layers,
 } from "lucide-react"
 
 export interface PricingMatrix {
@@ -47,7 +50,6 @@ export const INCLUSIONS: Record<string, string[]> = {
 }
 
 export const PRICING_ADDONS = {
-  // Move In/Out uses DEEP_MATRIX + this multiplier
   moveMultiplier: 1.2,
   addons: {
     fridge: { label: "Inside Fridge", price: 35, icon: Refrigerator },
@@ -55,7 +57,7 @@ export const PRICING_ADDONS = {
     moveAppliances: { label: "Move Fridge/Oven", price: 60, icon: Move },
     pets: { label: "Patio/Balcony", price: 45, icon: Fence },
     windows: { label: "Interior Windows", price: 15, icon: Waves },
-    blinds: { label: "Hand-Wipe Blinds", price: 12, icon: Eye },
+    blinds: { label: "Hand-Wipe Blinds", price: 20, icon: Eye }, // Updated price
     cabinets: { label: "Inside Cabinets", price: 45, icon: Zap },
     microwave: { label: "Inside Microwave", price: 15, icon: Zap },
     limescale: {
@@ -63,12 +65,15 @@ export const PRICING_ADDONS = {
       price: 40,
       icon: ShieldCheck,
     },
+    // New Addons
+    linen: { label: "Change Bed Linen", price: 20, icon: BedDouble },
+    ceilingFan: { label: "Ceiling Fan", price: 10, icon: Wind },
+    baseboards: { label: "Baseboards", price: 15, icon: Layers },
   },
 }
 
-// Define helper types based on the matrix keys
-type BedCount = string //keyof typeof PRICING_MATRICES.STANDARD
-type BathCount = string // We use string here to allow for "5+"
+type BedCount = string
+type BathCount = string
 
 export const FREQUENCY_DISCOUNTS = {
   WEEKLY: 0.2,
@@ -102,16 +107,13 @@ export const DEEP_CLEANING_ADDONS = [
     desc: "Streak-free detail",
   },
   {
-    item: "Baseboard Wiping",
-    price: 50,
-    displayPrice: "$50+",
+    item: PRICING_ADDONS.addons.baseboards.label,
+    price: PRICING_ADDONS.addons.baseboards.price,
+    displayPrice: `$${PRICING_ADDONS.addons.baseboards.price}/rm`,
     desc: "Hand-scrubbed finish",
   },
 ] as const
 
-/**
- * Helper to get a calculated row for the Regular Cleaning table
- */
 export function getRegularPricingRow(beds: BedCount, baths: BathCount) {
   const bedEntry = PRICING_MATRICES.STANDARD[beds]
   const base = (bedEntry as Record<string, number>)[baths] || 0
@@ -124,7 +126,6 @@ export function getRegularPricingRow(beds: BedCount, baths: BathCount) {
   }
 }
 
-// Define the base scope used for Standard/Deep/Move-Out cleaning
 export const baseCleaningScope = {
   general: {
     title: "Entire Apartment",
@@ -143,18 +144,35 @@ export const baseCleaningScope = {
         price: PRICING_ADDONS.addons.windows.price,
         unit: "per window",
       },
+      {
+        name: PRICING_ADDONS.addons.blinds.label,
+        price: PRICING_ADDONS.addons.blinds.price,
+        unit: "per window",
+      },
+      {
+        name: PRICING_ADDONS.addons.linen.label,
+        price: PRICING_ADDONS.addons.linen.price,
+        unit: "per bed",
+      },
+      {
+        name: PRICING_ADDONS.addons.ceilingFan.label,
+        price: PRICING_ADDONS.addons.ceilingFan.price,
+        unit: "ea",
+      },
+      {
+        name: PRICING_ADDONS.addons.baseboards.label,
+        price: PRICING_ADDONS.addons.baseboards.price,
+        unit: "per room",
+      },
       { name: "Balcony Glass", price: 60, unit: "per balcony" },
       { name: "Pet Hair Removal", price: 35, unit: "" },
-      { name: "Bring Vacuum", price: 30, unit: "" },
       {
         name: PRICING_ADDONS.addons.pets.label,
         price: PRICING_ADDONS.addons.pets.price,
         unit: "",
       },
       { name: "Ironing", price: 40, unit: "per hour" },
-      { name: "Key Delivery/Pickup", price: 25, unit: "" },
       { name: "Clean Walk-in Closet", price: 35, unit: "" },
-      { name: "Chandelier Cleaning", price: 20, unit: "per pc" },
     ],
   },
   kitchen: {
@@ -209,7 +227,6 @@ export const baseCleaningScope = {
   },
 }
 
-// Define the specialized scope for Upholstery (Angara Streamers style)
 export const upholsteryScope = {
   sofa: {
     title: "Sofa & Sectional",
@@ -245,9 +262,6 @@ export const upholsteryScope = {
   },
 }
 
-/**
- * Helper function to select the right data based on the URL slug
- */
 export function getScopeBySlug(slug: string) {
   switch (slug) {
     case "upholstery-cleaning":
