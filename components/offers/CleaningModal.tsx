@@ -5,7 +5,7 @@ import { AnimatedButton } from "../SmallComponents/AnimatedButton"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { ButtonShiny } from "../SmallComponents/ButtonShiny"
-import { X } from "lucide-react"
+import { X, ChevronDown } from "lucide-react"
 
 type CleaningModalProps = {
   text?: string | undefined
@@ -25,7 +25,6 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
       hideProgressBar: true,
     })
 
-  // 1. Phone Masking Logic (Client Side UX)
   const handlePhoneInput = (e: React.FormEvent<HTMLInputElement>) => {
     const target = e.currentTarget
     let value = target.value.replace(/\D/g, "")
@@ -46,7 +45,6 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
 
   const [state, action, isLoading] = useActionState<FormState, FormData>(
     async (prevState: FormState, formData: FormData) => {
-      // 2. Phone Regex Validation
       const phone = formData.get("phone") as string
       const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/
 
@@ -78,8 +76,16 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
       document.body.style.overflow = "unset"
     }
   }, [isOpen])
-  // Text button logic
+
   const buttonText = text ? text : "Get Price"
+
+  // Base input styling that adapts to light/dark themes
+  const inputClassName = `
+    w-full appearance-none rounded-2xl border-2 px-5 py-4 text-base font-medium transition-all outline-none
+    bg-muted/50 border-border text-foreground placeholder:text-muted-foreground
+    focus:border-primary-blue focus:bg-background focus:ring-4 focus:ring-primary-blue/10
+    dark:bg-slate-900/50 dark:border-slate-800 dark:focus:border-primary-blue
+  `
 
   return (
     <>
@@ -97,25 +103,25 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
       <dialog
         ref={modalRef}
         onClick={(e) => e.target === modalRef.current && handleClose()}
-        className="outline-none backdrop:bg-slate-900/60 backdrop:backdrop-blur-sm"
+        className="bg-transparent outline-none backdrop:bg-slate-950/70 backdrop:backdrop-blur-sm"
       >
         <div
-          className="relative w-[95%] max-w-md transform animate-in rounded-[2.5rem] bg-white p-8 shadow-2xl transition-all duration-300 fade-in zoom-in md:p-12"
+          className="relative w-[95%] max-w-md transform animate-in rounded-[2.5rem] border border-border bg-background p-8 text-foreground shadow-2xl transition-all duration-300 fade-in zoom-in md:p-12"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Close Button */}
           <button
             onClick={handleClose}
-            className="absolute top-6 right-6 text-slate-300 transition-colors hover:text-slate-600"
+            className="absolute top-6 right-6 text-muted-foreground transition-colors hover:text-foreground"
           >
             <X size={24} />
           </button>
 
           <div className="mb-8 text-center">
-            <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase italic">
+            <h2 className="text-3xl font-black tracking-tight text-foreground uppercase italic">
               Playa<span className="text-primary-blue">Cleaning</span>
             </h2>
-            <p className="mt-2 text-xs font-semibold tracking-widest text-slate-500 uppercase">
+            <p className="mt-2 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
               Fast Quote • Los Angeles, CA
             </p>
           </div>
@@ -127,58 +133,70 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
                 name="username"
                 type="text"
                 placeholder="Your Name"
-                className="input-style"
+                className={inputClassName}
               />
               <input
                 required
                 name="phone"
                 type="tel"
                 placeholder="(213) 598-77-63"
-                onInput={handlePhoneInput} // Added Masking
-                className="input-style"
+                onInput={handlePhoneInput}
+                className={inputClassName}
+              />
+            </div>
+            <div>
+              <input
+                type="hidden"
+                name="pageUrl"
+                value={
+                  typeof window !== "undefined" ? window.location.href : ""
+                }
+              />
+              <input
+                type="hidden"
+                name="customNotes"
+                value="Playa Cleaning $129 Offer"
               />
             </div>
 
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
-                <select
-                  name="bedrooms"
-                  className="input-style appearance-none bg-white"
-                >
-                  <option value="1">1 Bedroom</option>
-                  <option value="2">2 Bedrooms</option>
-                  <option value="3">3 Bedrooms</option>
-                  <option value="4+">4+ Bedrooms</option>
-                </select>
-                <select
-                  name="bathrooms"
-                  className="input-style appearance-none bg-white"
-                >
-                  <option value="1">1 Bath</option>
-                  <option value="2">2 Baths</option>
-                  <option value="3+">3+ Baths</option>
-                </select>
-              </div>
+                {/* Bedrooms Select Wrapper */}
+                <div className="group relative">
+                  <select name="bedrooms" className={inputClassName}>
+                    <option value="1">1 Bedroom</option>
+                    <option value="2">2 Bedrooms</option>
+                    <option value="3">3 Bedrooms</option>
+                    <option value="4+">4+ Bedrooms</option>
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-muted-foreground transition-colors group-focus-within:text-primary-blue">
+                    <ChevronDown size={18} strokeWidth={2.5} />
+                  </div>
+                </div>
 
-              <select
-                name="serviceType"
-                className="input-style appearance-none bg-white font-bold text-primary-blue"
-              >
-                <option value="deep">Deep Cleaning (Recommended)</option>
-                <option value="standard">Standard Maintenance</option>
-                <option value="move">Move In / Move Out</option>
-              </select>
+                {/* Bathrooms Select Wrapper */}
+                <div className="group relative">
+                  <select name="bathrooms" className={inputClassName}>
+                    <option value="1">1 Bath</option>
+                    <option value="2">2 Baths</option>
+                    <option value="3+">3+ Baths</option>
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-muted-foreground transition-colors group-focus-within:text-primary-blue">
+                    <ChevronDown size={18} strokeWidth={2.5} />
+                  </div>
+                </div>
+              </div>
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full rounded-2xl bg-primary-blue py-5 text-xl font-black tracking-tight text-white uppercase shadow-xl shadow-blue-500/30 transition-all hover:bg-blue-700 active:scale-95 disabled:bg-blue-300"
+              className="w-full rounded-2xl bg-primary-blue py-5 text-xl font-black tracking-tight text-white uppercase shadow-xl shadow-primary-blue/30 transition-all hover:opacity-90 active:scale-95 disabled:bg-primary-blue/40"
             >
-              {isLoading ? "Sending..." : "Get My Price"}
+              {isLoading ? "Sending..." : buttonText}
             </button>
 
-            <p className="px-4 text-center text-[10px] font-medium text-slate-400">
+            <p className="px-4 text-center text-[10px] leading-relaxed font-medium text-muted-foreground">
               By requesting a quote, you agree to be contacted via call/text
               regarding your request.
             </p>
@@ -186,29 +204,7 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
         </div>
       </dialog>
 
-      <ToastContainer />
-
-      <style jsx>{`
-        .input-style {
-          width: 100%;
-          border-radius: 16px;
-          border: 2px solid #f1f5f9;
-          background-color: #f8fafc;
-          padding: 16px 20px;
-          font-size: 16px;
-          font-weight: 500;
-          transition: all 0.2s ease;
-          outline: none;
-        }
-        .input-style:focus {
-          border-color: var(--color-primary-blue);
-          background-color: #fff;
-          box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
-        }
-        .input-style::placeholder {
-          color: #94a3b8;
-        }
-      `}</style>
+      <ToastContainer theme="colored" />
     </>
   )
 }

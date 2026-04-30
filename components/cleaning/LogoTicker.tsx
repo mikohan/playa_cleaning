@@ -14,7 +14,7 @@ const ADVANTAGES = [
 
 export const LogoTicker = () => {
   return (
-    <div className="overflow-hidden bg-background py-8">
+    <div className="overflow-hidden py-8">
       <div className="container mx-auto">
         <div className="flex overflow-hidden mask-[linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
           <motion.div

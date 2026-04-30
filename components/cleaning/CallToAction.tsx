@@ -11,7 +11,12 @@ import AliciaPortrait from "@/public/images/cleaning/hero-4.png"
 import { WaveDivider } from "../common/WaveDivider"
 import { cn } from "@/lib/utils"
 
-export const CallToAction = () => {
+interface CallToActionProps {
+  defaultOption?: string
+  option?: string
+}
+
+export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
   const [state, action, isLoading] = useActionState<FormState, FormData>(
     async (prevState: FormState, formData: FormData) => {
       // 1. Phone Regex Validation
@@ -122,6 +127,18 @@ export const CallToAction = () => {
                   action={action}
                   className="relative z-20 max-w-xl space-y-4 rounded-[2rem] border border-border bg-card p-2 shadow-sm sm:p-4"
                 >
+                  <input
+                    type="hidden"
+                    name="pageUrl"
+                    value={
+                      typeof window !== "undefined" ? window.location.href : ""
+                    }
+                  />
+                  <input
+                    type="hidden"
+                    name="customNotes"
+                    value="Playa Cleaning $129 Offer"
+                  />
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     <input
                       required
@@ -158,8 +175,8 @@ export const CallToAction = () => {
                         "col-span-2 font-bold text-primary-blue sm:col-span-1"
                       )}
                     >
-                      <option value="deep">Deep Clean</option>
                       <option value="standard">Standard</option>
+                      <option value="deep">Deep Clean</option>
                       <option value="move">Move In/Out</option>
                     </select>
                   </div>

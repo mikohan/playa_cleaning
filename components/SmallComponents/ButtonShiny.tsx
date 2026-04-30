@@ -23,7 +23,7 @@ const shinyButtonVariants = cva(
 
 interface Props
   extends HTMLMotionProps<"div">, VariantProps<typeof shinyButtonVariants> {
-  text: string
+  text?: string
   // Pass any CSS color (hex, rgb, or tailwind variable)
   bgColor?: string
 }
@@ -66,7 +66,7 @@ export const ButtonShiny = ({
       {...props}
     >
       <span className="linear-mask relative z-10 block h-full w-full cursor-pointer font-light tracking-wide text-white">
-        {text}
+        {text ? text : "Book now"}
       </span>
       {/* Overlay for the shimmer effect */}
       <span className="linear-overlay pointer-events-none absolute inset-0 block rounded-[inherit] p-1"></span>

@@ -1,5 +1,49 @@
 export const servicePages = [
   {
+    slug: "premium-home-cleaning-offer",
+    page: "$129 Premium Home Cleaning + Complimentary Steam Floor Sanitizing",
+    intent: "Transactional/Conversion",
+    bodyText:
+      "Professional, pet‑friendly, detail‑focused cleaning with HEPA vacuum. Same‑week availability.",
+    target_keywords: [
+      "home cleaning playa vista",
+      "premium cleaning offer",
+      "steam floor sanitizing",
+      "pet friendly cleaning service",
+      "professional house cleaners los angeles",
+      "first time cleaning discount",
+    ],
+    seo: {
+      title:
+        "$129 Premium Home Cleaning | Playa Vista | Professional House Cleaning",
+      description:
+        "Claim your $129 first-time cleaning in Playa Vista. Includes 2 hours of professional cleaning and a free steam floor sanitizing. Pet-friendly and detail-focused.",
+      og_data: {
+        "og:title":
+          "$129 First-Time Clean & Complimentary Steam Sanitizing in Playa Vista",
+        "og:description":
+          "Transform your home with our premium cleaning offer. Professional, same-week availability for Playa Vista residents.",
+      },
+    },
+    ld_json: {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: "Premium Home Cleaning Offer",
+      provider: {
+        "@type": "LocalBusiness",
+        name: "Playa Cleaning",
+      },
+      areaServed: "Playa Vista, Los Angeles, CA",
+      offers: {
+        "@type": "Offer",
+        price: "129.00",
+        priceCurrency: "USD",
+        description:
+          "Premium Home Cleaning up to 2 hours plus free steam floor sanitizing",
+      },
+    },
+  },
+  {
     slug: "move-out-cleaning",
     page: "Move In / Move Out Cleaning",
     intent: "Critical/Transactional",
