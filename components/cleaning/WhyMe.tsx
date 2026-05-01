@@ -67,6 +67,7 @@ export const WhyMe = () => {
               fill
               className="object-cover transition-transform duration-500 hover:scale-105"
               priority
+              sizes="(max-width: 768px) 90vw, (max-width: 1200px) 50vw, 33vw" // Fixed from 100vw
             />
             {/* Overlay Label */}
             <div className="absolute right-6 bottom-6 left-6 rounded-2xl border border-white/20 bg-white/10 p-4 text-white backdrop-blur-md">

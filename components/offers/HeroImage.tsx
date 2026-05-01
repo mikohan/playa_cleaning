@@ -100,6 +100,7 @@ export function HeroImage({ data }: WhatIncludedProps) {
                       alt="Client"
                       width={40}
                       height={40}
+                      sizes="(max-width: 768px) 15vw, (max-width: 1200px) 10vw, 5vw"
                     />
                   </div>
                 ))}
