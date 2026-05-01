@@ -119,6 +119,7 @@ export function HeroImage({ data }: WhatIncludedProps) {
                 fill
                 className="object-cover object-top"
                 priority
+                sizes="(max-width: 768px) 90vw, (max-width: 1200px) 50vw, 33vw"
               />
               {/* Trust Badge Floating on Image */}
               <div className="absolute top-6 right-6 flex items-center gap-2 rounded-full border border-border bg-background/80 px-4 py-2 shadow-sm backdrop-blur-md">
