@@ -7,6 +7,7 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
 import { Plus_Jakarta_Sans, Inter } from "next/font/google"
+import { ClientWrapper } from "@/components/common/ClientWrapper"
 
 export const metadata: Metadata = {
   // Add this line here:
@@ -53,12 +54,12 @@ export default function RootLayout({
         "font-sans"
       )}
     >
-      <ReactLenis root>
-        <body>
-          <GoogleTagManager gtmId={gtmId} />
-          <ThemeProvider>{children}</ThemeProvider>
-        </body>
-      </ReactLenis>
+      <body>
+        <GoogleTagManager gtmId={gtmId} />
+        <ThemeProvider>
+          <ClientWrapper>{children}</ClientWrapper>
+        </ThemeProvider>
+      </body>
     </html>
   )
 }
