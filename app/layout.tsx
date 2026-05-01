@@ -1,4 +1,4 @@
-import { blauerNue } from "@/app/fonts"
+// import { blauerNue } from "@/app/fonts"
 import ReactLenis from "lenis/react"
 import "lenis/dist/lenis.css"
 import { GoogleTagManager } from "@next/third-parties/google"
@@ -47,15 +47,15 @@ export default function RootLayout({
       suppressHydrationWarning
       className={cn(
         "antialiased",
-        blauerNue.variable,
+        // blauerNue.variable,
         jakarta.variable,
         inter.variable,
         "font-sans"
       )}
     >
-      <GoogleTagManager gtmId={gtmId} />
       <ReactLenis root>
         <body>
+          <GoogleTagManager gtmId={gtmId} />
           <ThemeProvider>{children}</ThemeProvider>
         </body>
       </ReactLenis>

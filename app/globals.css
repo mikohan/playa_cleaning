@@ -6,7 +6,8 @@
 
 @theme inline {
   --font-heading: var(--font-sans);
-  --font-sans: var(--font-sans);
+  /* --font-sans: var(--font-sans); */
+  --font-sans: var(--font-jakarta);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -88,7 +89,8 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
   /* Custom settings */
-  --font-sans: var(--font-blauer-nue);
+  /* --font-sans: var(--font-blauer-nue); */
+  --font-sans: var(--font-jakarta);
   --top-blur: oklch(0.9 0.034 259.597);
   --primary-blue: oklch(0.5712 0.1434 254.62);
   --footer: oklch(0.2077 0.0398 265.75);
@@ -143,7 +145,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background font-sans text-foreground;
   }
   html {
     /* @apply font-sans; */
