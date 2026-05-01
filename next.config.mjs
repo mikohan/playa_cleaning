@@ -4,9 +4,8 @@ const nextConfig = {
   experimental: {
     optimizeCss: true,
   },
-  // Since you are running on port 3003, ensure your environment is set for production
+  // swcMinify is now the default; removing it fixes the 'Unrecognized key' error
   reactStrictMode: true,
-  swcMinify: true,
 }
 
 export default nextConfig
