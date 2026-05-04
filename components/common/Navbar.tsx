@@ -41,7 +41,7 @@ const navItems = [
       { name: "Carpet & Upholstery", href: "/services/upholstery-cleaning" },
     ],
   },
-  { title: "Locations", href: "/locations" },
+  // { title: "Locations", href: "/locations" },
   { title: "Estimator", href: "/cleaning-calculator" },
 ]
 

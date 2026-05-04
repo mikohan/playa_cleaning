@@ -169,7 +169,7 @@ export default function LocationsPage() {
                     .map((area) => (
                       <li key={area.slug}>
                         <Link
-                          href={`/services/house-cleaning/${area.slug}`}
+                          href={`/services/${area.slug}`}
                           className="group flex justify-between text-[13px] font-medium text-muted-foreground transition-colors hover:text-primary-blue"
                         >
                           <span>{area.name}</span>
