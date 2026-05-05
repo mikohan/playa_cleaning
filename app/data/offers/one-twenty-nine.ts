@@ -1,61 +1,61 @@
 export const PREMIUM_OFFER_CONTENT = {
-  slug: "premium-home-cleaning",
+  slug: "regular-maintenance-detailing",
   metadata: {
-    title: "$129 Premium Home Cleaning | Complimentary Steam Floor Sanitizing",
+    title: "$165 Signature Maintenance | Industrial HEPA & Steam Sanitation",
     description:
-      "Premium home cleaning for $129. Includes up to 2 hours of professional cleaning plus complimentary steam floor sanitizing. Pet-friendly, HEPA vacuum, same-week availability.",
+      "Systematic home maintenance detailing starting at $165. Featuring industrial-grade suction and steam floor sanitizing for high-end Westside residences.",
     keywords:
-      "cleaning service, home cleaning, maid service, steam floor sanitizing, premium cleaning Los Angeles",
+      "home detailing, luxury cleaning LA, industrial vacuum cleaning, systematic home maintenance, Playa Cleaning",
   },
   hero: {
-    badge: "Limited Time Special",
-    headline: "$129 Premium Home Cleaning",
-    headlineAccent: "+ Complimentary Steam Sanitizing",
+    badge: "The Westside Standard",
+    headline: "$165 Regular Maintenance",
+    headlineAccent: "Industrial-Grade Detailing",
     subheadline:
-      "Professional, pet-friendly, detail-focused cleaning with a HEPA vacuum. Same-week availability for our local neighbors.",
-    cta: "Claim Your $129 First-Time Clean",
+      "Moving beyond surface wipes. We implement a systematic, high-suction reset designed for homes that demand surgical-level precision.",
+    cta: "Book Your $165 Maintenance Session",
   },
   included: {
-    title: "What’s Included (Up to 2 Hours)",
+    title: "The Maintenance Protocol (2-Hour Intensive)",
     sections: [
       {
-        category: "Kitchen & Bath",
+        category: "High-End Surfaces",
         items: [
-          "Countertops & Stovetops",
-          "Exterior appliance wipe-down",
-          "Sink & faucet polishing",
-          "Complimentary Steam Floor Sanitizing",
+          "Stainless Steel Grain Detailing",
+          "Stone & Marble pH-Neutral Wipe",
+          "Sink & Faucet High-Shine Polish",
+          "Industrial Steam Floor Sanitation",
         ],
       },
       {
-        category: "Living & Bedrooms",
+        category: "Air Quality & Dust",
         items: [
-          "Dusting & general tidying",
-          "HEPA vacuuming for pet hair/allergens",
-          "Bed making (linens provided)",
-          "Entryway & Hallway steam mop",
+          "Industrial HEPA Suction (Dust & Allergens)",
+          "Micro-Dusting of Vertical Surfaces",
+          "Precision Edge Vacuuming",
+          "Entryway Restoration",
         ],
       },
     ],
   },
   excluded: {
-    title: "Need More Deep Cleaning?",
+    title: "Require a Deep Restoration?",
     items: [
-      "Inside oven/fridge",
-      "Baseboards & Blinds",
-      "Move-in/Move-out details",
-      "Heavy decluttering",
+      "Heavy Grease/Mineral Build-up",
+      "Interior Oven & Appliance Detailing",
+      "Grout Scrubbing & Restoration",
+      "Post-Construction Dust Removal",
     ],
     upsellNote:
-      "Additional time is available at $55/hour if you require a deep-scrub or extra attention to detail.",
+      "For homes that haven't been professionally detailed in over 30 days, we recommend starting with our $330 Signature Deep Restoration.",
   },
   footer: {
     trustBadges: [
-      "Insured & Bonded",
-      "100% Satisfaction Guarantee",
-      "Pet-Friendly Certified",
+      "Industrial-Grade Equipment",
+      "Surface-Specific Protocols",
+      "Reliable Execution Guaranteed",
     ],
     locationNote:
-      "Serving Playa Vista, Marina del Rey, Venice, Culver City, and Westchester.",
+      "Serving exclusive residences in Playa Vista, Marina del Rey, Venice, Culver City, and Westchester.",
   },
 }

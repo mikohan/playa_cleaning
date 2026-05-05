@@ -104,9 +104,9 @@ export function HeroImage({ data }: WhatIncludedProps) {
                     />
                   </div>
                 ))}
-                <p className="pl-6 text-sm font-medium text-muted-foreground">
+                <div className="pl-6 text-sm font-medium text-muted-foreground">
                   <GoogleStars rating="4.99" starsCount={5} size={16} />
-                </p>
+                </div>
               </div>
             </div>
           </div>
