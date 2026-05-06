@@ -125,7 +125,7 @@ export const Footer = () => {
 
           {/* Column 3: Service Areas (New Section) */}
           <div className="flex flex-col items-center md:items-start">
-            {/* <h4 className="mb-6 text-sm font-black tracking-widest text-primary-blue uppercase">
+            <h4 className="mb-6 text-sm font-black tracking-widest text-primary-blue uppercase">
               Service Areas
             </h4>
             <nav className="grid grid-cols-1 gap-y-3 text-center md:text-left">
@@ -138,7 +138,7 @@ export const Footer = () => {
                   {loc.name}
                 </Link>
               ))}
-            </nav> */}
+            </nav>
           </div>
 
           {/* Column 4: Navigation & Area */}
