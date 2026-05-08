@@ -121,6 +121,11 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
           </div>
 
           <form action={action} className="space-y-4">
+            <input
+              type="hidden"
+              name="pageFrom"
+              value={typeof window !== "undefined" ? window.location.href : ""}
+            />
             <div className="grid grid-cols-1 gap-3">
               <input
                 required
@@ -143,7 +148,7 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
               <div className="grid grid-cols-2 gap-3">
                 <select
                   name="bedrooms"
-                  className="input-style appearance-none bg-white"
+                  className="input-style select-style appearance-none bg-white"
                 >
                   <option value="1">1 Bedroom</option>
                   <option value="2">2 Bedrooms</option>
@@ -152,7 +157,7 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
                 </select>
                 <select
                   name="bathrooms"
-                  className="input-style appearance-none bg-white"
+                  className="input-style select-style appearance-none bg-white"
                 >
                   <option value="1">1 Bath</option>
                   <option value="2">2 Baths</option>
@@ -162,7 +167,7 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
 
               <select
                 name="serviceType"
-                className="input-style appearance-none bg-white font-bold text-primary-blue"
+                className="input-style select-style appearance-none bg-white font-bold text-primary-blue"
               >
                 <option value="deep">Deep Cleaning (Recommended)</option>
                 <option value="standard">Standard Maintenance</option>
@@ -207,6 +212,13 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
         }
         .input-style::placeholder {
           color: #94a3b8;
+        }
+        .select-style {
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' /%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-position: right 1rem center;
+          background-size: 1.25rem;
+          padding-right: 2.5rem;
         }
       `}</style>
     </>

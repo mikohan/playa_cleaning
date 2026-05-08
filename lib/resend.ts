@@ -23,6 +23,7 @@ export const sendEmail = async (
   const bedrooms = (formData.get("bedrooms") as string) || "N/A"
   const bathrooms = (formData.get("bathrooms") as string) || "N/A"
   const serviceType = (formData.get("serviceType") as string) || "Standard"
+  const pageFrom = (formData.get("pageFrom") as string) || "Main"
 
   // New Hidden Fields
   const pageUrl = (formData.get("pageUrl") as string) || "Unknown Source"
@@ -53,6 +54,7 @@ DETAILS:
 Bedrooms: ${bedrooms}
 Bathrooms: ${bathrooms}
 Service: ${serviceType}
+PageFrom: ${pageFrom}
 
 SOURCE INFO:
 Sent From: ${pageUrl}
