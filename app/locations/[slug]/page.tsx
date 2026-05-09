@@ -19,7 +19,7 @@ import { Footer } from "@/components/common/Footer"
 import ServiceGrid from "@/components/cleaning/ServiceGrid"
 import { CalculatorCTA } from "@/components/newCleaning/CalculatorCTA"
 import { CallToAction } from "@/components/cleaning/CallToAction"
-
+import { Metadata } from "next"
 const STRAPI_URL = process.env.STRAPI_URL || "https://cms.playacleaning.com"
 
 // ─────────────────────────────────────────────────────────────
@@ -69,7 +69,145 @@ async function getLocationData(slug: string): Promise<LocationRecord | null> {
 // ─────────────────────────────────────────────────────────────
 // Page Component
 // ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// Dynamic Metadata Function
+// ─────────────────────────────────────────────────────────────
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const location = await getLocationData(slug)
 
+  if (!location) return { title: "Location Not Found" }
+
+  const title = `Professional Cleaning Services in ${location.city_name} | Playa Cleaning`
+  const description = `${location.local_hook || `Top-rated residential and commercial cleaning services in ${location.city_name}. Trusted local professionals, instant quotes, and 5-star service.`}`
+  const url = `https://www.playacleaning.com/locations/${slug}`
+  const imageUrl = location.location_image?.url
+    ? `${STRAPI_URL}${location.location_image.url}`
+    : "https://www.playacleaning.com/og-default.jpg"
+
+  // Dynamic coordinates from Strapi
+  const lat = location.coordinates?.lat || 34.0522
+  const lng = location.coordinates?.lng || -118.2437
+
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    // Injecting Geo Metadata for local SEO crawlers
+    other: {
+      "geo.region": "US-CA",
+      "geo.placename": location.city_name,
+      "geo.position": `${lat};${lng}`,
+      ICBM: `${lat}, ${lng}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: "Playa Cleaning",
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: `Cleaning services in ${location.city_name}`,
+        },
+      ],
+      locale: "en_US",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      nocache: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// SEO Structured Data Component (DECLARED OUTSIDE)
+// ─────────────────────────────────────────────────────────────
+function JsonLd({ location }: { location: LocationRecord }) {
+  // Extracting dynamic coordinates
+  const lat = location.coordinates?.lat || 34.0522
+  const lng = location.coordinates?.lng || -118.2437
+
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CleaningService",
+    name: `Playa Cleaning ${location.city_name}`,
+    image: location.location_image?.url
+      ? `${STRAPI_URL}${location.location_image.url}`
+      : "",
+    telephone: process.env.COMPANY_PHONE || "+1-213-598-77-63", // Updated to your business phone
+    url: `https://www.playacleaning.com/locations/${location.slug}`,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: location.city_name,
+      addressRegion: "CA",
+      addressCountry: "US",
+    },
+    geo: {
+      "@type": "GeoCircle",
+      geoMidpoint: {
+        "@type": "GeoCoordinates",
+        latitude: lat,
+        longitude: lng,
+      },
+      geoRadius: "15000", // 15km service radius
+    },
+    areaServed: {
+      "@type": "City",
+      name: location.city_name,
+    },
+    priceRange: "$$",
+  }
+
+  const faqJsonLd = location.faq_location && {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: location.faq_location.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  }
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
+    </>
+  )
+}
 export default async function LocationPage({
   params,
 }: {
@@ -104,59 +242,63 @@ export default async function LocationPage({
   ) as LocationNeighbor[]
 
   return (
-    <div>
-      <Navbar />
-      <section>
-        {/* Hero */}
-        <HeroVideo
-          title={`Cleaning service in ${location.city_name}`}
-          subtitle={location.local_hook}
-          highlightIndex={0}
-        />
-      </section>
-      <section>
-        <LogoTicker />
-      </section>
-      <section className="relative mt-16">
-        <div className="absolute top-0 left-0 -z-10 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
-        <WaveDivider position="top" fill="var(--color-background)" />
-        <ServiceGrid cityName={location.city_name} />
-      </section>
-      <section className="relative mt-16">
-        <div className="absolute top-0 left-0 -z-10 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
-        <WaveDivider position="top" fill="var(--color-background)" />
-        <LocationContext
-          cityName={location.city_name}
-          contextText={location.neighborhood_context}
-          imageUrl={
-            location.location_image?.url
-              ? `${STRAPI_URL}${location.location_image.url}`
-              : undefined
-          }
-        />
-      </section>
-      <section className="relative">
-        <div className="absolute -top-18 left-80 -z-10 h-100 w-100 border bg-top-blur/60 blur-[150px]"></div>
-        <LocationFAQ
-          cityName={location.city_name}
-          items={location.faq_location} // Falls back to defaults if empty
-        />
-      </section>
+    <>
+      {/* 1. SEO Structured Data Injection */}
+      <JsonLd location={location} />
+      <div>
+        <Navbar />
+        <section>
+          {/* Hero */}
+          <HeroVideo
+            title={`Cleaning service in ${location.city_name}`}
+            subtitle={location.local_hook}
+            highlightIndex={0}
+          />
+        </section>
+        <section>
+          <LogoTicker />
+        </section>
+        <section className="relative mt-16">
+          <div className="absolute top-0 left-0 -z-10 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
+          <WaveDivider position="top" fill="var(--color-background)" />
+          <ServiceGrid cityName={location.city_name} />
+        </section>
+        <section className="relative mt-16">
+          <div className="absolute top-0 left-0 -z-10 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
+          <WaveDivider position="top" fill="var(--color-background)" />
+          <LocationContext
+            cityName={location.city_name}
+            contextText={location.neighborhood_context}
+            imageUrl={
+              location.location_image?.url
+                ? `${STRAPI_URL}${location.location_image.url}`
+                : undefined
+            }
+          />
+        </section>
+        <section className="relative">
+          <div className="absolute -top-18 left-80 -z-10 h-100 w-100 border bg-top-blur/60 blur-[150px]"></div>
+          <LocationFAQ
+            cityName={location.city_name}
+            items={location.faq_location} // Falls back to defaults if empty
+          />
+        </section>
 
-      <section>
-        <Testimonials />
-      </section>
-      <CallToAction />
-      <section>
-        <LocationNeighbors
-          currentCityName={location.city_name}
-          neighbors={neighbors}
-        />
-      </section>
-      <CalculatorCTA />
-      <footer>
-        <Footer />
-      </footer>
-    </div>
+        <section>
+          <Testimonials />
+        </section>
+        <CallToAction />
+        <section>
+          <LocationNeighbors
+            currentCityName={location.city_name}
+            neighbors={neighbors}
+          />
+        </section>
+        <CalculatorCTA />
+        <footer>
+          <Footer />
+        </footer>
+      </div>
+    </>
   )
 }
