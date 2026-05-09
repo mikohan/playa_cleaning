@@ -4,7 +4,7 @@ type props = {
   loop?: boolean
   muted?: boolean
   width?: string
-  heigh?: string
+  height?: string
 }
 export function VideoComponent({
   source,
@@ -12,12 +12,12 @@ export function VideoComponent({
   loop = true,
   muted = true,
   width = "720",
-  heigh = "1280",
+  height = "1280",
 }: props) {
   return (
     <video
       width={width}
-      height={heigh}
+      height={height}
       controls
       preload="auto"
       autoPlay={autoPlay}

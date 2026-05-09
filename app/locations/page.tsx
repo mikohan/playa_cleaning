@@ -1,212 +1,147 @@
-import React from "react"
 import Link from "next/link"
-import Image from "next/image"
-import { Metadata } from "next"
-import { Navbar } from "@/components/common/Navbar"
-import { Footer } from "@/components/common/Footer"
-import { BreadCrumbs } from "@/components/common/BreadCrumbs"
-import { LOS_ANGELES_AREAS } from "@/app/data/west-side-areas"
-import { MapPin, Star, ShieldCheck, Clock } from "lucide-react"
-import OlesyaImage from "@/public/images/cleaning/ol-6.png"
-import { ServiceAreasSection } from "@/components/newCleaning/ServiceAreasSection"
-import { CalculatorCTA } from "@/components/newCleaning/CalculatorCTA"
+import { LocationDataResponse, LocationRecord } from "@/app/types/locationTypes"
 
-export const metadata: Metadata = {
-  title:
-    "Service Areas | Professional Cleaning Across Los Angeles | Playa Cleaning",
-  description:
-    "Playa Cleaning provides premium house, deep, and move-out cleaning services throughout Los Angeles. From Santa Monica and Venice to Pasadena and Silver Lake, find a professional cleaner in your neighborhood.",
-  keywords: [
-    "cleaning services Los Angeles",
-    "maid service Santa Monica",
-    "house cleaning Pasadena",
-    "West Hollywood cleaning company",
-    "Culver City maid service",
-    "Beverly Hills house cleaners",
-    "Playa Vista cleaning services",
-    "South Bay cleaning",
-  ],
-  alternates: {
-    canonical: "https://playacleaning.com/locations",
-  },
+// ─────────────────────────────────────────────────────────────
+// Data Fetching
+// ─────────────────────────────────────────────────────────────
 
-  // Open Graph
-  openGraph: {
-    title: "Playa Cleaning Service Areas | Local LA House Cleaners",
-    description:
-      "Reliable, professional home cleaning available across all major Los Angeles neighborhoods. Check if we serve your zip code today!",
-    url: "https://playacleaning.com/locations",
-    siteName: "Playa Cleaning",
-    images: [
-      {
-        url: "/og-image.jpg", // A map-style graphic or a clean home shot
-        width: 1200,
-        height: 630,
-        alt: "Map of Playa Cleaning service areas in Los Angeles",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
+async function getAllLocations(): Promise<LocationRecord[]> {
+  const STRAPI_URL =
+    process.env.NEXT_PUBLIC_STRAPI_URL || "https://cms.playacleaning.com"
+  const API_TOKEN = process.env.STRAPI_API_TOKEN
 
-  // Twitter Card
-  twitter: {
-    card: "summary_large_image",
-    title: "Where We Clean: Playa Cleaning Service Locations",
-    description:
-      "Serving Santa Monica, Culver City, West LA, and beyond. Professional cleaning you can trust, right in your neighborhood.",
-    images: ["/og-image.jpg"],
-  },
+  // We only need a few fields for the listing page to keep the payload light
+  const query = new URLSearchParams({
+    "filters[active][$eq]": "true",
+    "fields[0]": "city_name",
+    "fields[1]": "slug",
+    "fields[2]": "local_hook",
+    "fields[3]": "zip_codes",
+    "fields[4]": "documentId",
+  })
+
+  const res = await fetch(`${STRAPI_URL}/api/locations?${query.toString()}`, {
+    headers: {
+      Authorization: `Bearer ${API_TOKEN}`,
+    },
+    next: { revalidate: 3600 },
+  })
+
+  if (!res.ok) {
+    console.error("Failed to fetch locations")
+    return []
+  }
+
+  // Use the interface as the expected JSON shape
+  const json: LocationDataResponse = await res.json()
+
+  return json.data || []
 }
 
-export default function LocationsPage() {
-  // Grouping areas by region for a clean Silo structure
-  const regions = Array.from(
-    new Set(LOS_ANGELES_AREAS.map((area) => area.region))
-  )
+// ─────────────────────────────────────────────────────────────
+// Page Component
+// ─────────────────────────────────────────────────────────────
+
+export default async function LocationsListingPage() {
+  const locations = await getAllLocations()
 
   return (
-    <main className="min-h-screen bg-background font-jakarta text-foreground">
-      <Navbar />
+    <div className="min-h-screen bg-background text-foreground selection:bg-primary-blue/20">
+      {/* 1. HERO */}
+      <section className="relative overflow-hidden border-b border-border bg-slate-50/50 pt-32 pb-20">
+        <div className="relative z-10 container mx-auto px-6 text-center">
+          <h1 className="mb-6 font-jakarta text-5xl font-bold tracking-tight md:text-7xl">
+            Professional Cleaning <br /> Across{" "}
+            <span className="text-primary-blue">Los Angeles</span>
+          </h1>
+          <p className="mx-auto max-w-2xl text-xl leading-relaxed text-muted-foreground">
+            From the tech lofts of Silicon Beach to the historic estates of
+            Santa Monica, Angara Streamers provides premium upholstery care
+            right in your neighborhood.
+          </p>
+        </div>
+      </section>
 
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="pt-8">
-          <BreadCrumbs serviceName="Service Areas" />
+      {/* 2. LOCATION GRID */}
+      <section className="container mx-auto px-6 py-24">
+        <div className="mb-12 flex flex-col items-end justify-between gap-6 border-b border-border pb-8 md:flex-row">
+          <div>
+            <h2 className="mb-2 text-3xl font-bold tracking-tight italic">
+              Our Service Areas
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Select your city for localized pricing and availability.
+            </p>
+          </div>
+          <div className="flex items-center gap-2 rounded-full border border-primary-blue/20 bg-primary-blue/5 px-5 py-2 text-sm font-bold text-primary-blue">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-blue opacity-75"></span>
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-primary-blue"></span>
+            </span>
+            Now Serving {locations.length} Neighborhoods
+          </div>
         </div>
 
-        {/* --- HERO SECTION --- */}
-        <section className="grid grid-cols-1 gap-16 py-16 lg:grid-cols-12 lg:items-center">
-          <div className="lg:col-span-7">
-            <h1 className="mb-8 text-5xl leading-[1.1] font-black tracking-tight text-primary-blue md:text-7xl">
-              Clean Homes, <br />
-              <span className="text-foreground/20">All Over LA.</span>
-            </h1>
-            <div className="max-w-xl space-y-6">
-              <p className="text-xl leading-relaxed font-medium text-foreground/80 [word-spacing:0.05rem]">
-                From the beach cities of the Westside to the historic
-                neighborhoods of the San Gabriel Valley, Playa Cleaning brings a
-                premium, high-standard clean to every corner of Los Angeles
-                County.
-              </p>
-              <p className="leading-relaxed text-muted-foreground [word-spacing:0.02rem]">
-                We’ve optimized our routes to ensure that whether you are in a
-                Santa Monica condo or a Pasadena estate, you receive the same
-                punctual, 5-star service Alicia and her team are known for.
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {locations.map((loc) => (
+            <Link
+              key={loc.id} // Preferred over documentId for React keys if available
+              href={`/locations/${loc.slug}`}
+              className="group relative flex flex-col rounded-3xl border border-slate-200 bg-white p-8 transition-all duration-500 hover:-translate-y-2 hover:border-primary-blue hover:shadow-2xl hover:shadow-primary-blue/10"
+            >
+              <h3 className="mb-3 text-2xl font-bold tracking-tight transition-colors group-hover:text-primary-blue">
+                {loc.city_name}
+              </h3>
+              <p className="mb-6 line-clamp-3 text-sm leading-relaxed text-slate-500">
+                {loc.local_hook}
               </p>
 
-              {/* Trust Badges */}
-              <div className="flex flex-wrap gap-6 pt-4">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-5 w-5 text-primary-blue" />
-                  <span className="text-[10px] font-bold tracking-widest uppercase">
-                    Licensed & Bonded
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-primary-blue" />
-                  <span className="text-[10px] font-bold tracking-widest uppercase">
-                    7 Days a Week
-                  </span>
-                </div>
+              <div className="mt-auto flex items-center justify-between border-t border-slate-50 pt-6">
+                <span className="font-mono text-xs font-medium text-slate-400">
+                  {loc.zip_codes?.split(",")[0] || "LA Area"} & more
+                </span>
+                <span className="flex items-center gap-1 text-sm font-bold text-primary-blue transition-all group-hover:gap-3">
+                  View Area <span>→</span>
+                </span>
               </div>
-            </div>
-          </div>
+            </Link>
+          ))}
+        </div>
+      </section>
 
-          {/* Alicia Showcase */}
-          <div className="lg:col-span-5">
-            <div className="relative aspect-4/5 overflow-hidden rounded-[40px] border border-border shadow-2xl">
-              <Image
-                src={OlesyaImage}
-                alt="Alicia, our Lead Service Coordinator"
-                fill
-                className="object-cover"
-                sizes="(max-w-1024px) 100vw, 500px"
-              />
-              <div className="absolute right-8 bottom-8 left-8 rounded-3xl border border-white/20 bg-background/90 p-6 backdrop-blur-md">
-                <div className="mb-2 flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="h-3 w-3 fill-amber-400 text-amber-400"
-                    />
-                  ))}
-                </div>
-                <p className="text-sm leading-snug font-bold">
-                  &quot;We serve a 50-mile radius around LA to ensure every
-                  neighborhood has access to a truly deep clean.&quot;
-                </p>
-                <p className="mt-2 text-[10px] font-black tracking-widest text-primary-blue uppercase">
-                  — Alicia M.
-                </p>
-              </div>
-            </div>
+      {/* 3. SOCIAL PROOF */}
+      <section className="bg-slate-900 py-24 text-white">
+        <div className="container mx-auto px-6 text-center">
+          <p className="mb-4 text-xs font-bold tracking-widest text-slate-400 uppercase">
+            Trusted by thousands
+          </p>
+          <h2 className="mb-8 text-3xl font-bold">
+            5-Star Upholstery Care in Every Zip Code
+          </h2>
+          <div className="flex h-20 items-center justify-center rounded-2xl border border-dashed border-slate-700 text-slate-500 italic">
+            [ Reviews Component Integration ]
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* --- LOCATION DIRECTORY --- */}
-        <section className="border-t border-border/50 py-24">
-          <div className="mb-16 text-center">
-            <h2 className="mb-4 text-[10px] font-black tracking-[0.3em] text-primary-blue uppercase">
-              Directory
-            </h2>
-            <p className="text-3xl font-black tracking-tight">
-              Find Your Neighborhood
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 gap-x-12 gap-y-20 md:grid-cols-2 lg:grid-cols-3">
-            {regions.sort().map((region) => (
-              <div key={region} className="space-y-6">
-                <div className="flex items-center gap-3 border-b border-border pb-4">
-                  <MapPin className="h-4 w-4 text-primary-blue" />
-                  <h3 className="text-sm font-black tracking-widest uppercase">
-                    {region}
-                  </h3>
-                </div>
-                <ul className="grid grid-cols-1 gap-y-3">
-                  {LOS_ANGELES_AREAS.filter((area) => area.region === region)
-                    .sort((a, b) => a.name.localeCompare(b.name))
-                    .map((area) => (
-                      <li key={area.slug}>
-                        <Link
-                          href={`/services/${area.slug}`}
-                          className="group flex justify-between text-[13px] font-medium text-muted-foreground transition-colors hover:text-primary-blue"
-                        >
-                          <span>{area.name}</span>
-                          <span className="text-[10px] font-black tracking-tighter uppercase opacity-0 transition-opacity group-hover:opacity-100">
-                            View Rates
-                          </span>
-                        </Link>
-                      </li>
-                    ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* --- SEO FOOTER TEXT --- */}
-        <section className="pt-12 pb-24">
-          <div className="mx-auto max-w-4xl rounded-[32px] bg-muted/30 p-12 text-center">
-            <h2 className="mb-6 text-2xl font-black tracking-tight">
-              The Trusted Choice for Los Angeles Residents
-            </h2>
-            <p className="text-sm leading-relaxed text-muted-foreground [word-spacing:0.02rem]">
-              Playa Cleaning is more than just a maid service; we are a local
-              Los Angeles institution dedicated to improving the quality of life
-              for our clients. By providing comprehensive coverage across the
-              Greater Los Angeles area, we ensure that whether you need a
-              <strong> Move Out Cleaning in Santa Monica</strong>, a{" "}
-              <strong>Deep Clean in Pasadena</strong>, or{" "}
-              <strong>Recurring Maid Services in Silver Lake</strong>,
-              professional help is only a click away. Our teams are fully
-              equipped, mobile, and ready to transform your living space today.
-            </p>
-          </div>
-        </section>
-      </div>
-      <CalculatorCTA />
-      <Footer />
-    </main>
+      {/* 4. SEO VALUE SECTION */}
+      <section className="container mx-auto max-w-4xl px-6 py-24">
+        <div className="prose prose-slate lg:prose-xl dark:prose-invert mx-auto text-center">
+          <h2 className="mb-8 text-3xl font-bold text-slate-900">
+            Specialized Equipment for LA Architecture
+          </h2>
+          <p className="leading-relaxed text-slate-600">
+            Operating a mobile cleaning service in Los Angeles requires more
+            than just a van. We&apos;ve optimized our operations for the
+            specific logistics of the Westside. Whether it’s navigating the
+            tight parking structures in <strong>Downtown Santa Monica</strong>
+            or meeting the strict LEED-certified building requirements in{" "}
+            <strong>Playa Vista</strong>, our teams arrive with portable,
+            high-powered extraction units that reach where truck-mounts
+            can&apos;t.
+          </p>
+        </div>
+      </section>
+    </div>
   )
 }
