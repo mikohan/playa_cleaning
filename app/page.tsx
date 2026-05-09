@@ -9,7 +9,12 @@ export default function Page() {
   return (
     <div>
       <Navbar />
-      <HeroVideo />
+      <HeroVideo
+        title="Residential Cleaning With Real Attention to Details"
+        subtitle="I’m Alicia. I love cleaning, I love people, and I clean your home with the same care and precision I use in my own."
+        highlightIndex={1}
+        showNotation
+      />
       <LogoTicker />
       <Testimonials />
       <CallToAction />

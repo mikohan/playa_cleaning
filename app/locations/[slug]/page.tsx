@@ -9,6 +9,16 @@ import {
   FAQLocation,
 } from "@/app/types/locationTypes"
 import { Navbar } from "@/components/common/Navbar"
+import { HeroVideo } from "@/components/cleaning/HeroVideo"
+import { LogoTicker } from "@/components/cleaning/LogoTicker"
+import LocationContext from "@/components/cleaning/LocationContext"
+import { WaveDivider } from "@/components/common/WaveDivider"
+import LocationFAQ from "@/components/cleaning/LocationFAQ"
+import { Testimonials } from "@/components/cleaning/Testimonials"
+import { Footer } from "@/components/common/Footer"
+import ServiceGrid from "@/components/cleaning/ServiceGrid"
+import { CalculatorCTA } from "@/components/newCleaning/CalculatorCTA"
+import { CallToAction } from "@/components/cleaning/CallToAction"
 
 const STRAPI_URL = process.env.STRAPI_URL || "https://cms.playacleaning.com"
 
@@ -77,7 +87,6 @@ export default async function LocationPage({
         .filter((n) => n.slug !== location.slug)
         .map((n) => {
           // DEBUG LOG: See what Strapi is actually giving you for the neighbor
-          console.log(`Mapping neighbor ${n.city_name}:`, n.location_image)
 
           return [
             n.slug,
@@ -97,85 +106,56 @@ export default async function LocationPage({
   return (
     <div>
       <Navbar />
-      {/* Hero */}
-      <section className="relative flex h-[60vh] items-center justify-center">
-        {location.location_image && (
-          <Image
-            src={`${STRAPI_URL}${location.location_image.url}`}
-            alt={location.location_image.alternativeText || location.city_name}
-            fill
-            className="object-cover opacity-40"
-            priority
-          />
-        )}
-        <div className="relative z-10 px-6 text-center">
-          <h1 className="mb-4 text-5xl font-bold md:text-7xl">
-            Cleaning in{" "}
-            <span className="text-blue-400">{location.city_name}</span>
-          </h1>
-          <p className="mx-auto max-w-2xl text-xl text-slate-300">
-            {location.local_hook}
-          </p>
-        </div>
+      <section>
+        {/* Hero */}
+        <HeroVideo
+          title={`Cleaning service in ${location.city_name}`}
+          subtitle={location.local_hook}
+          highlightIndex={0}
+        />
+      </section>
+      <section>
+        <LogoTicker />
+      </section>
+      <section className="relative mt-16">
+        <div className="absolute top-0 left-0 -z-10 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
+        <WaveDivider position="top" fill="var(--color-background)" />
+        <ServiceGrid cityName={location.city_name} />
+      </section>
+      <section className="relative mt-16">
+        <div className="absolute top-0 left-0 -z-10 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
+        <WaveDivider position="top" fill="var(--color-background)" />
+        <LocationContext
+          cityName={location.city_name}
+          contextText={location.neighborhood_context}
+          imageUrl={
+            location.location_image?.url
+              ? `${STRAPI_URL}${location.location_image.url}`
+              : undefined
+          }
+        />
+      </section>
+      <section className="relative">
+        <div className="absolute -top-18 left-80 -z-10 h-100 w-100 border bg-top-blur/60 blur-[150px]"></div>
+        <LocationFAQ
+          cityName={location.city_name}
+          items={location.faq_location} // Falls back to defaults if empty
+        />
       </section>
 
-      {/* Content Section */}
-      <main className="container mx-auto grid gap-16 px-6 py-20 lg:grid-cols-3">
-        <div className="space-y-12 lg:col-span-2">
-          <section>
-            <h2 className="mb-6 text-3xl font-bold">Service Area Context</h2>
-            <p className="text-lg leading-relaxed text-slate-600">
-              {location.neighborhood_context}
-            </p>
-          </section>
-
-          {/* Render JSON FAQs */}
-          {location.faq_location && Array.isArray(location.faq_location) && (
-            <section>
-              <h2 className="mb-8 text-3xl font-bold">Local Questions</h2>
-              <div className="space-y-6">
-                {location.faq_location.map((faq: FAQLocation, i: number) => (
-                  <div key={i} className="border-l-4 border-blue-500 py-2 pl-6">
-                    <h3 className="mb-2 text-xl font-bold">{faq.question}</h3>
-                    <p className="text-slate-600">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-        </div>
-
-        {/* Sidebar / Info */}
-        <aside className="space-y-8">
-          <div className="rounded-3xl border border-slate-100 bg-slate-50 p-8">
-            <h3 className="mb-4 text-xs font-bold tracking-widest text-slate-400 uppercase">
-              Coverage
-            </h3>
-            <p className="font-mono font-bold text-blue-600">
-              {location.zip_codes}
-            </p>
-          </div>
-
-          <div className="rounded-3xl bg-blue-600 p-8 text-white">
-            <h3 className="mb-2 text-xl font-bold">Ready to Book?</h3>
-            <p className="mb-6 text-blue-100">
-              Professional upholstery cleaning in {location.city_name}.
-            </p>
-            <button className="w-full rounded-xl bg-white py-4 font-bold text-blue-600 transition-colors hover:bg-blue-50">
-              Get an Instant Quote
-            </button>
-          </div>
-        </aside>
-      </main>
-
-      <LocationNeighbors
-        neighbors={neighbors}
-        currentCityName={location.city_name}
-      />
-
-      <footer className="border-t py-12 text-center text-sm text-slate-400">
-        <p className="mb-2 font-bold text-slate-600 uppercase">Service Hub</p>
-        <p>{location.coordinates?.address_hint}</p>
+      <section>
+        <Testimonials />
+      </section>
+      <CallToAction />
+      <section>
+        <LocationNeighbors
+          currentCityName={location.city_name}
+          neighbors={neighbors}
+        />
+      </section>
+      <CalculatorCTA />
+      <footer>
+        <Footer />
       </footer>
     </div>
   )

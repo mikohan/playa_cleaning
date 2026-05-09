@@ -74,7 +74,7 @@ export function Navbar() {
                     <>
                       <Link href={item.href} passHref>
                         <div className="cursor-pointer">
-                          <NavigationMenuTrigger className="cursor-pointer bg-transparent text-[10px] font-black tracking-[0.2em] uppercase transition-colors hover:text-primary-blue">
+                          <NavigationMenuTrigger className="cursor-pointer bg-transparent font-black tracking-widest uppercase transition-colors hover:text-primary-blue">
                             {item.title}
                           </NavigationMenuTrigger>
                         </div>
@@ -107,7 +107,7 @@ export function Navbar() {
                       <Link
                         href={item.href}
                         className={cn(
-                          "px-4 py-2 text-[10px] font-black tracking-[0.2em] uppercase transition-colors hover:text-primary-blue",
+                          "px-4 py-2 text-base font-black tracking-widest uppercase transition-colors hover:text-primary-blue",
                           "nav-animation-underline"
                         )}
                       >
