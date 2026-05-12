@@ -7,7 +7,7 @@ import { LOS_ANGELES_AREAS } from "@/app/data/west-side-areas"
 
 export const LocationTicker = () => {
   return (
-    <div className="overflow-hidden bg-accent py-16">
+    <div className="overflow-hidden py-16">
       <div className="container mx-auto">
         {/* Mask provides the soft fade-out effect on the edges */}
         <div className="flex overflow-hidden mask-[linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">

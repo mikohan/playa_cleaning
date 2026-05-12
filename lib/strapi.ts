@@ -87,3 +87,41 @@ export async function getAllServiceSlugs(): Promise<string[]> {
     return data.slug
   })
 }
+
+export async function getAllServices(): Promise<ServiceData[]> {
+  try {
+    const servicesRes = await strapiRequest<StrapiResponse<ServiceData>>(
+      "services",
+      {
+        // Using string keys for fields as per your previous pattern
+        "fields[0]": "name",
+        "fields[1]": "slug",
+        "fields[2]": "meta_description",
+        "pagination[pageSize]": 25,
+      }
+    )
+
+    if (!servicesRes?.data) return []
+
+    // Map and flatten using your unified response interface
+    return servicesRes.data.map((item) => {
+      // If attributes exist (v4), spread them; otherwise use the item directly (v5)
+      const flatData = item.attributes ? { ...item, ...item.attributes } : item
+
+      return {
+        id: item.id,
+        documentId: flatData.documentId,
+        name: flatData.name,
+        slug: flatData.slug,
+        meta_description: flatData.meta_description,
+        // Add defaults for other required ServiceData fields to satisfy the interface
+        header: flatData.header || "",
+        subheader: flatData.subheader || "",
+        seo_text_rich: flatData.seo_text_rich || "",
+      } as ServiceData
+    })
+  } catch (error) {
+    console.error("❌ Error fetching services for ticker:", error)
+    return []
+  }
+}

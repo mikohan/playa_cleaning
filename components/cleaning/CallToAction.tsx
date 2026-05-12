@@ -72,14 +72,14 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
   `
 
   return (
-    <section className="relative overflow-hidden">
-      <div className="relative py-24">
+    <section className="relative mx-auto overflow-hidden">
+      <div className="relative mx-auto py-24">
         <div className="absolute top-0 left-0 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
         <WaveDivider position="top" fill="var(--color-background)" />
 
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto max-w-7xl px-6">
           <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-5 lg:gap-20">
-            <div className="group relative z-10 h-125 overflow-hidden rounded-[2.5rem] bg-muted md:col-span-2 md:h-[650px]">
+            <div className="group relative h-125 overflow-hidden rounded-2xl bg-muted md:col-span-2 md:h-165">
               <Image
                 src={AliciaPortrait}
                 alt="Olesya Vostrikova - Playa Cleaning"

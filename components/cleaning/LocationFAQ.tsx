@@ -15,11 +15,16 @@ interface FAQItem {
 }
 
 interface LocationFAQProps {
-  cityName: string
+  cityName?: string
   items: FAQItem[]
+  serviceName?: string
 }
 
-export default function LocationFAQ({ cityName, items }: LocationFAQProps) {
+export default function LocationFAQ({
+  cityName,
+  items,
+  serviceName,
+}: LocationFAQProps) {
   if (!items?.length) return null
 
   // SEO TIP: You would ideally inject JSON-LD FAQ Schema here
@@ -44,7 +49,10 @@ export default function LocationFAQ({ cityName, items }: LocationFAQProps) {
                 </span>
               </div>
               <h2 className="text-3xl leading-tight font-bold tracking-tight text-foreground md:text-4xl">
-                Cleaning Services in {cityName}:{" "}
+                {serviceName
+                  ? serviceName + " "
+                  : `Cleaning Services in ${cityName}`}
+                {/* Cleaning Services in {cityName}:{" "} */}
                 <span className="text-primary-blue">What You Need to Know</span>
               </h2>
               <p className="mt-4 text-muted-foreground">

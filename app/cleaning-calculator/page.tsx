@@ -12,6 +12,7 @@ import {
 } from "lucide-react"
 import OlesyaImage from "@/public/images/cleaning/ol-2.png"
 import { CleaningCalculator } from "@/components/cleaning/CleaningCalculatorOffer"
+import { BreadCrumbsUniversal } from "@/components/common/BreadCrumbsUniversal"
 
 export const metadata: Metadata = {
   title: "Instant Cleaning Quote | Playa Cleaning Los Angeles",
@@ -71,6 +72,7 @@ export const metadata: Metadata = {
 export default function CalculatorPage() {
   return (
     <main className="min-h-screen bg-background font-jakarta text-foreground">
+      <BreadCrumbsUniversal />
       <div className="mx-auto max-w-7xl px-6">
         <div className="pt-8">
           <BreadCrumbs serviceName="Price Estimator" />

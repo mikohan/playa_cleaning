@@ -8,7 +8,23 @@ import { CarpetCallToAction } from "@/components/cleaning/CarpetCallToAction"
 import { CallToAction } from "@/components/cleaning/CallToAction"
 import HeroMeColor from "@/public/images/cleaning/hero-me-color.png"
 import { CalculatorCTA } from "@/components/newCleaning/CalculatorCTA"
-import { getServiceBySlug, getAllServiceSlugs } from "@/lib/strapi"
+import {
+  getServiceBySlug,
+  getAllServiceSlugs,
+  getAllServices,
+} from "@/lib/strapi"
+import { RichTextRenderer } from "@/components/common/RichTextRenderer"
+import { ServiceTicker } from "@/components/common/ServiceTicker"
+import { HeroServiceImage } from "@/components/cleaning/HeroServiceImage"
+import { WaveDivider } from "@/components/common/WaveDivider"
+import { Testimonials } from "@/components/cleaning/Testimonials"
+import { ServiceComparison } from "@/components/cleaning/ServiceComparison"
+import { ServiceScope } from "@/components/newCleaning/ServiceScope"
+import { FAQSection } from "@/components/cleaning/FAQSection"
+import LocationFAQ from "@/components/cleaning/LocationFAQ"
+import { WhyMeLeft } from "@/components/cleaning/WhyMeLeft"
+import { LocationTicker } from "@/components/cleaning/LocationTicker"
+import { WhyMeVideo } from "@/components/cleaning/WhyMeVideo"
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -73,6 +89,7 @@ export async function generateStaticParams() {
 export default async function ServicePage({ params }: Props) {
   const { slug } = await params
   const service = await getServiceBySlug(slug)
+  const services = await getAllServices()
 
   if (!service) notFound()
 
@@ -143,111 +160,52 @@ export default async function ServicePage({ params }: Props) {
       },
     ],
   }
-
+  let showIncludes = false
+  if (slug === "deep-cleaning" || slug == "maid-service") {
+    showIncludes = true
+  }
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <main className="min-h-screen bg-background font-jakarta">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="pt-8 pb-4">
-            <BreadCrumbs serviceName={service.name} />
+      <main>
+        <section className="conatainer mx-auto px-8 md:px-0">
+          <BreadCrumbs serviceName={service.name} />
+          <div className="container mx-auto">
+            <HeroServiceImage
+              heroImage={heroImage} // Missing property 1
+              professionalName={professionalName}
+              service={service}
+            />
           </div>
+        </section>
+        <section className="flex h-24 items-center bg-accent md:h-48">
+          <ServiceTicker services={services} />
+        </section>
+        {showIncludes && <ServiceScope serviceSlug={slug} />}
+        <section>
+          <WhyMeVideo />
+        </section>
 
-          {/* --- Hero Section --- */}
-          <section className="grid grid-cols-1 gap-12 py-12 lg:grid-cols-12 lg:items-start">
-            <div className="lg:col-span-7">
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary-blue/10 px-4 py-2 text-primary-blue">
-                <span className="text-xs font-black tracking-widest uppercase">
-                  Premium Service
-                </span>
-              </div>
+        <Testimonials />
+        {isCarpetService ? <CarpetCallToAction /> : <CallToAction />}
 
-              <h1 className="mb-6 text-5xl leading-tight font-black tracking-tight text-foreground md:text-7xl">
-                {service.header || service.name}
-              </h1>
-
-              <p className="mb-8 text-xl font-bold text-primary-blue">
-                {service.subheader}
-              </p>
-
-              <div className="max-w-2xl">
-                <p className="text-lg leading-relaxed text-muted-foreground">
-                  {service.meta_description}
-                </p>
-              </div>
-
-              {/* Placeholder for Service Highlights / Features */}
-              <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {[
-                  "Eco-friendly Products",
-                  "Verified Professionals",
-                  "Satisfaction Guaranteed",
-                  "Flexible Scheduling",
-                ].map((feature) => (
-                  <div
-                    key={feature}
-                    className="flex items-center gap-3 text-sm font-bold text-foreground/80"
-                  >
-                    <CheckCircle2 size={18} className="text-primary-blue" />
-                    {feature}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* --- Sticky Sidebar Card --- */}
-            <div className="lg:sticky lg:top-24 lg:col-span-5">
-              <div className="relative aspect-4/5 overflow-hidden rounded-[40px] border border-border shadow-2xl shadow-primary-blue/5">
-                <Image
-                  src={heroImage}
-                  alt={professionalName}
-                  fill
-                  className="object-cover"
-                  sizes="(max-w-1024px) 100vw, 500px"
-                />
-
-                <div className="absolute inset-x-6 bottom-6 rounded-3xl border border-white/20 bg-white/10 p-6 backdrop-blur-md">
-                  <div className="flex items-center justify-between text-white">
-                    <div>
-                      <p className="text-[10px] font-black tracking-[0.2em] uppercase opacity-80">
-                        Expert Lead
-                      </p>
-                      <p className="text-xl font-black">{professionalName}</p>
-                    </div>
-                    <div className="flex flex-col items-end">
-                      <div className="flex gap-0.5 text-accent-yellow">
-                        {[...Array(5)].map((_, i) => (
-                          <Star key={i} size={14} className="fill-current" />
-                        ))}
-                      </div>
-                      <p className="mt-1 text-[10px] font-bold uppercase">
-                        Top Rated
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* --- Rich Text Section (Reusable Component Target) --- */}
-          <section className="border-t border-border py-20">
-            <div className="max-w-4xl">
+        {/* --- Rich Text Section (Reusable Component Target) --- */}
+        <section className="relative py-20">
+          <div className="absolute top-0 left-0 -z-10 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
+          <WaveDivider position="top" fill="var(--color-background)" />
+          <div className="container mx-auto">
+            <div className="mx-auto max-w-4xl px-8 md:px-0">
               <h2 className="mb-10 text-3xl font-black">Detailed Overview</h2>
 
-              {/* Placeholder for your future <RichTextRenderer content={service.seo_text_rich} /> */}
-              <div
-                className="prose prose-lg dark:prose-invert prose-headings:font-black prose-headings:tracking-tight prose-p:text-muted-foreground prose-p:leading-relaxed max-w-none"
-                dangerouslySetInnerHTML={{ __html: service.seo_text_rich }}
-              />
+              <RichTextRenderer content={service.seo_text_rich} />
             </div>
-          </section>
-        </div>
-
-        {isCarpetService ? <CarpetCallToAction /> : <CallToAction />}
+          </div>
+        </section>
+        <LocationTicker />
+        <LocationFAQ serviceName={service.name} items={service.faq_service} />
 
         <CalculatorCTA />
       </main>
