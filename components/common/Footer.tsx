@@ -1,9 +1,9 @@
-"use client"
-
 import React from "react"
 import Link from "next/link"
 import { TreePalm } from "lucide-react"
 import { servicePages } from "@/app/data/seo-data"
+import { getFooterLocations } from "@/lib/get-locations"
+import { LocationRecord } from "@/app/types/locationTypes"
 
 // Optimized React Component Icons
 import { InstagramIcon } from "../icons/InstagramIcon"
@@ -46,18 +46,14 @@ const SOCIAL_LINKS = [
   },
 ]
 
-// Top locations for SEO silo linking
-const TOP_LOCATIONS = [
-  { name: "Santa Monica", slug: "santa-monica" },
-  { name: "Venice Beach", slug: "venice" },
-  { name: "Culver City", slug: "culver-city" },
-  { name: "West Los Angeles", slug: "west-la" },
-  { name: "Marina Del Rey", slug: "marina-del-rey" },
-  { name: "Playa Vista", slug: "playa-vista" },
-]
-
-export const Footer = () => {
+export const Footer = async () => {
   const currentYear = new Date().getFullYear()
+
+  // Fetch typed locations
+  const allLocations: LocationRecord[] = await getFooterLocations()
+
+  // Slice for the "Top" locations view
+  const visibleLocations = allLocations.slice(0, 6)
 
   return (
     <footer className="relative bg-foreground pt-16 text-background">
@@ -65,7 +61,6 @@ export const Footer = () => {
       <WaveDivider position="top" fill="var(--color-background)" />
 
       <div className="container mx-auto px-6 py-12 md:py-16">
-        {/* Changed to grid-cols-2 on small tablets and grid-cols-4 on desktop */}
         <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
           {/* Column 1: Brand & Contact */}
           <div className="flex flex-col items-center space-y-6 md:items-start">
@@ -105,7 +100,7 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Column 2: The 8 Services (SEO Powerhouse) */}
+          {/* Column 2: Our Services */}
           <div className="flex flex-col items-center md:items-start">
             <h4 className="mb-6 text-sm font-black tracking-widest text-primary-blue uppercase">
               Our Services
@@ -123,25 +118,33 @@ export const Footer = () => {
             </nav>
           </div>
 
-          {/* Column 3: Service Areas (New Section) */}
+          {/* Column 3: Service Areas (Refactored with LocationRecord) */}
           <div className="flex flex-col items-center md:items-start">
             <h4 className="mb-6 text-sm font-black tracking-widest text-primary-blue uppercase">
               Service Areas
             </h4>
             <nav className="grid grid-cols-1 gap-y-3 text-center md:text-left">
-              {TOP_LOCATIONS.map((loc) => (
+              {visibleLocations.map((loc) => (
                 <Link
-                  key={loc.slug}
-                  href={`/services/house-cleaning/${loc.slug}`}
+                  key={loc.documentId}
+                  href={`/locations/${loc.slug}`}
                   className="text-sm font-medium text-background/80 transition-colors hover:text-primary-blue"
                 >
-                  {loc.name}
+                  {loc.city_name}
                 </Link>
               ))}
+              {allLocations.length > 6 && (
+                <Link
+                  href="/locations"
+                  className="pt-2 text-xs font-bold tracking-widest text-primary-blue uppercase hover:underline"
+                >
+                  View All Locations →
+                </Link>
+              )}
             </nav>
           </div>
 
-          {/* Column 4: Navigation & Area */}
+          {/* Column 4: Company */}
           <div className="flex flex-col items-center md:items-start">
             <h4 className="mb-6 text-sm font-black tracking-widest text-primary-blue uppercase">
               Company
@@ -169,10 +172,11 @@ export const Footer = () => {
                 href="/pricing"
                 className="transition-colors hover:text-primary-blue"
               >
-                Pricing{" "}
+                Pricing
               </Link>
               <p className="mt-4 max-w-50 text-xs leading-relaxed text-background italic opacity-70">
-                Proudly serving a 50-mile radius around Los Angeles, CA.
+                Proudly serving West LA and surrounding middle-class
+                neighborhoods.
               </p>
             </nav>
           </div>

@@ -41,6 +41,7 @@ function GoogleStars({
               width={starSize}
               src={Star}
               alt="Review stars"
+              className="h-auto w-auto"
             />
           </div>
         ))}

@@ -1,201 +1,151 @@
-import { servicePages } from "@/app/data/seo-data"
 import { notFound } from "next/navigation"
 import { Metadata } from "next"
-import Image from "next/image" // Import Next.js Image component
+import Image from "next/image"
 import { Navbar } from "@/components/common/Navbar"
 import { Footer } from "@/components/common/Footer"
 import { BreadCrumbs } from "@/components/common/BreadCrumbs"
-import { MapPin, Star } from "lucide-react" // Using lucide-react for consistent styling
+import { MapPin, Star, CheckCircle2 } from "lucide-react"
 import OlesyaImage from "@/public/images/cleaning/ol-2.png"
 import { CarpetCallToAction } from "@/components/cleaning/CarpetCallToAction"
 import { CallToAction } from "@/components/cleaning/CallToAction"
 import HeroMeColor from "@/public/images/cleaning/hero-me-color.png"
 import { CalculatorCTA } from "@/components/newCleaning/CalculatorCTA"
+import { getServiceBySlug, getAllServiceSlugs } from "@/lib/strapi"
+import { ServiceData } from "@/app/types/serviceTypes"
 
 interface Props {
   params: Promise<{ slug: string }>
 }
 
-// 1. FULL METADATA ENGINE (Unchanged for SEO stability)
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const service = servicePages.find((p) => p.slug === slug)
-
+  const service = await getServiceBySlug(slug)
   if (!service) return { title: "Service Not Found" }
 
-  const url = `https://playacleaning.com/services/${slug}`
-  const title = service.seo.title
-  const description = service.seo.description
-
   return {
-    title,
-    description,
-    alternates: { canonical: url },
-    openGraph: {
-      title: service.seo.og_data["og:title"] || title,
-      description: service.seo.og_data["og:description"] || description,
-      url,
-      siteName: "Playa Cleaning",
-      images: [
-        {
-          url: "https://playacleaning.com/og-image.jpg",
-          width: 1200,
-          height: 630,
-          alt: title,
-        },
-      ],
-      locale: "en_US",
-      type: "website",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: ["https://playacleaning.com/og-image.jpg"],
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        "max-video-preview": -1,
-        "max-image-preview": "large",
-        "max-snippet": -1,
-      },
-    },
+    title: service.meta_title || service.name,
+    description: service.meta_description,
+    alternates: { canonical: `https://playacleaning.com/services/${slug}` },
   }
 }
 
 export async function generateStaticParams() {
-  return servicePages.map((service) => ({
-    slug: service.slug,
-  }))
+  const slugs = await getAllServiceSlugs()
+  return slugs.map((slug) => ({ slug }))
 }
 
 export default async function ServicePage({ params }: Props) {
   const { slug } = await params
-  const service = servicePages.find((p) => p.slug === slug)
+  const service = await getServiceBySlug(slug)
 
   if (!service) notFound()
-  const carpet: boolean = slug.includes("carpet") || slug.includes("upholstery")
-  const src = carpet ? HeroMeColor : OlesyaImage
+
+  const isCarpetService = slug.includes("carpet") || slug.includes("upholstery")
+  const heroImage = isCarpetService ? HeroMeColor : OlesyaImage
+  const professionalName = isCarpetService ? "Vlad V." : "Alisia V."
 
   return (
     <main className="min-h-screen bg-background font-jakarta">
-      {/* 2. FULL LD+JSON SCHEMA (Unchanged) */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            ...service.ld_json,
-            description: service.seo.description,
-            url: `https://playacleaning.com/services/${slug}`,
-            logo: "https://playacleaning.com/logo.png",
-            priceRange: "$$",
-            address: {
-              "@type": "PostalAddress",
-              addressLocality: "Los Angeles",
-              addressRegion: "CA",
-              addressCountry: "US",
-            },
-          }),
-        }}
-      />
-
       <Navbar />
 
       <div className="mx-auto max-w-7xl px-6">
         <div className="pt-8 pb-4">
-          <BreadCrumbs serviceName={service.page} />
+          <BreadCrumbs serviceName={service.name} />
         </div>
 
-        {/* 3. Main Hero & Content Section (Grid layout for Content vs Alicia) */}
-        <section className="grid grid-cols-1 gap-12 py-12 lg:grid-cols-12 lg:items-center">
-          {/* Left Column: Heading and Professional Copy */}
-          <div className="lg:col-span-8">
-            <h1 className="mb-10 max-w-3xl text-5xl leading-tight font-black tracking-tight text-primary-blue md:text-6xl">
-              {service.page}
+        {/* --- Hero Section --- */}
+        <section className="grid grid-cols-1 gap-12 py-12 lg:grid-cols-12 lg:items-start">
+          <div className="lg:col-span-7">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary-blue/10 px-4 py-2 text-primary-blue">
+              <span className="text-xs font-black tracking-widest uppercase">
+                Premium Service
+              </span>
+            </div>
+
+            <h1 className="mb-6 text-5xl leading-tight font-black tracking-tight text-foreground md:text-7xl">
+              {service.header || service.name}
             </h1>
 
-            <div className="max-w-2xl space-y-6">
-              <p className="text-xl leading-relaxed font-medium text-foreground/90 [word-spacing:0.05rem]">
-                {service.bodyText}
+            <p className="mb-8 text-xl font-bold text-primary-blue">
+              {service.subheader}
+            </p>
+
+            <div className="max-w-2xl">
+              <p className="text-lg leading-relaxed text-muted-foreground">
+                {service.meta_description}
               </p>
-              <p className="leading-relaxed text-muted-foreground [word-spacing:0.02rem]">
-                {service.seo.description}
-              </p>
+            </div>
+
+            {/* Placeholder for Service Highlights / Features */}
+            <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {[
+                "Eco-friendly Products",
+                "Verified Professionals",
+                "Satisfaction Guaranteed",
+                "Flexible Scheduling",
+              ].map((feature) => (
+                <div
+                  key={feature}
+                  className="flex items-center gap-3 text-sm font-bold text-foreground/80"
+                >
+                  <CheckCircle2 size={18} className="text-primary-blue" />
+                  {feature}
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Right Column: Dynamic Showcase of Alicia (Sticky on Desktop) */}
-          <div className="lg:sticky lg:top-24 lg:col-span-4">
-            <div className="relative aspect-4/5 overflow-hidden rounded-[32px] border border-border shadow-2xl shadow-primary-blue/5">
+          {/* --- Sticky Sidebar Card --- */}
+          <div className="lg:sticky lg:top-24 lg:col-span-5">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[40px] border border-border shadow-2xl shadow-primary-blue/5">
               <Image
-                src={src} // *** REPLACE WITH YOUR ACTUAL IMAGE PATH ***
-                alt="Alicia, Playa Cleaning Professional"
+                src={heroImage}
+                alt={professionalName}
                 fill
                 className="object-cover"
-                sizes="(max-w-1024px) 100vw, 400px"
+                sizes="(max-w-1024px) 100vw, 500px"
               />
-              {/* Trust Overlay */}
-              <div className="absolute right-6 bottom-6 left-6 rounded-2xl border border-border/50 bg-background/80 p-5 backdrop-blur-sm">
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="text-[10px] font-black tracking-widest text-primary-blue/70 uppercase">
-                    Trusted Expert
-                  </span>
-                  <div className="flex items-center gap-0.5 text-amber-500">
-                    <Star className="h-4 w-4 fill-amber-400" />
-                    <span className="text-sm font-bold text-foreground">
-                      5.0
-                    </span>
+
+              <div className="absolute inset-x-6 bottom-6 rounded-3xl border border-white/20 bg-white/10 p-6 backdrop-blur-md">
+                <div className="flex items-center justify-between text-white">
+                  <div>
+                    <p className="text-[10px] font-black tracking-[0.2em] uppercase opacity-80">
+                      Expert Lead
+                    </p>
+                    <p className="text-xl font-black">{professionalName}</p>
                   </div>
-                </div>
-                <p className="text-base font-extrabold tracking-tight text-foreground">
-                  {carpet ? "Vlad V." : "Alisia V."}{" "}
-                </p>
-                <div className="mt-1 flex items-center gap-1.5 text-muted-foreground">
-                  <MapPin className="h-3.5 w-3.5 opacity-60" />
-                  <span className="text-xs font-semibold">Serving LA</span>
+                  <div className="flex flex-col items-end">
+                    <div className="flex gap-0.5 text-accent-yellow">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} size={14} className="fill-current" />
+                      ))}
+                    </div>
+                    <p className="mt-1 text-[10px] font-bold uppercase">
+                      Top Rated
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
-      </div>
-      {carpet ? <CarpetCallToAction /> : <CallToAction />}
 
-      {/* 4. Bottom Inline Keywords Section (Full width just above Footer) */}
-      <section className="mt-20 bg-muted/30">
-        <div className="mx-auto max-w-7xl px-6 py-12">
-          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full border-4 border-background bg-primary-blue text-lg font-black text-white">
-                P
-              </div>
-              <div>
-                <h3 className="text-xs font-black tracking-[0.2em] text-primary-blue uppercase">
-                  Expertise in {service.page}
-                </h3>
-                <p className="text-[10px] font-medium tracking-wider text-muted-foreground uppercase [word-spacing:0.1rem]">
-                  Professional, specialized cleaning solutions
-                </p>
-              </div>
-            </div>
+        {/* --- Rich Text Section (Reusable Component Target) --- */}
+        <section className="border-t border-border py-20">
+          <div className="max-w-4xl">
+            <h2 className="mb-10 text-3xl font-black">Detailed Overview</h2>
 
-            <ul className="flex flex-wrap gap-2 md:justify-end">
-              {service.target_keywords.map((keyword, index) => (
-                <li
-                  key={index}
-                  className="rounded-full border border-border bg-background px-4 py-1.5 text-[11px] font-bold tracking-wider text-muted-foreground uppercase transition-all hover:border-primary-blue/30 hover:text-primary-blue hover:shadow-sm"
-                >
-                  {keyword}
-                </li>
-              ))}
-            </ul>
+            {/* Placeholder for your future <RichTextRenderer content={service.seo_text_rich} /> */}
+            <div
+              className="prose prose-lg dark:prose-invert prose-headings:font-black prose-headings:tracking-tight prose-p:text-muted-foreground prose-p:leading-relaxed max-w-none"
+              dangerouslySetInnerHTML={{ __html: service.seo_text_rich }}
+            />
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
+
+      {isCarpetService ? <CarpetCallToAction /> : <CallToAction />}
+
       <CalculatorCTA />
       <Footer />
     </main>

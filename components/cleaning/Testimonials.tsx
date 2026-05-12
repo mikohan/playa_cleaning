@@ -43,7 +43,7 @@ const TestimonialsColumn = (props: {
                 {userName}
               </div>
             </div>
-            <GoogleStars starsCount={5} inline text="" rating="" />
+            <GoogleStars starsCount={5} inline text="4.9" rating="" />
             <div className="mt-4 leading-relaxed text-muted-foreground">
               {text}
             </div>

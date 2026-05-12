@@ -37,7 +37,9 @@ export default function LocationContext({
                   alt={imageAlt || `Cleaning services in ${cityName}`}
                   fill
                   className="object-cover transition-transform duration-700 hover:scale-105"
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  priority
+                  fetchPriority="high"
                 />
               ) : (
                 <div className="flex h-full items-center justify-center bg-secondary">

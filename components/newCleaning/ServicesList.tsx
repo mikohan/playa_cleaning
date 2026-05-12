@@ -10,11 +10,14 @@ import {
   Star,
   ChevronRight,
 } from "lucide-react"
-import { servicePages } from "@/app/data/seo-data"
-import { cn } from "@/lib/utils"
+import { ServiceData } from "@/app/types/serviceTypes" // Import the interface we created earlier
 import AliciaImage from "@/public/images/cleaning/hero-4.png"
 
-export default function ServicesList() {
+interface ServicesListProps {
+  services: ServiceData[]
+}
+
+export default function ServicesList({ services }: ServicesListProps) {
   return (
     <div className="bg-background font-jakarta text-foreground">
       {/* 1. HERO SECTION: Editorial Intro with Alicia */}
@@ -23,7 +26,6 @@ export default function ServicesList() {
           <div className="flex flex-col items-center gap-12 md:flex-row">
             {/* Alicia Image Block */}
             <div className="relative aspect-[4/5] w-full shrink-0 md:w-5/12">
-              {/* Decorative Background Shape */}
               <div className="absolute inset-0 -rotate-3 rounded-[2.5rem] bg-primary-blue/5" />
 
               <Image
@@ -80,7 +82,6 @@ export default function ServicesList() {
 
       {/* 2. SERVICES GRID */}
       <section className="relative py-20">
-        {/* CSS Background Graphics - No hardcoded colors */}
         <div className="pointer-events-none absolute inset-0 opacity-40">
           <div className="absolute top-0 left-0 h-96 w-96 rounded-full bg-primary-blue/10 blur-[100px]" />
           <div className="absolute right-0 bottom-0 h-96 w-96 rounded-full bg-accent-yellow/5 blur-[100px]" />
@@ -88,19 +89,19 @@ export default function ServicesList() {
 
         <div className="relative z-10 container mx-auto max-w-7xl px-6">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {servicePages.map((service, index) => (
+            {services.map((service, index) => (
               <Link
-                key={service.slug}
+                key={service.id}
                 href={`/services/${service.slug}`}
                 className="group relative flex flex-col justify-between overflow-hidden rounded-[2rem] border border-border bg-card/50 p-8 backdrop-blur-sm transition-all duration-500 hover:scale-[1.02] hover:border-primary-blue/30 hover:shadow-2xl"
               >
-                {/* Visual Accent on Hover */}
                 <div className="absolute -top-10 -right-10 h-32 w-32 scale-0 rounded-full bg-primary-blue/5 transition-transform duration-700 group-hover:scale-100" />
 
                 <div className="relative z-10 space-y-4">
                   <div className="flex items-start justify-between">
                     <div className="rounded-full bg-primary-blue/10 px-3 py-1 text-[10px] font-black tracking-widest text-primary-blue uppercase">
-                      {service.intent.split("/")[1] || "Service"}
+                      {/* Using name or slug as a fallback for the category badge */}
+                      {service.name.split(" ")[0]}
                     </div>
                     <span className="text-4xl font-black italic opacity-10">
                       0{index + 1}
@@ -108,11 +109,11 @@ export default function ServicesList() {
                   </div>
 
                   <h3 className="text-2xl font-bold tracking-tight transition-colors group-hover:text-primary-blue">
-                    {service.page}
+                    {service.name}
                   </h3>
 
                   <p className="line-clamp-3 text-sm leading-relaxed text-muted-foreground opacity-80">
-                    {service.bodyText}
+                    {service.meta_description}
                   </p>
                 </div>
 
@@ -135,7 +136,6 @@ export default function ServicesList() {
       <section className="pb-24">
         <div className="container mx-auto max-w-6xl px-6">
           <div className="relative overflow-hidden rounded-[3rem] bg-footer p-12 text-white dark:border dark:border-border dark:bg-card">
-            {/* SVG Graphic using currentStroke/Fill */}
             <div className="pointer-events-none absolute inset-0 opacity-10">
               <svg
                 width="100%"
