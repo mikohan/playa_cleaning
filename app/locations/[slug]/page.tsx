@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation"
-import Image from "next/image"
 import { strapiRequest } from "@/lib/strapi"
 import LocationNeighbors from "@/components/cleaning/LocationNighbors"
 import {
@@ -8,19 +7,18 @@ import {
   LocationNeighbor,
 } from "@/app/types/locationTypes"
 import { ServiceData, StrapiResponse } from "@/app/types/serviceTypes"
-import { Navbar } from "@/components/common/Navbar"
 import { HeroVideo } from "@/components/cleaning/HeroVideo"
 import { LogoTicker } from "@/components/cleaning/LogoTicker"
 import LocationContext from "@/components/cleaning/LocationContext"
 import { WaveDivider } from "@/components/common/WaveDivider"
 import LocationFAQ from "@/components/cleaning/LocationFAQ"
 import { Testimonials } from "@/components/cleaning/Testimonials"
-import { Footer } from "@/components/common/Footer"
 import ServiceGrid from "@/components/cleaning/ServiceGrid"
 import { CalculatorCTA } from "@/components/newCleaning/CalculatorCTA"
 import { CallToAction } from "@/components/cleaning/CallToAction"
 import { Metadata } from "next"
 import GoogleMap from "@/components/common/GoogleMap"
+import { BreadCrumbsUniversal } from "@/components/common/BreadCrumbsUniversal"
 
 const STRAPI_URL = process.env.STRAPI_URL || "https://cms.playacleaning.com"
 
@@ -84,23 +82,20 @@ async function getServicesData(): Promise<ServiceData[]> {
 // ─────────────────────────────────────────────────────────────
 // Dynamic Metadata
 // ─────────────────────────────────────────────────────────────
-
-export async function generateMetadata({
-  params,
-}: {
+interface Props {
   params: Promise<{ slug: string }>
-}): Promise<Metadata> {
+}
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const location = await getLocationData(slug)
 
   if (!location) return { title: "Location Not Found" }
 
   const title = `Professional Cleaning Services in ${location.city_name} | Playa Cleaning`
-  const description = `${location.local_hook || `Top-rated residential and commercial cleaning services in ${location.city_name}. Trusted local professionals, instant quotes, and 5-star service.`}`
+  const description =
+    location.local_hook ||
+    `Top-rated residential and commercial cleaning in ${location.city_name}. 5-star local professionals, instant quotes, and eco-friendly products.`
   const url = `https://www.playacleaning.com/locations/${slug}`
-  const imageUrl = location.location_image?.url
-    ? `${STRAPI_URL}${location.location_image.url}`
-    : "https://www.playacleaning.com/og-default.jpg"
 
   const lat = location.coordinates?.lat || 34.0522
   const lng = location.coordinates?.lng || -118.2437
@@ -109,6 +104,7 @@ export async function generateMetadata({
     title,
     description,
     alternates: { canonical: url },
+    keywords: `cleaning service ${location.city_name}, house cleaning ${location.city_name}, maid service ${location.city_name}, upholstery cleaning ${location.city_name}`,
     other: {
       "geo.region": "US-CA",
       "geo.placename": location.city_name,
@@ -120,71 +116,98 @@ export async function generateMetadata({
       description,
       url,
       siteName: "Playa Cleaning",
-      images: [{ url: imageUrl, width: 1200, height: 630 }],
+      images: [
+        {
+          url: `${STRAPI_URL}${location.location_image?.url}`,
+          width: 1200,
+          height: 630,
+        },
+      ],
       locale: "en_US",
       type: "website",
     },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   }
 }
 
 // ─────────────────────────────────────────────────────────────
-// SEO Structured Data Component
+// 3. STRUCTURED DATA COMPONENT (JSON-LD)
 // ─────────────────────────────────────────────────────────────
-
-function JsonLd({ location }: { location: LocationRecord }) {
+function JsonLd({
+  location,
+  services,
+}: {
+  location: LocationRecord
+  services: ServiceData[]
+}) {
   const lat = location.coordinates?.lat || 34.0522
   const lng = location.coordinates?.lng || -118.2437
 
-  const organizationJsonLd = {
+  const mainSchema = {
     "@context": "https://schema.org",
-    "@type": "CleaningService",
-    name: `Playa Cleaning ${location.city_name}`,
-    image: location.location_image?.url
-      ? `${STRAPI_URL}${location.location_image.url}`
-      : "",
-    telephone: process.env.COMPANY_PHONE || "+1-213-598-77-63",
-    url: `https://www.playacleaning.com/locations/${location.slug}`,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: location.city_name,
-      addressRegion: "CA",
-      addressCountry: "US",
-    },
-    geo: {
-      "@type": "GeoCircle",
-      geoMidpoint: { "@type": "GeoCoordinates", latitude: lat, longitude: lng },
-      geoRadius: "15000",
-    },
-    areaServed: { "@type": "City", name: location.city_name },
-    priceRange: "$$",
+    "@graph": [
+      {
+        "@type": "CleaningService",
+        name: `Playa Cleaning ${location.city_name}`,
+        image: `${STRAPI_URL}${location.location_image?.url}`,
+        telephone: "+1-213-598-77-63",
+        url: `https://www.playacleaning.com/locations/${location.slug}`,
+        priceRange: "$$",
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: location.city_name,
+          addressRegion: "CA",
+          addressCountry: "US",
+        },
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: lat,
+          longitude: lng,
+        },
+        aggregateRating: {
+          "@type": "AggregateRating",
+          ratingValue: "4.9",
+          reviewCount: "158",
+        },
+        areaServed: {
+          "@type": "City",
+          name: location.city_name,
+        },
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: "Cleaning Services",
+          itemListElement: services.map((s) => ({
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "Service",
+              name: s.name,
+            },
+          })),
+        },
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: (location.faq_location || []).map((faq) => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: { "@type": "Answer", text: faq.answer },
+        })),
+      },
+    ],
   }
 
-  const faqJsonLd = location.faq_location && {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: location.faq_location.map((faq) => ({
-      "@type": "Question",
-      name: faq.question,
-      acceptedAnswer: { "@type": "Answer", text: faq.answer },
-    })),
-  }
-
+  // The return statement must be explicitly present and return a JSX element
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-      />
-      {faqJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
-      )}
-    </>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(mainSchema) }}
+    />
   )
 }
-
 // ─────────────────────────────────────────────────────────────
 // Page Component
 // ─────────────────────────────────────────────────────────────
@@ -227,8 +250,9 @@ export default async function LocationPage({
 
   return (
     <>
-      <JsonLd location={location} />
+      <JsonLd location={location} services={services} />
       <div className="bg-background">
+        <BreadCrumbsUniversal />
         <section>
           <HeroVideo
             title={`Cleaning service in ${location.city_name}`}

@@ -116,7 +116,7 @@ export default async function RootLayout({
             {/* Pass both to Navbar for the "Services" and "Locations" dropdowns */}
             <Navbar services={services ?? []} locations={locations ?? []} />
             {children}
-            {/* <Footer services={services ?? []} locations={locations ?? []} /> */}
+            <Footer services={services ?? []} locations={locations ?? []} />
           </main>
         </ThemeProvider>
       </body>

@@ -2,6 +2,7 @@ import React from "react"
 import Link from "next/link"
 import { ShieldCheck, Lock, Eye, FileText, ArrowLeft } from "lucide-react"
 import { Metadata } from "next"
+import { BreadCrumbsUniversal } from "@/components/common/BreadCrumbsUniversal"
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Playa Cleaning Los Angeles",
@@ -52,6 +53,7 @@ export default function PrivacyPolicy() {
 
   return (
     <div className="font-blauerRegular min-h-screen bg-slate-50 px-6 py-12 lg:px-8">
+      <BreadCrumbsUniversal />
       <div className="mx-auto max-w-3xl">
         {/* Back to Home */}
         <Link

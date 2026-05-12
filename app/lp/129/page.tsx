@@ -1,7 +1,5 @@
 import { Metadata } from "next"
-import { Navbar } from "@/components/common/Navbar"
 import { HeroImage } from "@/components/offers/HeroImage"
-import { Footer } from "@/components/common/Footer"
 import { PREMIUM_OFFER_CONTENT } from "@/app/data/offers/one-twenty-nine"
 import { WhyMe } from "@/components/cleaning/WhyMe"
 import { Testimonials } from "@/components/cleaning/Testimonials"
@@ -25,7 +23,6 @@ export const metadata: Metadata = {
 export default function PremiumOfferPage() {
   return (
     <div className="font-jakarta">
-      <Navbar />
       <main>
         {/* Passing the content object to your existing HeroImage component */}
         <HeroImage data={PREMIUM_OFFER_CONTENT} />
@@ -34,7 +31,6 @@ export default function PremiumOfferPage() {
         <TeamBentoGrid />
         <CallToAction />
       </main>
-      <Footer />
     </div>
   )
 }

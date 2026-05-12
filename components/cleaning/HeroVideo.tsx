@@ -5,6 +5,7 @@ import { AvatarGroup } from "./AvatarGroup"
 import { CleaningModal } from "../common/CleaningModal"
 import { ModalVideo } from "../common/ModalVideo"
 import { RoughNotation, RoughNotationGroup } from "react-rough-notation"
+import { BreadCrumbsUniversal } from "../common/BreadCrumbsUniversal"
 
 const VideoComponent = dynamic(
   () => import("./VideoComponent").then((mod) => mod.VideoComponent),
@@ -37,14 +38,14 @@ function HeroVideo({
   if (!title) return null
 
   return (
-    <section className="bg-gradient py-8 md:py-16">
+    <section className="bg-gradient py-8">
       <div className="container mx-auto max-w-7xl px-6">
         <div className="flex flex-col items-center justify-center gap-12 md:flex-row">
           {/* Text Content */}
           <div className="text-center md:flex-1 md:text-left">
             <div className="flex flex-col items-center gap-4 md:items-start">
               <div className="flex flex-col items-center gap-2 md:items-start">
-                <GoogleStars starsCount={5} rating="" />
+                <GoogleStars starsCount={5} rating="4.9" />
                 <AvatarGroup />
               </div>
 

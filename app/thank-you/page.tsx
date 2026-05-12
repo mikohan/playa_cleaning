@@ -3,8 +3,6 @@ import Image from "next/image"
 import Link from "next/link"
 import { PartyPopper, ArrowRight, CheckCircle2, Phone } from "lucide-react"
 import AliciaPortrait from "@/public/images/cleaning/hero-4.png"
-import { Navbar } from "@/components/common/Navbar"
-import { Footer } from "@/components/common/Footer"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -41,7 +39,6 @@ export const metadata: Metadata = {
 export default function ThankYouPage() {
   return (
     <div>
-      <Navbar />
       <div className="flex min-h-screen items-center justify-center p-4 md:p-8">
         <div className="w-full max-w-5xl overflow-hidden rounded-2xl bg-card shadow-lg">
           <div className="grid grid-cols-1 md:grid-cols-2">
@@ -130,7 +127,6 @@ export default function ThankYouPage() {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   )
 }

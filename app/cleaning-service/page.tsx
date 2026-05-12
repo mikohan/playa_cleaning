@@ -70,7 +70,6 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div>
-      <Navbar />
       <div className="font-jakarta">
         <HeroSection city="Los Angeles" />
         <LogoTicker />
@@ -78,7 +77,6 @@ export default function Page() {
         <Testimonials />
         <CallToAction />
         <CalculatorCTA />
-        <Footer />
       </div>
     </div>
   )

@@ -1,36 +1,42 @@
 import React from "react"
 import { Metadata } from "next"
 
-// 1. Sort Imports Alphabetically
+// 1. UI & Common
 import { AvatarGroup } from "@/components/ui/avatar"
-import { BenefitsSection } from "@/components/cleaning/BenefitsSection"
-import { BookingCalculator } from "@/components/newCleaning/BookingCalculator"
-import { CalculatorCTA } from "@/components/newCleaning/CalculatorCTA"
-import { CallToAction } from "@/components/cleaning/CallToAction"
-import { CleaningCalculator } from "@/components/cleaning/CleaningCalculatorOffer"
-import { CleaningPricing } from "@/components/newCleaning/CleaningPricing"
-import { GeoSection } from "@/components/newCleaning/GeoSection"
-import { FAQSection } from "@/components/cleaning/FAQSection"
-import { FeaturesSection } from "@/components/newCleaning/FeaturesSection"
-import { Footer } from "@/components/common/Footer"
+import { LogoTicker } from "@/components/cleaning/LogoTicker"
+
+// 2. Hero Variants
+import { HeroImage } from "@/components/cleaning/HeroImage"
 import { HeroImageGemini } from "@/components/cleaning/HeroImageGemini"
 import { HeroSection } from "@/components/newCleaning/HeroSection"
-import { HeroImage } from "@/components/cleaning/HeroImage"
 import { HeroVideo } from "@/components/cleaning/HeroVideo"
-import { LogoTicker } from "@/components/cleaning/LogoTicker"
-import { Navbar } from "@/components/common/Navbar"
-import { ServiceComparison } from "@/components/cleaning/ServiceComparison"
+
+// 3. Functional / Calculators
+import { BookingCalculator } from "@/components/newCleaning/BookingCalculator"
+import { CleaningCalculator } from "@/components/cleaning/CleaningCalculatorOffer"
+import { CalculatorCTA } from "@/components/newCleaning/CalculatorCTA"
+
+// 4. Content Sections
+import { BenefitsSection } from "@/components/cleaning/BenefitsSection"
+import { CleaningPricing } from "@/components/newCleaning/CleaningPricing"
+import { FAQSection } from "@/components/cleaning/FAQSection"
+import { FeaturesSection } from "@/components/newCleaning/FeaturesSection"
+import { GeoSection } from "@/components/newCleaning/GeoSection"
 import { ServiceAreasSection } from "@/components/newCleaning/ServiceAreasSection"
-import { Testimonials } from "@/components/cleaning/Testimonials"
-import { WhyMe } from "@/components/cleaning/WhyMe"
+import { ServiceComparison } from "@/components/cleaning/ServiceComparison"
 import { ServiceExclusions } from "@/components/newCleaning/ServiceExclusion"
 import { ServiceScope } from "@/components/newCleaning/ServiceScope"
-import ServicesList from "@/components/newCleaning/ServicesList"
+import { ServiceList } from "@/components/newCleaning/ServicesList" // Fixed: Named Import
+
+// 5. Social & Trust
+import { CallToAction } from "@/components/cleaning/CallToAction"
 import { TeamBentoGrid } from "@/components/newCleaning/TeamBentoGrid"
+import { Testimonials } from "@/components/cleaning/Testimonials"
+import { WhyMe } from "@/components/cleaning/WhyMe"
 
 // MASK FROM SEARCH ENGINES
 export const metadata: Metadata = {
-  title: "Style Guide | Internal",
+  title: "Style Guide | Internal UI Kit",
   robots: {
     index: false,
     follow: false,
@@ -38,76 +44,136 @@ export const metadata: Metadata = {
   },
 }
 
-// Reusable wrapper to handle the sorting labels and separators
 const SectionWrapper = ({
+  id,
   title,
   children,
 }: {
+  id: string
   title: string
   children: React.ReactNode
 }) => (
-  <section className="space-y-4 py-12">
+  <section id={id} className="scroll-mt-24 space-y-4 py-12">
     <div className="flex items-center gap-4">
       <span className="text-xs font-black tracking-widest text-primary-blue uppercase">
         {title}
       </span>
-      {/* <div className="h-px flex-1 bg-pink-300" /> */}
+      <div className="h-px flex-1 bg-border/60" />
     </div>
-    <div className="overflow-hidden rounded-xl border border-dashed border-border p-4">
+    <div className="overflow-hidden rounded-3xl border border-dashed border-border bg-slate-50/30 p-4">
       {children}
     </div>
   </section>
 )
 
 const StyleGuidePage = () => {
-  // 2. Component Manifest for easy management
   const components = [
-    { name: "Avatar Group", component: <AvatarGroup /> },
-    { name: "Benefits Section", component: <BenefitsSection /> },
-    { name: "Booking Calculator", component: <BookingCalculator /> },
-    { name: "Calculator CTA", component: <CalculatorCTA /> },
-    { name: "Call To Action", component: <CallToAction /> },
-    { name: "Cleaning Calculator", component: <CleaningCalculator /> },
-    { name: "Cleaning Pricing", component: <CleaningPricing /> },
-    { name: "Geo Section", component: <GeoSection /> },
-    { name: "FAQ Section", component: <FAQSection /> },
-    { name: "Features Section", component: <FeaturesSection /> },
-    { name: "Hero Image Gemini", component: <HeroImageGemini /> },
-    { name: "Hero Image", component: <HeroImage /> },
-    { name: "Hero Section New", component: <HeroSection city="Playa vista" /> },
-    { name: "Hero Video", component: <HeroVideo /> },
-    { name: "Logo Ticker", component: <LogoTicker /> },
-    { name: "Service Comparison", component: <ServiceComparison /> },
-    { name: "Service Area Section", component: <ServiceAreasSection /> },
-    { name: "Service Exclusion", component: <ServiceExclusions /> },
-    { name: "Service Scope", component: <ServiceScope /> },
-    { name: "Service List", component: <ServicesList /> },
-    { name: "Testimonials", component: <Testimonials /> },
-    { name: "Team Bento Grid", component: <TeamBentoGrid /> },
-    { name: "Why Me", component: <WhyMe /> },
+    { name: "Avatar Group", id: "avatar", component: <AvatarGroup /> },
+    {
+      name: "Benefits Section",
+      id: "benefits",
+      component: <BenefitsSection />,
+    },
+    {
+      name: "Booking Calculator",
+      id: "booking-calc",
+      component: <BookingCalculator />,
+    },
+    { name: "Calculator CTA", id: "calc-cta", component: <CalculatorCTA /> },
+    { name: "Call To Action", id: "cta", component: <CallToAction /> },
+    {
+      name: "Cleaning Calculator",
+      id: "cleaning-calc",
+      component: <CleaningCalculator />,
+    },
+    { name: "Cleaning Pricing", id: "pricing", component: <CleaningPricing /> },
+    { name: "FAQ Section", id: "faq", component: <FAQSection /> },
+    {
+      name: "Features Section",
+      id: "features",
+      component: <FeaturesSection />,
+    },
+    { name: "Geo Section", id: "geo", component: <GeoSection /> },
+    { name: "Hero Image", id: "hero-img", component: <HeroImage /> },
+    {
+      name: "Hero Image Gemini",
+      id: "hero-gemini",
+      component: <HeroImageGemini />,
+    },
+    {
+      name: "Hero Section New",
+      id: "hero-new",
+      component: <HeroSection city="Playa Vista" />,
+    },
+    {
+      name: "Hero Video",
+      id: "hero-video",
+      component: <HeroVideo title="Title" subtitle="subtitle" />,
+    },
+    { name: "Logo Ticker", id: "ticker", component: <LogoTicker /> },
+    {
+      name: "Service Area Section",
+      id: "service-area",
+      component: <ServiceAreasSection />,
+    },
+    {
+      name: "Service Comparison",
+      id: "comparison",
+      component: <ServiceComparison />,
+    },
+    {
+      name: "Service Exclusion",
+      id: "exclusion",
+      component: <ServiceExclusions />,
+    },
+    {
+      name: "Service List",
+      id: "service-list",
+      component: <ServiceList services={[]} />,
+    },
+    { name: "Service Scope", id: "scope", component: <ServiceScope /> },
+    { name: "Team Bento Grid", id: "team", component: <TeamBentoGrid /> },
+    { name: "Testimonials", id: "testimonials", component: <Testimonials /> },
+    { name: "Why Me", id: "why-me", component: <WhyMe /> },
   ]
 
   return (
-    <main className="min-h-screen bg-background p-8 font-jakarta text-foreground md:p-20">
-      <Navbar />
+    <main className="min-h-screen bg-background font-jakarta text-foreground">
+      <div className="container mx-auto px-6 py-20 md:px-20">
+        <header className="mb-16">
+          <div className="mb-4 inline-block rounded-full bg-primary-blue/10 px-4 py-1 text-xs font-bold text-primary-blue">
+            Development Mode
+          </div>
+          <h1 className="mb-2 text-5xl font-black tracking-tighter uppercase">
+            Internal UI Kit
+          </h1>
+          <p className="max-w-2xl text-lg text-muted-foreground">
+            A living documentation of components for Playa Cleaning and Angara
+            Lab. Use this to verify responsiveness and visual consistency.
+          </p>
+        </header>
 
-      <header className="mt-12 mb-16">
-        <h1 className="mb-2 text-4xl font-black tracking-tight">
-          Internal UI Kit
-        </h1>
-        <p className="text-lg text-muted-foreground">
-          Alphabetical visual review for Playa Cleaning & Angara Lab components.
-        </p>
-      </header>
+        {/* Quick Links Menu */}
+        <nav className="mb-20 flex flex-wrap gap-2">
+          {components.map((item) => (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              className="rounded-full border border-border bg-white px-4 py-1.5 text-xs font-medium transition-all hover:border-primary-blue hover:text-primary-blue"
+            >
+              {item.name}
+            </a>
+          ))}
+        </nav>
 
-      {/* Render sorted components */}
-      {components.map((item) => (
-        <SectionWrapper key={item.name} title={item.name}>
-          {item.component}
-        </SectionWrapper>
-      ))}
-
-      <Footer />
+        <div className="space-y-8">
+          {components.map((item) => (
+            <SectionWrapper key={item.id} id={item.id} title={item.name}>
+              {item.component}
+            </SectionWrapper>
+          ))}
+        </div>
+      </div>
     </main>
   )
 }

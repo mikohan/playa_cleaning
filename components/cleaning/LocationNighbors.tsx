@@ -92,7 +92,7 @@ export default function LocationNeighbors({
                 className="group relative flex h-full flex-col overflow-hidden rounded-4xl border border-border bg-card transition-all duration-500 hover:border-primary-blue/50 hover:shadow-2xl hover:shadow-primary-blue/10"
               >
                 {/* Thumbnail Wrapper */}
-                <div className="relative aspect-[4/5] w-full overflow-hidden bg-muted">
+                <div className="relative aspect-4/5 w-full overflow-hidden bg-muted">
                   <Image
                     src={getImageUrl(neighbor.location_image?.url)}
                     alt={`Playa Cleaning services in ${neighbor.city_name}`}
@@ -112,7 +112,7 @@ export default function LocationNeighbors({
                 </div>
 
                 {/* Content Body */}
-                <div className="flex flex-grow flex-col p-8">
+                <div className="flex grow flex-col p-8">
                   <h3 className="text-2xl font-bold text-foreground transition-colors group-hover:text-primary-blue">
                     {neighbor.city_name}
                   </h3>

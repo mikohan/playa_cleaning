@@ -71,8 +71,6 @@ export const metadata: Metadata = {
 export default function CalculatorPage() {
   return (
     <main className="min-h-screen bg-background font-jakarta text-foreground">
-      <Navbar />
-
       <div className="mx-auto max-w-7xl px-6">
         <div className="pt-8">
           <BreadCrumbs serviceName="Price Estimator" />
@@ -189,8 +187,6 @@ export default function CalculatorPage() {
           </a>
         </div>
       </div>
-
-      <Footer />
     </main>
   )
 }

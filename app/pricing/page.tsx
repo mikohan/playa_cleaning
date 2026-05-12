@@ -1,8 +1,6 @@
-import { Navbar } from "@/components/common/Navbar"
 import { LogoTicker } from "@/components/cleaning/LogoTicker"
 import { Testimonials } from "@/components/cleaning/Testimonials"
 import { WhyMe } from "@/components/cleaning/WhyMe"
-import { Footer } from "@/components/common/Footer"
 import { FAQSection } from "@/components/cleaning/FAQSection"
 import { BenefitsSection } from "@/components/cleaning/BenefitsSection"
 import { CallToAction } from "@/components/cleaning/CallToAction"
@@ -10,6 +8,8 @@ import { ServiceComparison } from "@/components/cleaning/ServiceComparison"
 import { CleaningPricing } from "@/components/newCleaning/CleaningPricing"
 import { ServiceScope } from "@/components/newCleaning/ServiceScope"
 import { Metadata } from "next"
+import { BreadCrumbs } from "@/components/common/BreadCrumbs"
+import { BreadCrumbsUniversal } from "@/components/common/BreadCrumbsUniversal"
 
 export const metadata: Metadata = {
   title: "Flat-Rate House Cleaning Pricing Los Angeles | Playa Cleaning",
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className="font-jakarta">
-      <Navbar />
+      <BreadCrumbsUniversal />
       <CleaningPricing />
       <LogoTicker />
       <ServiceScope />
@@ -73,7 +73,6 @@ export default function Page() {
       <Testimonials />
       <FAQSection />
       <CallToAction />
-      <Footer />
     </div>
   )
 }

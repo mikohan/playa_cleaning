@@ -1,6 +1,5 @@
+import { BreadCrumbsUniversal } from "@/components/common/BreadCrumbsUniversal"
 import React from "react"
-import { Navbar } from "@/components/common/Navbar"
-import { Footer } from "@/components/common/Footer"
 
 export const metadata = {
   title: "Terms of Service | Playa Cleaning",
@@ -12,7 +11,7 @@ const tosIntro = `Playa Cleaning LLC ("the Company," "we," "us") provides profes
 export default function TermsOfService() {
   return (
     <div>
-      <Navbar />
+      <BreadCrumbsUniversal />
       <main className="container mx-auto max-w-4xl px-6 py-20 font-jakarta">
         <h1 className="mb-8 border-b pb-4 text-4xl font-black">
           Terms of Service
@@ -146,7 +145,6 @@ export default function TermsOfService() {
           </section>
         </div>
       </main>
-      <Footer />
     </div>
   )
 }
