@@ -1,11 +1,10 @@
 import React from "react"
 import Link from "next/link"
 import { TreePalm } from "lucide-react"
-import { servicePages } from "@/app/data/seo-data"
-import { getFooterLocations } from "@/lib/get-locations"
+import { ServiceData } from "@/app/types/serviceTypes"
 import { LocationRecord } from "@/app/types/locationTypes"
 
-// Optimized React Component Icons
+// Icons
 import { InstagramIcon } from "../icons/InstagramIcon"
 import { FacebookIcon } from "@/components/icons/FacebookIcon"
 import { TikTokIcon } from "@/components/icons/TickTockIcon"
@@ -46,14 +45,17 @@ const SOCIAL_LINKS = [
   },
 ]
 
-export const Footer = async () => {
+interface FooterProps {
+  services: ServiceData[]
+  locations: LocationRecord[]
+}
+
+export const Footer = ({ services, locations }: FooterProps) => {
   const currentYear = new Date().getFullYear()
 
-  // Fetch typed locations
-  const allLocations: LocationRecord[] = await getFooterLocations()
-
-  // Slice for the "Top" locations view
-  const visibleLocations = allLocations.slice(0, 6)
+  // SEO Optimization: Slice lists for footer scannability
+  const visibleServices = (services ?? []).slice(0, 8)
+  const visibleLocations = (locations ?? []).slice(0, 6)
 
   return (
     <footer className="relative bg-foreground pt-16 text-background">
@@ -81,7 +83,7 @@ export const Footer = async () => {
                 (213) 598-77-63
               </a>
             </p>
-            <div className="flex gap-4 text-foreground">
+            <div className="flex gap-4">
               {SOCIAL_LINKS.map((social) => {
                 const IconComponent = social.icon
                 return (
@@ -106,19 +108,27 @@ export const Footer = async () => {
               Our Services
             </h4>
             <nav className="grid grid-cols-1 gap-y-3 text-center md:text-left">
-              {servicePages.map((service) => (
+              {visibleServices.map((service) => (
                 <Link
                   key={service.slug}
                   href={`/services/${service.slug}`}
                   className="text-sm font-medium text-background/80 transition-colors hover:text-primary-blue"
                 >
-                  {service.page}
+                  {service.name}
                 </Link>
               ))}
+              {services?.length > 8 && (
+                <Link
+                  href="/services"
+                  className="pt-2 text-xs font-bold tracking-widest text-primary-blue uppercase hover:underline"
+                >
+                  All Services →
+                </Link>
+              )}
             </nav>
           </div>
 
-          {/* Column 3: Service Areas (Refactored with LocationRecord) */}
+          {/* Column 3: Service Areas */}
           <div className="flex flex-col items-center md:items-start">
             <h4 className="mb-6 text-sm font-black tracking-widest text-primary-blue uppercase">
               Service Areas
@@ -126,14 +136,14 @@ export const Footer = async () => {
             <nav className="grid grid-cols-1 gap-y-3 text-center md:text-left">
               {visibleLocations.map((loc) => (
                 <Link
-                  key={loc.documentId}
+                  key={loc.slug}
                   href={`/locations/${loc.slug}`}
                   className="text-sm font-medium text-background/80 transition-colors hover:text-primary-blue"
                 >
                   {loc.city_name}
                 </Link>
               ))}
-              {allLocations.length > 6 && (
+              {locations.length > 6 && (
                 <Link
                   href="/locations"
                   className="pt-2 text-xs font-bold tracking-widest text-primary-blue uppercase hover:underline"
@@ -163,27 +173,20 @@ export const Footer = async () => {
                 Terms of Service
               </Link>
               <Link
-                href="/services"
-                className="transition-colors hover:text-primary-blue"
-              >
-                Our Process
-              </Link>
-              <Link
                 href="/pricing"
                 className="transition-colors hover:text-primary-blue"
               >
                 Pricing
               </Link>
               <p className="mt-4 max-w-50 text-xs leading-relaxed text-background italic opacity-70">
-                Proudly serving West LA and surrounding middle-class
-                neighborhoods.
+                Proudly serving West LA and surrounding neighborhoods.
               </p>
             </nav>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-16 flex w-full flex-col items-center justify-between gap-4 border-t border-white/5 pt-8 text-[13px] text-background/80 md:flex-row">
+        <div className="mt-16 flex w-full flex-col items-center justify-between gap-4 pt-8 text-[13px] text-background/80 md:flex-row">
           <p>© {currentYear} Playa Cleaning LLC. All rights reserved.</p>
           <div className="flex gap-4">
             <span className="font-bold text-primary-blue">

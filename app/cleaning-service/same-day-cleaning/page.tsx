@@ -62,8 +62,6 @@ const SameDayCleaningPage = () => {
 
   return (
     <div className="text-foreground transition-colors duration-300">
-      <Navbar />
-
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden pt-20 pb-32">
         {/* Decorative background - removed z-index, using natural flow */}
@@ -302,8 +300,6 @@ const SameDayCleaningPage = () => {
           </div>
         </div>
       </section>
-
-      <Footer />
     </div>
   )
 }

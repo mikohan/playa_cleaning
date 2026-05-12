@@ -3,7 +3,7 @@
 import React from "react"
 import Link from "next/link"
 import { useTheme } from "next-themes"
-import { Menu, TreePalm } from "lucide-react"
+import { Menu, TreePalm, MapPin } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 import {
@@ -25,34 +25,58 @@ import {
 import { AnimatedButton } from "../SmallComponents/AnimatedButton"
 import { ButtonShiny } from "../SmallComponents/ButtonShiny"
 import { ThemeToggle } from "./ThemeToggle"
+import { ServiceData } from "@/app/types/serviceTypes"
+import { LocationRecord } from "@/app/types/locationTypes"
 
-const navItems = [
-  { title: "Home", href: "/" },
-  {
-    title: "Services",
-    href: "/services",
-    isDropdown: true,
-    subItems: [
-      { name: "Regular Cleaning", href: "/services/house-cleaning" },
-      { name: "Deep Cleaning", href: "/services/deep-cleaning" },
-      { name: "Commercial & Office", href: "/services/office-cleaning" },
-      { name: "Move Out Cleaning", href: "/services/move-out-cleaning" },
-      { name: "Airbnb Cleaning", href: "/services/airbnb-cleaning" },
-      { name: "Carpet & Upholstery", href: "/services/upholstery-cleaning" },
-    ],
-  },
-  { title: "Locations", href: "/locations" },
-  { title: "Estimator", href: "/cleaning-calculator" },
-]
+interface NavbarProps {
+  services: ServiceData[]
+  locations: LocationRecord[]
+}
 
-export function Navbar() {
+export function Navbar({ services, locations }: NavbarProps) {
   const { theme, setTheme } = useTheme()
   const handleToggle = () => setTheme(theme === "dark" ? "light" : "dark")
 
+  // Map dynamic services
+  const dynamicServiceItems = services.map((service) => ({
+    name: service.name,
+    href: `/services/${service.slug}`,
+    description:
+      service.meta_description ||
+      `Professional ${service.name.toLowerCase()} services.`,
+  }))
+
+  // Map dynamic locations
+  const dynamicLocationItems = locations.map((loc) => ({
+    name: loc.city_name,
+    href: `/locations/${loc.slug}`,
+    description: `Professional house cleaning in ${loc.city_name}, CA.`,
+  }))
+
+  const navItems = [
+    { title: "Home", href: "/" },
+    {
+      title: "Services",
+      href: "/services",
+      isDropdown: true,
+      subItems: dynamicServiceItems,
+    },
+    {
+      title: "Locations",
+      href: "/locations",
+      isDropdown: true,
+      subItems: dynamicLocationItems.slice(0, 10), // Limit dropdown size for UX
+    },
+    { title: "Estimator", href: "/cleaning-calculator" },
+  ]
+
   return (
-    <header className="sticky top-0 z-10 w-full overflow-x-clip border-b border-border/40 backdrop-blur supports-backdrop-filter:bg-background/60">
+    <header className="sticky top-0 z-50 max-w-[100vw] border-b border-border/40 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="relative container mx-auto flex h-20 items-center justify-between px-6">
-        <div className="pointer-events-none absolute -z-10 h-full w-full bg-top-blur/40 blur-2xl"></div>
+        <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+          <div className="absolute inset-0 bg-top-blur/40 blur-3xl" />
+        </div>
+
         {/* Logo Section */}
         <Link
           href="/"
@@ -91,14 +115,21 @@ export function Navbar() {
                                   <div className="text-[11px] font-black tracking-wider uppercase">
                                     {sub.name}
                                   </div>
-                                  <p className="line-clamp-2 text-[10px] leading-snug font-medium tracking-tight text-muted-foreground uppercase opacity-70">
-                                    Professional {sub.name.toLowerCase()} for
-                                    your home.
-                                  </p>
                                 </Link>
                               </NavigationMenuLink>
                             </li>
                           ))}
+                          {item.title === "Locations" && (
+                            <li className="col-span-2 mt-2 border-t border-border pt-2">
+                              <Link
+                                href="/locations"
+                                className="flex items-center justify-center text-[10px] font-bold text-primary-blue uppercase hover:underline"
+                              >
+                                View All Service Areas{" "}
+                                <MapPin className="ml-1 h-3 w-3" />
+                              </Link>
+                            </li>
+                          )}
                         </ul>
                       </NavigationMenuContent>
                     </>
@@ -143,7 +174,7 @@ export function Navbar() {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="flex flex-col gap-8 px-8 py-12"
+                className="flex flex-col gap-8 overflow-y-auto px-8 py-12"
               >
                 <SheetHeader>
                   <SheetTitle className="flex items-center gap-2 text-left">
@@ -163,28 +194,31 @@ export function Navbar() {
                       >
                         {item.title}
                       </Link>
-                      {item.isDropdown &&
-                        item.subItems?.map((sub) => (
-                          <Link
-                            key={sub.name}
-                            href={sub.href}
-                            className="pl-4 text-sm font-bold tracking-widest text-muted-foreground uppercase hover:text-primary-blue"
-                          >
-                            — {sub.name}
-                          </Link>
-                        ))}
+                      {item.isDropdown && (
+                        <div className="grid grid-cols-1 gap-2 pl-4">
+                          {item.subItems?.map((sub) => (
+                            <Link
+                              key={sub.name}
+                              href={sub.href}
+                              className="text-sm font-bold tracking-widest text-muted-foreground uppercase hover:text-primary-blue"
+                            >
+                              — {sub.name}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
 
-                <div className="mt-auto flex flex-col gap-8 space-y-4">
+                <div className="mt-auto flex flex-col gap-8 pb-6">
                   <div
                     onClick={handleToggle}
                     className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border border-border p-3 text-[10px] font-black tracking-widest uppercase transition-colors hover:bg-muted"
                   >
                     <ThemeToggle /> Toggle Theme
                   </div>
-                  <Link href="/calculator">
+                  <Link href="/cleaning-calculator">
                     <ButtonShiny text="Order Cleaning" />
                   </Link>
                 </div>

@@ -70,7 +70,9 @@ export default function ServiceGrid({ cityName, services }: ServiceGridProps) {
             </span>
             <h2 className="mt-4 text-4xl font-bold tracking-tight text-foreground md:text-6xl">
               Professional Services in{" "}
-              <span className="text-primary-blue">{cityName}</span>
+              {cityName && (
+                <span className="text-primary-blue">{cityName}</span>
+              )}
             </h2>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
               From hospitality-grade residential care to compliance-driven

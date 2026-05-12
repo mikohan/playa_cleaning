@@ -229,8 +229,6 @@ export default async function LocationPage({
     <>
       <JsonLd location={location} />
       <div className="bg-background">
-        <Navbar />
-
         <section>
           <HeroVideo
             title={`Cleaning service in ${location.city_name}`}
@@ -293,8 +291,6 @@ export default async function LocationPage({
         </section>
 
         <CalculatorCTA />
-
-        <Footer />
       </div>
     </>
   )

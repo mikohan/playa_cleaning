@@ -46,8 +46,6 @@ export default async function ServicePage({ params }: Props) {
 
   return (
     <main className="min-h-screen bg-background font-jakarta">
-      <Navbar />
-
       <div className="mx-auto max-w-7xl px-6">
         <div className="pt-8 pb-4">
           <BreadCrumbs serviceName={service.name} />
@@ -147,7 +145,6 @@ export default async function ServicePage({ params }: Props) {
       {isCarpetService ? <CarpetCallToAction /> : <CallToAction />}
 
       <CalculatorCTA />
-      <Footer />
     </main>
   )
 }

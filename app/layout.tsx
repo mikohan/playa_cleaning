@@ -1,28 +1,22 @@
-// import { blauerNue } from "@/app/fonts"
-import ReactLenis from "lenis/react"
-import "lenis/dist/lenis.css"
+import { Plus_Jakarta_Sans, Inter } from "next/font/google"
 import { GoogleTagManager } from "@next/third-parties/google"
 import type { Metadata } from "next"
+
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
+import "lenis/dist/lenis.css"
+
 import { cn } from "@/lib/utils"
-import { Plus_Jakarta_Sans, Inter } from "next/font/google"
+import { ThemeProvider } from "@/components/theme-provider"
 import { ClientWrapper } from "@/components/common/ClientWrapper"
+import { Navbar } from "@/components/common/Navbar"
+import { Footer } from "@/components/common/Footer"
 
-export const metadata: Metadata = {
-  // Add this line here:
-  metadataBase: new URL("https://playacleaning.com"),
+// Import your helper and types
+import { strapiRequest } from "@/lib/strapi"
+import { ServiceData, StrapiResponse } from "@/app/types/serviceTypes"
+import { LocationRecord } from "@/app/types/locationTypes"
 
-  title: {
-    default: "Playa Cleaning | Professional House Cleaning Los Angeles",
-    template: "%s | Playa Cleaning",
-  },
-  description: "Premium flat-rate house cleaning services in Los Angeles.",
-  openGraph: {
-    images: "/og-image.jpg", // Now correctly resolves to https://playacleaning.com/og-image.jpg
-  },
-}
-// const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
+// --- Fonts ---
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-jakarta",
@@ -35,20 +29,81 @@ const inter = Inter({
   display: "swap",
 })
 
+// --- Metadata ---
+export const metadata: Metadata = {
+  metadataBase: new URL("https://playacleaning.com"),
+  title: {
+    default: "Playa Cleaning | Professional House Cleaning Los Angeles",
+    template: "%s | Playa Cleaning",
+  },
+  description: "Premium flat-rate house cleaning services in Los Angeles.",
+  openGraph: {
+    images: "/og-image.jpg",
+  },
+}
+
 const gtmId = process.env.NEXT_PUBLIC_TAG_MANAGER_ID || "GTM-PQNQ5K5R"
 
-export default function RootLayout({
+/**
+ * Optimized fetcher for global navigation data
+ */
+async function getGlobalData() {
+  try {
+    // 1. Fetch Services
+    const servicesRes = await strapiRequest<StrapiResponse<ServiceData>>(
+      "services",
+      {
+        "fields[0]": "name",
+        "fields[1]": "slug",
+        "fields[2]": "meta_description",
+        "pagination[pageSize]": 20,
+      }
+    )
+
+    // 2. Fetch Locations
+    const locationsRes = await strapiRequest<StrapiResponse<LocationRecord>>(
+      "locations",
+      {
+        "fields[0]": "city_name",
+        "fields[1]": "slug",
+        "pagination[pageSize]": 100, // Fetch all cities for the sitemap
+      }
+    )
+
+    // Flattening logic
+    const services =
+      (servicesRes?.data?.map((item) => ({
+        ...item,
+        ...(item.attributes ? item.attributes : {}),
+      })) as ServiceData[]) || []
+
+    const locations =
+      (locationsRes?.data?.map((item) => ({
+        ...item,
+        ...(item.attributes ? item.attributes : {}),
+      })) as LocationRecord[]) || []
+
+    return { services, locations }
+  } catch (error) {
+    console.error("Layout Data Fetch Error:", error)
+    return { services: [], locations: [] }
+  }
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  // Fetch both datasets once
+  const { services, locations } = await getGlobalData()
+
   return (
     <html
       lang="en"
       suppressHydrationWarning
       className={cn(
         "antialiased",
-        // blauerNue.variable,
         jakarta.variable,
         inter.variable,
         "font-sans"
@@ -57,7 +112,12 @@ export default function RootLayout({
       <body>
         <GoogleTagManager gtmId={gtmId} />
         <ThemeProvider>
-          <ClientWrapper>{children}</ClientWrapper>
+          <main>
+            {/* Pass both to Navbar for the "Services" and "Locations" dropdowns */}
+            <Navbar services={services ?? []} locations={locations ?? []} />
+            {children}
+            {/* <Footer services={services ?? []} locations={locations ?? []} /> */}
+          </main>
         </ThemeProvider>
       </body>
     </html>
