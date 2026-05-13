@@ -9,12 +9,14 @@ interface ServiceHeroProps {
   service: ServiceData
   heroImage: StaticImageData | string
   professionalName: string
+  buttonText?: string
 }
 
 export const HeroServiceImage = ({
   service,
   heroImage,
   professionalName,
+  buttonText,
 }: ServiceHeroProps) => {
   const features = [
     "Eco-friendly Products",
@@ -22,7 +24,6 @@ export const HeroServiceImage = ({
     "Satisfaction Guaranteed",
     "Flexible Scheduling",
   ]
-
   return (
     <section className="grid grid-cols-1 gap-12 py-12 lg:grid-cols-12 lg:items-start">
       {/* --- Left Side: Content --- */}
@@ -61,7 +62,7 @@ export const HeroServiceImage = ({
         </div>
 
         <div className="mt-16 flex w-full flex-col items-center gap-4 sm:flex-row">
-          <CleaningModal />
+          <CleaningModal text={buttonText} />
           <ModalVideo />
         </div>
       </div>

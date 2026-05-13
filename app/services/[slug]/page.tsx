@@ -167,6 +167,7 @@ export default async function ServicePage({ params }: Props) {
     showIncludes = true
   }
   const video_url = process.env.STRAPI_URL + service.video.url
+  const buttonText = service.button_text
   return (
     <>
       <script
@@ -181,6 +182,7 @@ export default async function ServicePage({ params }: Props) {
               heroImage={heroImage} // Missing property 1
               professionalName={professionalName}
               service={service}
+              buttonText={buttonText}
             />
           </div>
         </section>
