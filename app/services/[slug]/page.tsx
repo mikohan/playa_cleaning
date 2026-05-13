@@ -91,7 +91,12 @@ export default async function ServicePage({ params }: Props) {
   if (!service) notFound()
 
   const isCarpetService = slug.includes("carpet") || slug.includes("upholstery")
-  const heroImage = isCarpetService ? HeroMeColor : OlesyaImage
+  let heroImage = isCarpetService ? HeroMeColor.src : OlesyaImage.src
+  if (service.photo.url) {
+    heroImage = process.env.STRAPI_URL + service.photo.url
+  } else {
+    heroImage = isCarpetService ? HeroMeColor.src : OlesyaImage.src
+  }
   const professionalName = isCarpetService ? "Vlad V." : "Alisia V."
 
   const jsonLd = {
@@ -161,6 +166,7 @@ export default async function ServicePage({ params }: Props) {
   if (slug === "deep-cleaning" || slug == "maid-service") {
     showIncludes = true
   }
+  const video_url = process.env.STRAPI_URL + service.video.url
   return (
     <>
       <script
@@ -178,12 +184,12 @@ export default async function ServicePage({ params }: Props) {
             />
           </div>
         </section>
-        <section className="flex h-24 items-center bg-accent md:h-48">
+        <section className="flex h-24 items-center md:h-48">
           <ServiceTicker services={services} />
         </section>
         {showIncludes && <ServiceScope serviceSlug={slug} />}
         <section>
-          <WhyMeVideo />
+          <WhyMeVideo video={video_url} />
         </section>
 
         <Testimonials />

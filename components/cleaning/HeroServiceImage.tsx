@@ -75,7 +75,7 @@ export const HeroServiceImage = ({
             fill
             className="object-cover"
             priority // High priority as it's above the fold
-            sizes="(max-w-1024px) 100vw, 500px"
+            sizes="(min-width: 1540px) 610px, (min-width: 1280px) 504px, (min-width: 1040px) 397px, (min-width: 780px) 766px, (min-width: 740px) 638px, calc(96.19vw - 55px)"
           />
 
           {/* Glassmorphism Badge */}

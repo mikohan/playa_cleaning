@@ -52,7 +52,14 @@ export interface ServiceData {
   publishedAt: string
   faq_service: FAQService[]
   photo: StrapiImage
+  video: StrapiVideo
   service_addons_included: ServiceAddon[]
+}
+export interface StrapiVideo {
+  id: number | string
+  name: string
+  alternativeText: string
+  url: string
 }
 
 export interface StrapiMeta {

@@ -38,8 +38,12 @@ const BentoCard = ({
     <div className="leading-relaxed text-muted-foreground">{children}</div>
   </div>
 )
+type Props = {
+  video?: string
+}
 
-export const WhyMeVideo = () => {
+export const WhyMeVideo = ({ video }: Props) => {
+  const video_url = video ? video : "/videos/ol-deep.mp4"
   return (
     <section className="relative py-24 md:pt-60">
       <div className="absolute top-0 left-0 -z-10 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
@@ -69,7 +73,7 @@ export const WhyMeVideo = () => {
               poster={AliciaPoster.src}
               className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 hover:scale-105"
             >
-              <source src="/videos/ol-deep.mp4" type="video/mp4" />
+              <source src={video_url} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
 

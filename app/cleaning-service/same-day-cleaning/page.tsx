@@ -1,18 +1,9 @@
 import React from "react"
-import {
-  Clock,
-  CheckCircle2,
-  ShieldCheck,
-  Star,
-  ArrowRight,
-  MapPin,
-  Phone,
-} from "lucide-react"
-import { Navbar } from "@/components/common/Navbar"
-import { Footer } from "@/components/common/Footer"
+import { Clock, CheckCircle2, ShieldCheck, Star, Phone } from "lucide-react"
 import { LocationTicker } from "@/components/cleaning/LocationTicker"
 import { Metadata } from "next"
 import { CleaningModal } from "@/components/common/CleaningModal"
+import Image from "next/image"
 
 export const metadata: Metadata = {
   title: "Same Day Cleaning Service Los Angeles | 24 Hour Maid Service",
@@ -121,9 +112,14 @@ const SameDayCleaningPage = () => {
             </div>
 
             <div className="relative lg:w-1/2">
-              <div className="aspect-[4/3] overflow-hidden rounded-2xl border border-border bg-card shadow-2xl">
+              <div className="aspect-4/3 overflow-hidden rounded-2xl border border-border bg-card shadow-2xl">
                 <div className="flex h-full w-full items-center justify-center bg-muted px-4 text-center text-muted-foreground italic">
-                  [Professional Same Day House Cleaning Service in Action]
+                  <Image
+                    src="/images/cleaning/hero-4.webp"
+                    alt="Same day cleaning"
+                    width={1080}
+                    height={1350}
+                  />
                 </div>
               </div>
 
