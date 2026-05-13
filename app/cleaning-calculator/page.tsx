@@ -74,10 +74,6 @@ export default function CalculatorPage() {
     <main className="min-h-screen bg-background font-jakarta text-foreground">
       <BreadCrumbsUniversal />
       <div className="mx-auto max-w-7xl px-6">
-        <div className="pt-8">
-          <BreadCrumbs serviceName="Price Estimator" />
-        </div>
-
         {/* --- HERO SECTION --- */}
         <section className="grid grid-cols-1 gap-16 py-12 lg:grid-cols-12 lg:items-center">
           <div className="lg:col-span-7">

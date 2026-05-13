@@ -125,3 +125,55 @@ export async function getAllServices(): Promise<ServiceData[]> {
     return []
   }
 }
+
+// lib/strapi.ts
+
+/**
+ * Fetches a Strapi Single Type.
+ * Returns a Promise that resolves to the data object or null if not found.
+ */
+/**
+ * Fetches a Strapi Single Type.
+ * Returns a Promise that resolves to the data object or null.
+ */
+// lib/strapi.ts
+import { AboutPageData } from "@/app/types/aboutTypes" // Adjust path as needed
+
+export async function getSingleType<T>(contentType: string): Promise<T | null> {
+  const baseUrl = process.env.STRAPI_URL
+  const token = process.env.STRAPI_API_TOKEN
+
+  if (!baseUrl || !token) {
+    console.error(
+      "Strapi configuration missing: Check STRAPI_URL and STRAPI_API_TOKEN"
+    )
+    return null
+  }
+
+  const url = `${baseUrl}/api/${contentType}?populate=*`
+
+  try {
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      next: { revalidate: 3600 },
+    })
+
+    if (!res.ok) {
+      console.error(
+        `Strapi Request Failed: ${contentType} | Status: ${res.status}`
+      )
+      return null
+    }
+
+    // Explicitly typing the JSON response based on the Strapi v5 structure
+    const json: { data: T | null } = await res.json()
+
+    return json.data ?? null
+  } catch (error) {
+    console.error(`Network Error fetching Strapi ${contentType}:`, error)
+    return null
+  }
+}
