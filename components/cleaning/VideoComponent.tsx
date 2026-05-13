@@ -1,3 +1,4 @@
+import AliciaImage from "@/public/images/cleaning/hero-4.webp"
 type props = {
   source: string
   autoPlay?: boolean
@@ -25,6 +26,7 @@ export function VideoComponent({
       muted={muted}
       className="rounded-2xl"
       playsInline
+      poster={AliciaImage.src}
     >
       <source src={source} type="video/mp4" />
       <track

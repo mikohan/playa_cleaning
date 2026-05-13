@@ -7,6 +7,7 @@ import { CalculatorCTA } from "@/components/newCleaning/CalculatorCTA"
 
 import { strapiRequest } from "@/lib/strapi"
 import { StrapiResponse, ServiceData } from "@/app/types/serviceTypes"
+import { LocationTicker } from "@/components/cleaning/LocationTicker"
 
 export const metadata: Metadata = {
   title: "Professional Cleaning Services in Los Angeles | Playa Cleaning",
@@ -128,6 +129,7 @@ export default async function ServicesListPage() {
         {/* <ServicesList services={services} /> */}
         <ServiceList services={services} />
       </section>
+      <LocationTicker />
 
       <CalculatorCTA />
     </main>
