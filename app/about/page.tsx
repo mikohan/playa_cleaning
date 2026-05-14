@@ -6,8 +6,10 @@ import { cn } from "@/lib/utils"
 // Assets
 import AliciaPoster from "@/public/images/cleaning/hero-3.png"
 import { BreadCrumbsUniversal } from "@/components/common/BreadCrumbsUniversal"
-import { getSingleType } from "@/lib/strapi"
+import { getAllServices, getSingleType } from "@/lib/strapi"
 import { AboutPageData } from "../types/aboutTypes"
+import { ServiceTicker } from "@/components/common/ServiceTicker"
+import { CallToAction } from "@/components/cleaning/CallToAction"
 
 const StatCard = ({ label, value }: { label: string; value: string }) => (
   <div className="flex flex-col border-l border-primary-blue/20 pl-6">
@@ -28,7 +30,7 @@ export default async function AboutPage() {
 
   // Now TypeScript knows pageData has 'title' and 'video'
   const videoUrl = `${process.env.STRAPI_URL}${pageData.video.url}`
-  console.log(videoUrl)
+  const services = await getAllServices()
   return (
     <div className="relative min-h-screen bg-background">
       <BreadCrumbsUniversal />
@@ -100,9 +102,11 @@ export default async function AboutPage() {
                 The Story Behind the Standard
               </h2>
               <p className="text-lg leading-relaxed text-muted-foreground">
-                {
-                  "I&apos;ve always believed that a clean home is the foundation of a calm life. In Los Angeles, our time is our most precious asset. I founded Playa Cleaning because I realized homeowners weren&apos;t looking for a rotating crew—they were looking for a partner."
-                }
+                I&apos;ve always believed that a clean home is the foundation of
+                a calm life. In Los Angeles, our time is our most precious
+                asset. I founded Playa Cleaning because I realized homeowners
+                weren&apos;t looking for a rotating crew—they were looking for a
+                partner.
               </p>
               <div className="grid grid-cols-2 gap-8 pt-6">
                 <StatCard value="100%" label="Consistency" />
@@ -168,26 +172,13 @@ export default async function AboutPage() {
           </div>
         </div>
       </section>
+      <section>
+        <ServiceTicker services={services} />
+      </section>
 
       {/* --- CALL TO ACTION --- */}
-      <section className="container mx-auto px-6 pb-24">
-        <div className="relative overflow-hidden rounded-[3rem] bg-primary-blue px-8 py-16 text-center text-white lg:py-24">
-          <div className="relative z-10 mx-auto max-w-2xl">
-            <h2 className="mb-6 text-4xl font-bold md:text-5xl">
-              Ready for a Higher Standard?
-            </h2>
-            <p className="mb-10 text-lg opacity-90">
-              Let’s create a cleaning plan that fits your lifestyle perfectly.
-              localized pricing for Playa Vista & Marina del Rey.
-            </p>
-            <button className="rounded-full bg-white px-10 py-4 font-bold text-primary-blue transition-transform hover:scale-105 active:scale-95">
-              Get Your Local Quote
-            </button>
-          </div>
-          {/* Decorative background circle */}
-          <div className="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-white/10 blur-3xl" />
-          <div className="absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-black/10 blur-3xl" />
-        </div>
+      <section>
+        <CallToAction />
       </section>
     </div>
   )

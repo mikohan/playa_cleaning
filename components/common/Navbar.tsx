@@ -68,6 +68,7 @@ export function Navbar({ services, locations }: NavbarProps) {
       subItems: dynamicLocationItems.slice(0, 12), // Limit dropdown size for UX
     },
     { title: "Estimator", href: "/cleaning-calculator" },
+    { title: "About", href: "/about" },
   ]
 
   return (

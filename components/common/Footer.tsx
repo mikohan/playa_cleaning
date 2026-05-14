@@ -178,6 +178,12 @@ export const Footer = ({ services, locations }: FooterProps) => {
               >
                 Pricing
               </Link>
+              <Link
+                href="/about"
+                className="transition-colors hover:text-primary-blue"
+              >
+                About Playa Cleaning
+              </Link>
               <p className="mt-4 max-w-50 text-xs leading-relaxed text-background italic opacity-70">
                 Proudly serving West LA and surrounding neighborhoods.
               </p>
