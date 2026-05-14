@@ -29,12 +29,17 @@ const nextConfig = {
     return [
       // 1. FIX SERVICE SLUG MISMATCHES (Old/Short -> New Strapi Slugs)
       {
-        source: "/services/office-cleaning",
+        source: "/services/office-cleaning/:path*",
         destination: "/services/commercial-office-cleaning",
         permanent: true,
       },
       {
-        source: "/services/maid-service",
+        source: "/services/maid-service/:path*",
+        destination: "/services/maid-service", // Or whichever you prefer as primary
+        permanent: true,
+      },
+      {
+        source: "/services/houme-cleanig/:path*",
         destination: "/services/house-cleaning", // Or whichever you prefer as primary
         permanent: true,
       },
