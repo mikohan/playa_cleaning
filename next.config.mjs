@@ -29,13 +29,8 @@ const nextConfig = {
     return [
       // 1. FIX SERVICE SLUG MISMATCHES (Old/Short -> New Strapi Slugs)
       {
-        source: "/services/office-cleaning/:path*",
+        source: "/services/maid-service/(.+)",
         destination: "/services/commercial-office-cleaning",
-        permanent: true,
-      },
-      {
-        source: "/services/maid-service/:path*",
-        destination: "/services/maid-service", // Or whichever you prefer as primary
         permanent: true,
       },
       {
@@ -57,36 +52,35 @@ const nextConfig = {
       // Redirects /services/ANY-SERVICE/ANY-CITY to the main Service page.
       // Example: /services/deep-cleaning/burbank -> /services/deep-cleaning
       {
-        source: "/services/move-out-cleaning/:city",
+        source: "/services/move-out-cleaning/(.+)",
         destination: "/services/move-out-cleaning",
         permanent: true,
       },
       {
-        source: "/services/deep-cleaning/:city",
+        source: "/services/deep-cleaning/(.+)",
         destination: "/services/deep-cleaning",
         permanent: true,
       },
       {
-        source: "/services/upholstery-cleaning/:city",
+        source: "/services/upholstery-cleaning/(.+)",
         destination: "/services/upholstery-cleaning",
         permanent: true,
       },
       {
-        source: "/services/carpet-cleaning/:city",
+        source: "/services/carpet-cleaning/(.+)",
         destination: "/services/carpet-cleaning",
         permanent: true,
       },
       {
-        source: "/services/airbnb-cleaning/:city",
+        source: "/services/airbnb-cleaning/(.+)",
         destination: "/services/airbnb-cleaning",
         permanent: true,
       },
       {
-        source: "/services/post-construction-cleaning/:city",
+        source: "/services/post-construction-cleaning/(.+)",
         destination: "/services/post-construction-cleaning",
         permanent: true,
       },
-
       // 4. THE JUNK CITY CATCH-ALL (The "Purge")
       // If someone goes to /service-areas/burbank (not in your top 11),
       // it sends them to your main location hub to prevent 404s.
