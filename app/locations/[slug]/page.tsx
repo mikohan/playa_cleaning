@@ -23,6 +23,72 @@ import { BreadCrumbsUniversal } from "@/components/common/BreadCrumbsUniversal"
 const STRAPI_URL = process.env.STRAPI_URL || "https://cms.playacleaning.com"
 
 // ─────────────────────────────────────────────────────────────
+// Type Declarations for Structured Schema Data
+// ─────────────────────────────────────────────────────────────
+interface SchemaCleaningService {
+  "@type": "CleaningService"
+  "@id": string
+  name: string
+  image: string
+  telephone: string
+  url: string
+  priceRange: string
+  address: {
+    "@type": "PostalAddress"
+    addressLocality: string
+    addressRegion: string
+    addressCountry: string
+  }
+  geo: {
+    "@type": "GeoCoordinates"
+    latitude: number
+    longitude: number
+  }
+  aggregateRating: {
+    "@type": "AggregateRating"
+    ratingValue: string
+    reviewCount: string
+  }
+  areaServed: {
+    "@type": "City"
+    name: string
+  }
+  hasOfferCatalog: {
+    "@type": "OfferCatalog"
+    name: string
+    itemListElement: Array<{
+      "@type": "Offer"
+      position: number
+      itemOffered: {
+        "@type": "Service"
+        name: string
+        description: string
+      }
+    }>
+  }
+}
+
+interface SchemaFAQPage {
+  "@type": "FAQPage"
+  "@id": string
+  mainEntity: Array<{
+    "@type": "Question"
+    name: string
+    acceptedAnswer: {
+      "@type": "Answer"
+      text: string
+    }
+  }>
+}
+
+type SchemaGraphNode = SchemaCleaningService | SchemaFAQPage
+
+interface SchemaMainStructure {
+  "@context": "https://schema.org"
+  "@graph": SchemaGraphNode[]
+}
+
+// ─────────────────────────────────────────────────────────────
 // API Configuration
 // ─────────────────────────────────────────────────────────────
 
@@ -135,7 +201,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 // ─────────────────────────────────────────────────────────────
-// 3. STRUCTURED DATA COMPONENT (JSON-LD)
+// STRUCTURED DATA COMPONENT (JSON-LD)
 // ─────────────────────────────────────────────────────────────
 function JsonLd({
   location,
@@ -146,61 +212,76 @@ function JsonLd({
 }) {
   const lat = location.coordinates?.lat || 34.0522
   const lng = location.coordinates?.lng || -118.2437
+  const pageUrl = `https://www.playacleaning.com/locations/${location.slug}`
+  const businessId = `${pageUrl}#cleaning-service`
 
-  const mainSchema = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "CleaningService",
-        name: `Playa Cleaning ${location.city_name}`,
-        image: `${STRAPI_URL}${location.location_image?.url}`,
-        telephone: "+1-213-598-77-63",
-        url: `https://www.playacleaning.com/locations/${location.slug}`,
-        priceRange: "$$",
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: location.city_name,
-          addressRegion: "CA",
-          addressCountry: "US",
-        },
-        geo: {
-          "@type": "GeoCoordinates",
-          latitude: lat,
-          longitude: lng,
-        },
-        aggregateRating: {
-          "@type": "AggregateRating",
-          ratingValue: "4.9",
-          reviewCount: "158",
-        },
-        areaServed: {
-          "@type": "City",
-          name: location.city_name,
-        },
-        hasOfferCatalog: {
-          "@type": "OfferCatalog",
-          name: "Cleaning Services",
-          itemListElement: services.map((s) => ({
-            "@type": "Offer",
-            itemOffered: {
-              "@type": "Service",
-              name: s.name,
-            },
-          })),
-        },
+  const graphArray: SchemaGraphNode[] = [
+    {
+      "@type": "CleaningService",
+      "@id": businessId,
+      name: `Playa Cleaning ${location.city_name}`,
+      image: `${STRAPI_URL}${location.location_image?.url}`,
+      telephone: "+1-213-598-77-63",
+      url: pageUrl,
+      priceRange: "$$",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: location.city_name,
+        addressRegion: "CA",
+        addressCountry: "US",
       },
-      {
-        "@type": "FAQPage",
-        mainEntity: (location.faq_location || []).map((faq) => ({
-          "@type": "Question",
-          name: faq.question,
-          acceptedAnswer: { "@type": "Answer", text: faq.answer },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: lat,
+        longitude: lng,
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.9",
+        reviewCount: "158",
+      },
+      areaServed: {
+        "@type": "City",
+        name: location.city_name,
+      },
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "Cleaning Services",
+        itemListElement: services.map((s, index) => ({
+          "@type": "Offer",
+          position: index + 1,
+          itemOffered: {
+            "@type": "Service",
+            name: s.name,
+            description:
+              s.meta_description ||
+              `${s.name} service in ${location.city_name}`,
+          },
         })),
       },
-    ],
+    },
+  ]
+
+  if (location.faq_location && location.faq_location.length > 0) {
+    graphArray.push({
+      "@type": "FAQPage",
+      "@id": `${pageUrl}#faq`,
+      mainEntity: location.faq_location.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
+    })
   }
 
-  // The return statement must be explicitly present and return a JSX element
+  const mainSchema: SchemaMainStructure = {
+    "@context": "https://schema.org",
+    "@graph": graphArray,
+  }
+
   return (
     <script
       type="application/ld+json"
@@ -208,6 +289,7 @@ function JsonLd({
     />
   )
 }
+
 // ─────────────────────────────────────────────────────────────
 // Page Component
 // ─────────────────────────────────────────────────────────────
@@ -268,7 +350,6 @@ export default async function LocationPage({
         <section className="relative mt-16">
           <div className="absolute top-0 left-0 -z-10 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
           <WaveDivider position="top" fill="var(--color-background)" />
-          {/* Now passing the fetched services data to the grid */}
           <ServiceGrid cityName={location.city_name} services={services} />
         </section>
 
