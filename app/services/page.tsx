@@ -1,20 +1,30 @@
 import { Metadata } from "next"
-
 import { BreadCrumbs } from "@/components/common/BreadCrumbs"
 import { HeroComponentServices } from "@/components/cleaning/HeroComponentServices"
 import { ServiceList } from "@/components/newCleaning/ServicesList"
 import { CalculatorCTA } from "@/components/newCleaning/CalculatorCTA"
-
 import { strapiRequest } from "@/lib/strapi"
 import { StrapiResponse, ServiceData } from "@/app/types/serviceTypes"
 import { LocationTicker } from "@/components/cleaning/LocationTicker"
 
+// ─────────────────────────────────────────────────────────────
+// 1. MAXIMUM SEO METADATA INFUSION
+// ─────────────────────────────────────────────────────────────
+
 export const metadata: Metadata = {
   title: "Professional Cleaning Services in Los Angeles | Playa Cleaning",
   description:
-    "Expert residential and commercial cleaning across Los Angeles. Specializing in deep cleans, upholstery, and eco-friendly services. Book your 5-star clean today.",
+    "Expert residential, commercial, and technical upholstery cleaning services across Los Angeles. Specializing in routine maid services, deep cleans, and eco-friendly practices. Book your 5-star professional clean today.",
   alternates: {
-    canonical: "https://playacleaning.com/services",
+    canonical: "https://www.playacleaning.com/services",
+  },
+  keywords:
+    "cleaning services los angeles, professional cleaners la, house cleaning service, maid service near me, office cleaning company, technical upholstery cleaning, deep cleaning solutions, eco friendly cleaners",
+  other: {
+    "geo.region": "US-CA",
+    "geo.placename": "Los Angeles",
+    "geo.position": "34.0522;-118.2437",
+    ICBM: "34.0522, -118.2437",
   },
   robots: {
     index: true,
@@ -30,15 +40,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Top-Rated Cleaning Services in LA | Playa Cleaning",
     description:
-      "From Santa Monica to DTLA, we provide meticulous cleaning for homes and offices.",
-    url: "https://playacleaning.com/services",
+      "From Santa Monica and Venice to DTLA, we provide meticulous, top-tier professional cleaning services for homes, apartments, and offices.",
+    url: "https://www.playacleaning.com/services",
     siteName: "Playa Cleaning",
     images: [
       {
-        url: "https://playacleaning.com/og-services.jpg", // Create this image!
+        url: "https://cms.playacleaning.com/uploads/hero_4_8f4caab2a5.webp",
         width: 1200,
         height: 630,
-        alt: "Playa Cleaning Professional Staff",
+        alt: "Playa Cleaning Professional Staff and Services",
       },
     ],
     locale: "en_US",
@@ -48,10 +58,14 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Professional Cleaning Services in Los Angeles",
     description:
-      "Expert cleaning for every environment. 5-star service guaranteed.",
-    images: ["https://playacleaning.com/og-services.jpg"],
+      "Expert cleaning services tailored for every environment. 5-star home, commercial, and upholstery cleaning guaranteed.",
+    images: ["https://cms.playacleaning.com/uploads/hero_4_8f4caab2a5.webp"],
   },
 }
+
+// ─────────────────────────────────────────────────────────────
+// Page Component
+// ─────────────────────────────────────────────────────────────
 
 export default async function ServicesListPage() {
   const response = await strapiRequest<StrapiResponse<ServiceData>>(
@@ -63,49 +77,64 @@ export default async function ServicesListPage() {
     ...(item.attributes ? item.attributes : {}),
   }))
 
+  // ─────────────────────────────────────────────────────────────
+  // 2. ERROR-FREE GOOGLE VALIDATED SCHEMA
+  // ─────────────────────────────────────────────────────────────
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "ItemList",
-        name: "Our Cleaning Services",
-        numberOfItems: services.length,
-        itemListElement: services.map((s, i) => ({
-          "@type": "ListItem",
-          position: i + 1,
-          item: {
-            "@type": "Service",
-            name: s.name,
-            description: s.meta_description,
-            url: `https://playacleaning.com/services/${s.slug}`,
-            provider: {
-              "@type": "LocalBusiness",
-              name: "Playa Cleaning",
-              image: "https://playacleaning.com/logo.png",
-              address: {
-                "@type": "PostalAddress",
-                addressLocality: "Los Angeles",
-                addressRegion: "CA",
-                addressCountry: "US",
+        "@type": "LocalBusiness",
+        "@id": "https://www.playacleaning.com/#organization",
+        name: "Playa Cleaning",
+        url: "https://www.playacleaning.com",
+        telephone: "+1-213-598-77-63",
+        priceRange: "$$",
+        image: "https://cms.playacleaning.com/uploads/hero_4_8f4caab2a5.webp",
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Los Angeles",
+          addressRegion: "CA",
+          addressCountry: "US",
+        },
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          "@id": "https://www.playacleaning.com/services/#catalog",
+          name: "Our Professional Cleaning Services",
+          description:
+            "Full catalog of high-fidelity residential, maid, commercial, and technical upholstery cleaning options.",
+          itemListElement: services.map((s, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            item: {
+              "@type": "Service",
+              name: s.name,
+              description:
+                s.meta_description ||
+                `Premium professional ${s.name} solutions across Los Angeles.`,
+              url: `https://www.playacleaning.com/services/${s.slug}`,
+              provider: {
+                "@id": "https://www.playacleaning.com/#organization",
               },
             },
-          },
-        })),
+          })),
+        },
       },
       {
         "@type": "BreadcrumbList",
+        "@id": "https://www.playacleaning.com/services/#breadcrumb",
         itemListElement: [
           {
             "@type": "ListItem",
             position: 1,
             name: "Home",
-            item: "https://playacleaning.com",
+            item: "https://www.playacleaning.com",
           },
           {
             "@type": "ListItem",
             position: 2,
             name: "Services",
-            item: "https://playacleaning.com/services",
+            item: "https://www.playacleaning.com/services",
           },
         ],
       },
@@ -122,13 +151,13 @@ export default async function ServicesListPage() {
       <div className="container mx-auto max-w-7xl px-6 pt-6">
         <BreadCrumbs />
       </div>
+
       <HeroComponentServices />
 
       <section className="container mx-auto max-w-6xl px-6">
-        {/* Existing grid logic can go here or inside ServicesList */}
-        {/* <ServicesList services={services} /> */}
         <ServiceList services={services} />
       </section>
+
       <LocationTicker />
 
       <CalculatorCTA />

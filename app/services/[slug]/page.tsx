@@ -25,13 +25,18 @@ interface Props {
   params: Promise<{ slug: string }>
 }
 
+const STRAPI_URL = process.env.STRAPI_URL || "https://cms.playacleaning.com"
+
+// ─────────────────────────────────────────────────────────────
+// Dynamic Metadata Infusion
+// ─────────────────────────────────────────────────────────────
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const service = await getServiceBySlug(slug)
 
   if (!service) return { title: "Service Not Found" }
 
-  const url = `https://playacleaning.com/services/${slug}`
+  const url = `https://www.playacleaning.com/services/${slug}`
   const title =
     service.meta_title || `${service.name} | Playa Cleaning Los Angeles`
   const description =
@@ -42,6 +47,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: { canonical: url },
+    keywords: `${service.name} los angeles, professional ${service.name}, specialized deep cleaning, best ${service.name} near me`,
+    other: {
+      "geo.region": "US-CA",
+      "geo.placename": "Los Angeles",
+      "geo.position": "34.0522;-118.2437",
+      ICBM: "34.0522, -118.2437",
+    },
     robots: {
       index: true,
       follow: true,
@@ -58,20 +70,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: "Playa Cleaning",
       images: [
         {
-          url: service.photo.url || "https://playacleaning.com/og-image.jpg",
+          url: service.photo?.url
+            ? `${STRAPI_URL}${service.photo.url}`
+            : "https://www.playacleaning.com/og-image.jpg",
           width: 1200,
           height: 630,
           alt: `${service.name} Services in Los Angeles`,
         },
       ],
       locale: "en_US",
-      type: "article", // Use article for service detail pages
+      type: "article",
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [service.photo.url || "https://playacleaning.com/og-image.jpg"],
+      images: [
+        service.photo?.url
+          ? `${STRAPI_URL}${service.photo.url}`
+          : "https://www.playacleaning.com/og-image.jpg",
+      ],
     },
   }
 }
@@ -81,6 +99,9 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }))
 }
 
+// ─────────────────────────────────────────────────────────────
+// Page Component Execution
+// ─────────────────────────────────────────────────────────────
 export default async function ServicePage({ params }: Props) {
   const { slug } = await params
   const service = await getServiceBySlug(slug)
@@ -89,47 +110,56 @@ export default async function ServicePage({ params }: Props) {
   if (!service) notFound()
 
   const isCarpetService = slug.includes("carpet") || slug.includes("upholstery")
+
   let heroImage = isCarpetService ? HeroMeColor.src : OlesyaImage.src
-  if (service.photo.url) {
-    heroImage = process.env.STRAPI_URL + service.photo.url
-  } else {
-    heroImage = isCarpetService ? HeroMeColor.src : OlesyaImage.src
+  if (service.photo?.url) {
+    heroImage = `${STRAPI_URL}${service.photo.url}`
   }
+
   const professionalName = isCarpetService ? "Vlad V." : "Alisia V."
 
+  // ─────────────────────────────────────────────────────────────
+  // Error-Free Nested Google-Validated Local Schema
+  // ─────────────────────────────────────────────────────────────
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "Service",
-        name: service.name,
-        description: service.meta_description,
-        provider: {
-          "@type": "LocalBusiness",
-          name: "Playa Cleaning",
-          image: "https://playacleaning.com/logo.png",
-          address: {
-            "@type": "PostalAddress",
-            addressLocality: "Los Angeles",
-            addressRegion: "CA",
-            addressCountry: "US",
-          },
-          priceRange: "$$",
-          telephone: "+1-YOUR-PHONE-NUMBER",
-        },
-        areaServed: {
-          "@type": "City",
-          name: "Los Angeles",
+        "@type": "LocalBusiness",
+        "@id": "https://www.playacleaning.com/#organization",
+        name: "Playa Cleaning",
+        url: "https://www.playacleaning.com",
+        telephone: "+1-213-598-77-63",
+        priceRange: "$$",
+        image: "https://www.playacleaning.com/logo.png",
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Los Angeles",
+          addressRegion: "CA",
+          addressCountry: "US",
         },
         hasOfferCatalog: {
           "@type": "OfferCatalog",
-          name: "Cleaning Services",
+          "@id": `https://www.playacleaning.com/services/${slug}/#catalog`,
+          name: service.name,
+          description:
+            service.meta_description ||
+            `Premium professional ${service.name} configuration in Los Angeles.`,
           itemListElement: [
             {
               "@type": "Offer",
               itemOffered: {
                 "@type": "Service",
                 name: service.name,
+                description: service.meta_description,
+                url: `https://www.playacleaning.com/services/${slug}`,
+                areaServed: {
+                  "@type": "City",
+                  name: "Los Angeles",
+                },
+                provider: {
+                  "@id": "https://www.playacleaning.com/#organization",
+                },
               },
             },
           ],
@@ -137,35 +167,41 @@ export default async function ServicePage({ params }: Props) {
       },
       {
         "@type": "BreadcrumbList",
+        "@id": `https://www.playacleaning.com/services/${slug}/#breadcrumb`,
         itemListElement: [
           {
             "@type": "ListItem",
             position: 1,
             name: "Home",
-            item: "https://playacleaning.com",
+            item: "https://www.playacleaning.com",
           },
           {
             "@type": "ListItem",
             position: 2,
             name: "Services",
-            item: "https://playacleaning.com/services",
+            item: "https://www.playacleaning.com/services",
           },
           {
             "@type": "ListItem",
             position: 3,
             name: service.name,
-            item: `https://playacleaning.com/services/${slug}`,
+            item: `https://www.playacleaning.com/services/${slug}`,
           },
         ],
       },
     ],
   }
+
   let showIncludes = false
-  if (slug === "deep-cleaning" || slug == "maid-service") {
+  if (slug === "deep-cleaning" || slug === "maid-service") {
     showIncludes = true
   }
-  const video_url = process.env.STRAPI_URL + service.video.url
-  const buttonText = service.button_text
+
+  const video_url = service.video?.url
+    ? `${STRAPI_URL}${service.video.url}`
+    : null
+  const buttonText = service.button_text || "Get Instant Quote"
+
   return (
     <>
       <script
@@ -173,42 +209,50 @@ export default async function ServicePage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <main>
-        <section className="conatainer mx-auto px-8 md:px-0">
+        <section className="container mx-auto px-8 md:px-0">
           <BreadCrumbs serviceName={service.name} />
           <div className="container mx-auto">
             <HeroServiceImage
-              heroImage={heroImage} // Missing property 1
+              heroImage={heroImage}
               professionalName={professionalName}
               service={service}
               buttonText={buttonText}
             />
           </div>
         </section>
+
         <section className="flex h-24 items-center md:h-48">
           <ServiceTicker services={services} />
         </section>
+
         {showIncludes && <ServiceScope serviceSlug={slug} />}
-        <section>
-          <WhyMeVideo video={video_url} />
-        </section>
+
+        {video_url && (
+          <section>
+            <WhyMeVideo video={video_url} />
+          </section>
+        )}
 
         <Testimonials />
         {isCarpetService ? <CarpetCallToAction /> : <CallToAction />}
 
-        {/* --- Rich Text Section (Reusable Component Target) --- */}
+        {/* --- Rich Text Section (SEO Context Injection) --- */}
         <section className="relative py-20">
           <div className="absolute top-0 left-0 -z-10 h-[30%] w-full bg-linear-180 from-top-blur/50 to-background"></div>
           <WaveDivider position="top" fill="var(--color-background)" />
           <div className="container mx-auto">
             <div className="mx-auto max-w-4xl px-8 md:px-0">
               <h2 className="mb-10 text-3xl font-black">Detailed Overview</h2>
-
               <RichTextRenderer content={service.seo_text_rich} />
             </div>
           </div>
         </section>
+
         <LocationTicker />
-        <LocationFAQ serviceName={service.name} items={service.faq_service} />
+
+        {service.faq_service && service.faq_service.length > 0 && (
+          <LocationFAQ serviceName={service.name} items={service.faq_service} />
+        )}
 
         <CalculatorCTA />
       </main>
