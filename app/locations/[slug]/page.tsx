@@ -26,7 +26,7 @@ const STRAPI_URL = process.env.STRAPI_URL || "https://cms.playacleaning.com"
 // Type Declarations for Structured Schema Data
 // ─────────────────────────────────────────────────────────────
 interface SchemaCleaningService {
-  "@type": "CleaningService"
+  "@type": ["LocalBusiness", "CleaningService"]
   "@id": string
   name: string
   image: string
@@ -151,6 +151,7 @@ async function getServicesData(): Promise<ServiceData[]> {
 interface Props {
   params: Promise<{ slug: string }>
 }
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const location = await getLocationData(slug)
@@ -170,7 +171,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     alternates: { canonical: url },
-    keywords: `cleaning service ${location.city_name}, house cleaning ${location.city_name}, maid service ${location.city_name}, upholstery cleaning ${location.city_name}`,
+    keywords: `cleaning service ${location.city_name}, house cleaning ${location.city_name}, maid service ${location.city_name}, upholstery cleaning ${location.city_name}, professional cleaners ${location.city_name}, local maids ${location.city_name}`,
     other: {
       "geo.region": "US-CA",
       "geo.placename": location.city_name,
@@ -184,7 +185,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: "Playa Cleaning",
       images: [
         {
-          url: `${STRAPI_URL}${location.location_image?.url}`,
+          url: location.location_image?.url
+            ? `${STRAPI_URL}${location.location_image.url}`
+            : "",
           width: 1200,
           height: 630,
         },
@@ -217,10 +220,12 @@ function JsonLd({
 
   const graphArray: SchemaGraphNode[] = [
     {
-      "@type": "CleaningService",
+      "@type": ["LocalBusiness", "CleaningService"],
       "@id": businessId,
       name: `Playa Cleaning ${location.city_name}`,
-      image: `${STRAPI_URL}${location.location_image?.url}`,
+      image: location.location_image?.url
+        ? `${STRAPI_URL}${location.location_image.url}`
+        : "",
       telephone: "+1-213-598-77-63",
       url: pageUrl,
       priceRange: "$$",
