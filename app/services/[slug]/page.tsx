@@ -1,8 +1,6 @@
 import { notFound } from "next/navigation"
 import { Metadata } from "next"
-import Image from "next/image"
 import { BreadCrumbs } from "@/components/common/BreadCrumbs"
-import { Star, CheckCircle2 } from "lucide-react"
 import OlesyaImage from "@/public/images/cleaning/ol-2.png"
 import { CarpetCallToAction } from "@/components/cleaning/CarpetCallToAction"
 import { CallToAction } from "@/components/cleaning/CallToAction"

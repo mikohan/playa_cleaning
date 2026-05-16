@@ -26,13 +26,14 @@ const STRAPI_URL = process.env.STRAPI_URL || "https://cms.playacleaning.com"
 // Type Declarations for Structured Schema Data
 // ─────────────────────────────────────────────────────────────
 interface SchemaCleaningService {
-  "@type": ["LocalBusiness", "CleaningService"]
+  "@type": "CleaningService"
   "@id": string
   name: string
   image: string
   telephone: string
   url: string
   priceRange: string
+  additionalType: string
   address: {
     "@type": "PostalAddress"
     addressLocality: string
@@ -220,7 +221,7 @@ function JsonLd({
 
   const graphArray: SchemaGraphNode[] = [
     {
-      "@type": ["LocalBusiness", "CleaningService"],
+      "@type": "CleaningService",
       "@id": businessId,
       name: `Playa Cleaning ${location.city_name}`,
       image: location.location_image?.url
@@ -229,6 +230,7 @@ function JsonLd({
       telephone: "+1-213-598-77-63",
       url: pageUrl,
       priceRange: "$$",
+      additionalType: "https://schema.org/LocalBusiness",
       address: {
         "@type": "PostalAddress",
         addressLocality: location.city_name,
