@@ -25,15 +25,16 @@ const STRAPI_URL = process.env.STRAPI_URL || "https://cms.playacleaning.com"
 // ─────────────────────────────────────────────────────────────
 // Type Declarations for Structured Schema Data
 // ─────────────────────────────────────────────────────────────
-interface SchemaCleaningService {
-  "@type": "CleaningService"
+interface SchemaLocalBusiness {
+  "@type": "LocalBusiness"
   "@id": string
   name: string
   image: string
   telephone: string
   url: string
   priceRange: string
-  additionalType: string
+  description: string
+  serviceType: string
   address: {
     "@type": "PostalAddress"
     addressLocality: string
@@ -82,7 +83,7 @@ interface SchemaFAQPage {
   }>
 }
 
-type SchemaGraphNode = SchemaCleaningService | SchemaFAQPage
+type SchemaGraphNode = SchemaLocalBusiness | SchemaFAQPage
 
 interface SchemaMainStructure {
   "@context": "https://schema.org"
@@ -219,9 +220,13 @@ function JsonLd({
   const pageUrl = `https://www.playacleaning.com/locations/${location.slug}`
   const businessId = `${pageUrl}#cleaning-service`
 
+  const dynamicDescription =
+    location.local_hook ||
+    `Top-rated residential and commercial cleaning services in ${location.city_name}.`
+
   const graphArray: SchemaGraphNode[] = [
     {
-      "@type": "CleaningService",
+      "@type": "LocalBusiness",
       "@id": businessId,
       name: `Playa Cleaning ${location.city_name}`,
       image: location.location_image?.url
@@ -230,7 +235,8 @@ function JsonLd({
       telephone: "+1-213-598-77-63",
       url: pageUrl,
       priceRange: "$$",
-      additionalType: "https://schema.org/LocalBusiness",
+      description: dynamicDescription,
+      serviceType: "CleaningService",
       address: {
         "@type": "PostalAddress",
         addressLocality: location.city_name,
