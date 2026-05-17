@@ -40,6 +40,11 @@ export const metadata: Metadata = {
   openGraph: {
     images: "/og-image.jpg",
   },
+  appleWebApp: {
+    title: "PlayaCleaning",
+    statusBarStyle: "default",
+    capable: true,
+  },
 }
 
 const gtmId = process.env.NEXT_PUBLIC_TAG_MANAGER_ID || "GTM-PQNQ5K5R"
@@ -88,6 +93,18 @@ async function getGlobalData() {
     console.error("Layout Data Fetch Error:", error)
     return { services: [], locations: [] }
   }
+}
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Playa Cleaning",
+  url: "https://www.playacleaning.com",
+  logo: "https://www.playacleaning.com/logo.png", // Must be a direct link to your logo image
+  sameAs: [
+    "https://www.instagram.com/playa_cleaning",
+    "https://www.facebook.com/profile.php?id=61555670068109",
+  ],
 }
 
 export default async function RootLayout({
