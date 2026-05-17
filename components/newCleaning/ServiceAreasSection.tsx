@@ -1,91 +1,78 @@
 import Link from "next/link"
-import { MapPin } from "lucide-react"
-import { LOS_ANGELES_AREAS } from "@/app/data/la-areas-all"
+import { MapPin, Navigation } from "lucide-react"
+import { strapiRequest } from "@/lib/strapi"
+import { LocationDataResponse, LocationRecord } from "@/app/types/locationTypes"
 
-// Defining a strict interface based on your data structure
-interface Area {
-  name: string
-  slug: string
-  type: string
-  region: string
-  zipCodes: string[]
-  neighborSlugs: string[]
+// ─────────────────────────────────────────────────────────────
+// DATA FETCHING LAYER (DECOUPLED FUNCTION)
+// ─────────────────────────────────────────────────────────────
+async function getLiveServiceAreas(): Promise<LocationRecord[]> {
+  try {
+    const response = await strapiRequest<LocationDataResponse>("locations", {
+      "filters[active][$eq]": "true",
+      "fields[0]": "city_name",
+      "fields[1]": "slug",
+      "pagination[pageSize]": 100,
+    })
+    return response?.data || []
+  } catch (error) {
+    console.error("❌ Error fetching service areas for SEO links:", error)
+    return []
+  }
 }
 
-export function ServiceAreasSection() {
-  // Using Record to define the accumulator shape: Key is region string, Value is Area array
-  const groupedAreas = LOS_ANGELES_AREAS.reduce<Record<string, Area[]>>(
-    (acc, area) => {
-      const region = area.region || "Other Areas"
-      if (!acc[region]) {
-        acc[region] = []
-      }
-      acc[region].push(area)
-      return acc
-    },
-    {}
-  )
+// ─────────────────────────────────────────────────────────────
+// REFACTORED HIGH-DESIGN SEO COMPONENT
+// ─────────────────────────────────────────────────────────────
+export async function ServiceAreasSection() {
+  const liveLocations = await getLiveServiceAreas()
+
+  if (!liveLocations || liveLocations.length === 0) return null
 
   return (
-    <section className="mt-32 border-t border-border pt-24 pb-20">
+    /* Stripped wrapper border. Added a deep, premium background gradient with organic lighting radial anchors */
+    <section className="relative overflow-hidden bg-gradient-to-b from-background via-muted/20 to-background py-20">
+      {/* Decorative background light orb */}
+      <div className="pointer-events-none absolute top-1/2 left-1/2 -z-10 h-[400px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-blue/5 blur-[120px]" />
+
       <div className="container mx-auto max-w-6xl px-6">
-        <div className="mb-16 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-          <div className="max-w-2xl">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary-blue/10 px-4 py-2 text-primary-blue">
-              <MapPin size={16} />
-              <span className="text-sm font-bold tracking-wider uppercase">
-                Local Coverage
+        {/* Minimalist Grid Header (No outer border layout blocks) */}
+        <div className="mb-12 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 animate-pulse items-center justify-center rounded-xl bg-primary-blue/10 text-primary-blue">
+              <Navigation size={16} className="rotate-45" />
+            </div>
+            <div>
+              <h2 className="text-xs font-black tracking-[0.2em] text-primary-blue uppercase">
+                Service Network
+              </h2>
+              <p className="mt-0.5 text-sm font-bold tracking-tight text-foreground">
+                Premium professional coverage across Greater Los Angeles
+              </p>
+            </div>
+          </div>
+          <div className="mx-8 hidden h-px flex-1 bg-gradient-to-r from-primary-blue/20 via-border/40 to-transparent sm:block" />
+        </div>
+
+        {/* High-Density Modern Card Grid */}
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          {liveLocations.map((loc) => (
+            <Link
+              key={loc.slug}
+              href={`/locations/${loc.slug}`}
+              className="group flex items-center gap-3 rounded-xl border border-border/50 bg-background/60 p-3.5 text-[14px] font-semibold text-muted-foreground transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-blue/40 hover:bg-background hover:text-foreground hover:shadow-md hover:shadow-primary-blue/5"
+            >
+              {/* Micro Location Accent Pin Indicator */}
+              <MapPin
+                size={14}
+                className="shrink-0 text-muted-foreground/30 transition-all duration-300 group-hover:scale-110 group-hover:text-primary-blue"
+              />
+
+              <span className="truncate transition-colors duration-200">
+                {loc.city_name}
               </span>
-            </div>
-            <h2 className="text-4xl font-black tracking-tight text-foreground md:text-5xl">
-              Serving our neighbors across{" "}
-              <span className="text-primary-blue">Greater Los Angeles.</span>
-            </h2>
-          </div>
-          <p className="max-w-xs text-sm font-medium text-muted-foreground">
-            Don&apos;t see your neighborhood? We are constantly expanding.
-            Contact us for custom service outside these areas.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
-          {Object.entries(groupedAreas).map(([region, areas]) => (
-            <div key={region} className="space-y-6">
-              <h3 className="border-b border-primary-blue/10 pb-4 text-xs font-black tracking-[0.2em] text-primary-blue uppercase">
-                {region}
-              </h3>
-              <ul className="grid gap-3">
-                {areas.map((area) => (
-                  <li key={area.slug}>
-                    <Link
-                      href={`/service-areas/${area.slug}`}
-                      className="group flex items-center text-[15px] font-medium text-muted-foreground transition-colors hover:text-foreground"
-                    >
-                      <span className="h-1 w-0 bg-primary-blue transition-all group-hover:mr-2 group-hover:w-3" />
-                      {area.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            </Link>
           ))}
-        </div>
-
-        <div className="mt-20 rounded-3xl bg-muted/30 p-8">
-          <p className="mb-4 text-[10px] font-black tracking-widest text-muted-foreground uppercase">
-            Popular Service Zones
-          </p>
-          <div className="flex flex-wrap gap-x-6 gap-y-3">
-            {LOS_ANGELES_AREAS.slice(0, 15).map((area) => (
-              <Link
-                key={`footer-${area.slug}`}
-                href={`/service-areas/${area.slug}`}
-                className="text-xs font-bold text-muted-foreground/60 transition-colors hover:text-primary-blue"
-              >
-                {area.name} Cleaning
-              </Link>
-            ))}
-          </div>
         </div>
       </div>
     </section>

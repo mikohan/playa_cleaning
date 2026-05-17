@@ -69,7 +69,7 @@ export const HeroServiceImage = ({
 
       {/* --- Right Side: Sticky Sidebar Card --- */}
       <div className="lg:sticky lg:top-24 lg:col-span-5">
-        <div className="relative aspect-[4/5] overflow-hidden rounded-[40px] border border-border shadow-2xl shadow-primary-blue/5">
+        <div className="relative aspect-4/5 overflow-hidden rounded-[40px] border border-border shadow-2xl shadow-primary-blue/5">
           <Image
             src={heroImage}
             alt={professionalName}

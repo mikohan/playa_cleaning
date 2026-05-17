@@ -405,7 +405,7 @@ export default async function LocationPage({
           <h2 className="mb-8 text-3xl font-black tracking-tighter uppercase">
             Our Service Area in {location.city_name}
           </h2>
-          <GoogleMap lat={lat} lng={lng} zoom={13} className="h-[500px]" />
+          <GoogleMap lat={lat} lng={lng} zoom={13} className="h-125" />
         </section>
 
         <CalculatorCTA />

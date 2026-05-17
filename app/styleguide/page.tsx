@@ -33,6 +33,7 @@ import { CallToAction } from "@/components/cleaning/CallToAction"
 import { TeamBentoGrid } from "@/components/newCleaning/TeamBentoGrid"
 import { Testimonials } from "@/components/cleaning/Testimonials"
 import { WhyMe } from "@/components/cleaning/WhyMe"
+import { WhyMeVideo } from "@/components/cleaning/WhyMeVideo"
 
 // MASK FROM SEARCH ENGINES
 export const metadata: Metadata = {
@@ -135,6 +136,7 @@ const StyleGuidePage = () => {
     { name: "Team Bento Grid", id: "team", component: <TeamBentoGrid /> },
     { name: "Testimonials", id: "testimonials", component: <Testimonials /> },
     { name: "Why Me", id: "why-me", component: <WhyMe /> },
+    { name: "Why Me Video", id: "why-me-video", component: <WhyMeVideo /> },
   ]
 
   return (

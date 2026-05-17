@@ -5,7 +5,6 @@ import { AvatarGroup } from "./AvatarGroup"
 import { CleaningModal } from "../common/CleaningModal"
 import { ModalVideo } from "../common/ModalVideo"
 import { RoughNotation, RoughNotationGroup } from "react-rough-notation"
-import { BreadCrumbsUniversal } from "../common/BreadCrumbsUniversal"
 
 const VideoComponent = dynamic(
   () => import("./VideoComponent").then((mod) => mod.VideoComponent),
@@ -45,7 +44,7 @@ function HeroVideo({
           <div className="text-center md:flex-1 md:text-left">
             <div className="flex flex-col items-center gap-4 md:items-start">
               <div className="flex flex-col items-center gap-2 md:items-start">
-                <GoogleStars starsCount={5} rating="4.9" />
+                <GoogleStars size={20} starsCount={5} rating="4.9" />
                 <AvatarGroup />
               </div>
 

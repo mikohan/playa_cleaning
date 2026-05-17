@@ -1,4 +1,3 @@
-import Link from "next/link"
 import { LocationDataResponse, LocationRecord } from "@/app/types/locationTypes"
 import { Metadata } from "next"
 import { BreadCrumbsUniversal } from "@/components/common/BreadCrumbsUniversal"
