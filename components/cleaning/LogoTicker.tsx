@@ -2,6 +2,7 @@
 import React from "react"
 import { motion } from "framer-motion"
 import { ShieldCheck, Leaf, MapPin, Clock, Sparkles, Heart } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 const ADVANTAGES = [
   { icon: ShieldCheck, text: "Licensed & Insured" },
@@ -11,10 +12,13 @@ const ADVANTAGES = [
   { icon: Heart, text: "Pet & Kid Safe" },
   { icon: Sparkles, text: "Hospital-Grade Clean" },
 ]
+interface Props {
+  className?: string
+}
 
-export const LogoTicker = () => {
+export const LogoTicker = ({ className }: Props) => {
   return (
-    <div className="overflow-hidden">
+    <div className={cn(className, "flex items-center overflow-hidden")}>
       <div className="container mx-auto">
         <div className="flex overflow-hidden mask-[linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
           <motion.div

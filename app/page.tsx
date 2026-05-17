@@ -23,7 +23,7 @@ export default async function Page() {
         highlightIndex={1}
         showNotation
       />
-      <LogoTicker />
+      <LogoTicker className="h-48" />
       <BenefitsSection />
       <section className="bg-top-blur/20">
         <ServiceTicker services={services} className="flex h-44 items-center" />
