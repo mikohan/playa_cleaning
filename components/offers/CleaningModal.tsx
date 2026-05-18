@@ -14,6 +14,7 @@ type CleaningModalProps = {
 export const CleaningModal = ({ text }: CleaningModalProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const modalRef = useRef<HTMLDialogElement>(null)
+  const formRef = useRef<HTMLFormElement>(null)
 
   const handleOpen = () => setIsOpen(true)
   const handleClose = () => setIsOpen(false)
@@ -53,28 +54,34 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
         return { success: false, message: "Invalid phone format" }
       }
 
-      const result = await sendEmail(prevState, formData, "manager")
-      await sendEmail(prevState, formData, "customer")
+      await sendEmail(prevState, formData, "manager")
+      const result = await sendEmail(prevState, formData, "customer")
 
       if (result.success) {
-        // 🟢 STRICT, TYPE-SAFE DATA LAYER CONVERSION INJECTION
-        if (typeof window !== "undefined") {
-          const targetWindow = window as Window & {
-            dataLayer?: Array<Record<string, string | number>>
-          }
+        // Capture data values safely from the FormData object context
+        const beds = formData.get("bedrooms") || "1"
+        const baths = formData.get("bathrooms") || "1"
 
-          if (targetWindow.dataLayer) {
+        // 🟢 SAFE CLIENT-SIDE DATA LAYER INJECTION (Escapes Server Action Thread)
+        if (typeof window !== "undefined") {
+          setTimeout(() => {
+            const targetWindow = window as Window & {
+              dataLayer?: Array<Record<string, string | number>>
+            }
+            targetWindow.dataLayer = targetWindow.dataLayer || []
             targetWindow.dataLayer.push({
               event: "form_submission_success",
-              form_type: "inline_lead_capture", // Differentiates modal popups from master calculator logs
-              estimated_value: 129, // Maps directly to the modal's $129 promo baseline
-              service_type: `Modal Quick Quote - ${formData.get("bedrooms")}B/${formData.get("bathrooms")}B`,
+              form_type: "inline_lead_capture",
+              estimated_value: 129,
+              service_type: `Modal Quick Quote - ${beds}B/${baths}B`,
             })
-          }
+          }, 0)
         }
 
+        // Handle UI mutations synchronously here without triggering cascading hooks
         handleClose()
         notify()
+        formRef.current?.reset()
       }
       return result
     },
@@ -95,7 +102,6 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
 
   const buttonText = text ? text : "Get Price"
 
-  // Base input styling that adapts to light/dark themes
   const inputClassName = `
     w-full appearance-none rounded-2xl border-2 px-5 py-4 text-base font-medium transition-all outline-none
     bg-muted/50 border-border text-foreground placeholder:text-muted-foreground
@@ -142,7 +148,7 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
             </p>
           </div>
 
-          <form action={action} className="space-y-4">
+          <form ref={formRef} action={action} className="space-y-4">
             <div className="grid grid-cols-1 gap-3">
               <input
                 required

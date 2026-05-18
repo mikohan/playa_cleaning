@@ -55,32 +55,33 @@ function BookingContent() {
         // Optional: Trigger confirmation to customer
         await sendEmail({}, formData, "customer")
 
-        // 🟢 Strict Type Definition for the Google Tag Manager Data Layer object
+        // 🟢 SAFE CLIENT-SIDE DATA LAYER INJECTION (Escapes Route Lifecycles Safely)
         if (typeof window !== "undefined") {
           const targetWindow = window as Window & {
             dataLayer?: Array<Record<string, string | number>>
           }
+          targetWindow.dataLayer = targetWindow.dataLayer || []
+          targetWindow.dataLayer.push({
+            event: "form_submission_success",
+            form_type:
+              bookingMode === "pay"
+                ? "calculator_booking"
+                : "calculator_lead_submission", // Matches your GTM 'Calculator Lead Submission' action
+            estimated_value: parseFloat(bookingData.price) || 0,
+            service_type: bookingData.type,
+          })
+        }
 
-          if (targetWindow.dataLayer) {
-            targetWindow.dataLayer.push({
-              event: "form_submission_success",
-              form_type:
-                bookingMode === "pay"
-                  ? "calculator_booking"
-                  : "inline_lead_capture",
-              estimated_value: parseFloat(bookingData.price) || 0,
-              service_type: bookingData.type,
-            })
+        // 🟢 Execute page shifts on the next tick so tracking signals have time to fire
+        setTimeout(() => {
+          if (bookingMode === "pay") {
+            const email = (formData.get("email") as string) || ""
+            const stripeUrl = `${process.env.NEXT_PUBLIC_STRIPE_URL}?prefilled_email=${encodeURIComponent(email)}`
+            router.push(stripeUrl)
+          } else {
+            router.push("/thank-you")
           }
-        }
-
-        if (bookingMode === "pay") {
-          const email = (formData.get("email") as string) || ""
-          const stripeUrl = `${process.env.NEXT_PUBLIC_STRIPE_URL}?prefilled_email=${encodeURIComponent(email)}`
-          router.push(stripeUrl)
-        } else {
-          router.push("/thank-you")
-        }
+        }, 100)
       } else {
         // Handle Resend/Server errors
         alert(result.message || "Failed to send request. Please try again.")
@@ -197,7 +198,7 @@ function BookingContent() {
                 </div>
               </div>
 
-              {/* TOGGLE & BUTTONS REMAIN THE SAME */}
+              {/* TOGGLE & BUTTONS */}
               <div className="relative space-y-4 rounded-3xl border border-border bg-card p-3 shadow-[0_0_40px_-15px_var(--top-blur)]">
                 <div className="absolute -top-3 left-6 rounded-full bg-accent-green px-3 py-1 text-[9px] font-black tracking-widest text-primary-foreground uppercase shadow-sm">
                   Choose Booking Type
@@ -269,7 +270,7 @@ function BookingContent() {
             </form>
           </div>
 
-          {/* SIDEBAR REMAINS THE SAME */}
+          {/* SIDEBAR */}
           <div className="lg:col-span-5">
             <div className="sticky top-12 overflow-hidden rounded-[2.5rem] border border-border bg-card shadow-2xl">
               <div className="bg-primary-blue p-8 text-white">

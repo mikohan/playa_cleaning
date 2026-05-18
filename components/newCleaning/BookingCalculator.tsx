@@ -72,30 +72,32 @@ export const BookingCalculator = () => {
 
     setStatus("sending")
     const result = await sendBookingEmail({
-      beds: String(beds), // Converts number or BedKey to string
-      baths: String(baths), // Converts number or string to string
+      beds: String(beds),
+      baths: String(baths),
       phone,
-      price: totalPrice, // Price remains a number
+      price: totalPrice,
     })
 
     if (result.success) {
-      // 🟢 STRICT, TYPE-SAFE DATA LAYER CONVERSION INJECTION
+      // 🟢 SAFE CLIENT-SIDE DATA LAYER INJECTION (Escapes Component Unmount Lifecycles)
       if (typeof window !== "undefined") {
         const targetWindow = window as Window & {
           dataLayer?: Array<Record<string, string | number>>
         }
 
-        if (targetWindow.dataLayer) {
-          targetWindow.dataLayer.push({
-            event: "form_submission_success",
-            form_type: "inline_lead_capture", // Maps this embed instance accurately to your GTM parameters
-            estimated_value: totalPrice, // Feeds the dynamic matrix calculation directly to Google Ads bidding
-            service_type: `Embedded Quick Calculator - ${beds}B/${baths}B`,
-          })
-        }
+        targetWindow.dataLayer = targetWindow.dataLayer || []
+        targetWindow.dataLayer.push({
+          event: "form_submission_success",
+          form_type: "embedded_calculator", // Clarifies setup parameters vs your modal quick popups
+          estimated_value: totalPrice,
+          service_type: `Embedded Quick Calculator - ${beds}B/${baths}B`,
+        })
       }
 
-      setStatus("success")
+      // 🟢 Hold the DOM shift state slightly to let GTM capture container variables cleanly
+      setTimeout(() => {
+        setStatus("success")
+      }, 50)
     } else {
       setStatus("error")
       setTimeout(() => setStatus("idle"), 3000)

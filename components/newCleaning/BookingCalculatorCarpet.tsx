@@ -46,23 +46,31 @@ export const BookingCalculatorCarpet = () => {
     const result = await sendSteamEmail({ success: false }, formData)
 
     if (result.success) {
-      // 🟢 STRICT, TYPE-SAFE DATA LAYER CONVERSION INJECTION
+      // 🟢 SAFE CLIENT-SIDE DATA LAYER INJECTION (Escapes Component Unmount Lifecycles)
       if (typeof window !== "undefined") {
         const targetWindow = window as Window & {
           dataLayer?: Array<Record<string, string | number>>
         }
 
-        if (targetWindow.dataLayer) {
-          targetWindow.dataLayer.push({
-            event: "form_submission_success",
-            form_type: "inline_lead_capture",
-            estimated_value: 150, // Standard baseline value for custom multi-item requests
-            service_type: `Carpet/Upholstery Custom Request: ${items.trim().slice(0, 80)}`, // Truncates input safely for clean metrics strings
-          })
-        }
+        // Clean tracking strings: strip double-quotes/newlines to keep object parameters pristine
+        const sanitizedItems = items
+          .replace(/["\r\n]+/g, " ")
+          .trim()
+          .slice(0, 75)
+
+        targetWindow.dataLayer = targetWindow.dataLayer || []
+        targetWindow.dataLayer.push({
+          event: "form_submission_success",
+          form_type: "custom_upholstery_quote",
+          estimated_value: 150, // Standard baseline configuration for custom item runs
+          service_type: `Carpet/Upholstery Custom Request: ${sanitizedItems}`,
+        })
       }
 
-      setStatus("success")
+      // 🟢 Hold the DOM swap execution briefly so GTM captures script parameters completely
+      setTimeout(() => {
+        setStatus("success")
+      }, 50)
     } else {
       setStatus("error")
       setTimeout(() => setStatus("idle"), 3000)
@@ -72,6 +80,7 @@ export const BookingCalculatorCarpet = () => {
   const inputStyle =
     "rounded-2xl border-none bg-muted p-5 font-bold outline-none ring-primary-blue focus:ring-2 transition-all placeholder:text-muted-foreground/50 w-full"
 
+  // SUCCESS STATE
   if (status === "success") {
     return (
       <div className="max-w-xl rounded-3xl border border-border bg-card p-12 text-center shadow-2xl">
@@ -95,6 +104,7 @@ export const BookingCalculatorCarpet = () => {
     )
   }
 
+  // RENDER FORM
   return (
     <div className="max-w-xl rounded-3xl border border-border bg-card p-4 shadow-2xl">
       <div className="space-y-3">
@@ -131,8 +141,7 @@ export const BookingCalculatorCarpet = () => {
               <Loader2 className="animate-spin" size={24} />
             ) : status === "error" ? (
               <>
-                {" "}
-                <AlertCircle size={24} /> Error!{" "}
+                <AlertCircle size={24} /> Error!
               </>
             ) : (
               "Get Free Quote"
@@ -141,14 +150,14 @@ export const BookingCalculatorCarpet = () => {
         </div>
 
         <p className="px-2 text-[10px] font-bold tracking-widest text-muted-foreground/60 uppercase">
-          Professional Steam Extraction • Playa Cleaning
+          Professional Steam Extraction • Angara Steamers
         </p>
       </div>
     </div>
   )
 }
 
-// Helper for classes (add if not already globally available)
+// Fallback utility function for styling combinations
 function cn(...classes: string[]) {
   return classes.filter(Boolean).join(" ")
 }
