@@ -1,5 +1,6 @@
 # my own stuff
 public/sitemap*.xml
+repomix-output*
 # dependencies
 /node_modules
 /.pnp
