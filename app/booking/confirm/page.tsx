@@ -51,10 +51,8 @@ function BookingContent() {
       // We pass an empty object as prevState since we aren't using useActionState here
       const result = await sendEmail({}, formData, "manager")
 
-      if (result.success) {
-        // Optional: Trigger confirmation to customer
-        await sendEmail({}, formData, "customer")
-
+      // STUCTURAL FIX: Only pass the data layer event if the transaction is explicitly successful
+      if (result && result.success) {
         // 🟢 SAFE CLIENT-SIDE DATA LAYER INJECTION (Escapes Route Lifecycles Safely)
         if (typeof window !== "undefined") {
           const targetWindow = window as Window & {
@@ -62,11 +60,11 @@ function BookingContent() {
           }
           targetWindow.dataLayer = targetWindow.dataLayer || []
           targetWindow.dataLayer.push({
-            event: "form_submission_success",
+            event: "form_submit", // Restored to old name exactly as requested
             form_type:
               bookingMode === "pay"
                 ? "calculator_booking"
-                : "calculator_lead_submission", // Matches your GTM 'Calculator Lead Submission' action
+                : "calculator_lead_submission",
             estimated_value: parseFloat(bookingData.price) || 0,
             service_type: bookingData.type,
           })
@@ -130,7 +128,6 @@ function BookingContent() {
                       className="absolute top-1/2 left-4 -translate-y-1/2 text-muted-foreground/50"
                       size={18}
                     />
-                    {/* 4. Changed 'name' to 'username' to match your Server Action */}
                     <input
                       required
                       name="username"

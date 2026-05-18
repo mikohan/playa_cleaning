@@ -45,7 +45,8 @@ export const BookingCalculatorCarpet = () => {
 
     const result = await sendSteamEmail({ success: false }, formData)
 
-    if (result.success) {
+    // STUCTURAL FIX: Only push dataLayer variables if backend submission succeeds
+    if (result && result.success) {
       // 🟢 SAFE CLIENT-SIDE DATA LAYER INJECTION (Escapes Component Unmount Lifecycles)
       if (typeof window !== "undefined") {
         const targetWindow = window as Window & {
@@ -60,7 +61,7 @@ export const BookingCalculatorCarpet = () => {
 
         targetWindow.dataLayer = targetWindow.dataLayer || []
         targetWindow.dataLayer.push({
-          event: "form_submission_success",
+          event: "form_submit", // Restored to legacy name for multi-form tracking consistency
           form_type: "custom_upholstery_quote",
           estimated_value: 150, // Standard baseline configuration for custom item runs
           service_type: `Carpet/Upholstery Custom Request: ${sanitizedItems}`,

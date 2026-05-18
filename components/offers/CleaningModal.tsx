@@ -54,29 +54,27 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
         return { success: false, message: "Invalid phone format" }
       }
 
-      await sendEmail(prevState, formData, "manager")
-      const result = await sendEmail(prevState, formData, "customer")
+      // 1. Send ONE email to the manager. No customer email bloat.
+      const result = await sendEmail(prevState, formData, "manager")
 
-      if (result.success) {
-        // Capture data values safely from the FormData object context
+      // 2. Structural Success Gate
+      if (result && result.success) {
         const beds = formData.get("bedrooms") || "1"
         const baths = formData.get("bathrooms") || "1"
 
-        // 🟢 DECOUPLED DATA LAYER INJECTION (Fires immediately while DOM components exist)
         if (typeof window !== "undefined") {
           const targetWindow = window as Window & {
             dataLayer?: Array<Record<string, string | number>>
           }
           targetWindow.dataLayer = targetWindow.dataLayer || []
           targetWindow.dataLayer.push({
-            event: "form_submission_success",
-            form_type: "modal_quick_quote", // Explicit naming maps parameters cleanly into GTM data vectors
+            event: "form_submit",
+            form_type: "modal_quick_quote",
             estimated_value: 129,
             service_type: `Modal Quick Quote - ${beds}B/${baths}B`,
           })
         }
 
-        // 🟢 Minor macro-task execution offset gives GTM container variables plenty of time to clear
         setTimeout(() => {
           handleClose()
           notify()

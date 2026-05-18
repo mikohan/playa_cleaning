@@ -78,7 +78,8 @@ export const BookingCalculator = () => {
       price: totalPrice,
     })
 
-    if (result.success) {
+    // STUCTURAL FIX: Only run tracking configurations if server transaction satisfies success conditions
+    if (result && result.success) {
       // 🟢 SAFE CLIENT-SIDE DATA LAYER INJECTION (Escapes Component Unmount Lifecycles)
       if (typeof window !== "undefined") {
         const targetWindow = window as Window & {
@@ -87,8 +88,8 @@ export const BookingCalculator = () => {
 
         targetWindow.dataLayer = targetWindow.dataLayer || []
         targetWindow.dataLayer.push({
-          event: "form_submission_success",
-          form_type: "embedded_calculator", // Clarifies setup parameters vs your modal quick popups
+          event: "form_submit", // Restored to match your active GTM custom configuration setup
+          form_type: "embedded_calculator",
           estimated_value: totalPrice,
           service_type: `Embedded Quick Calculator - ${beds}B/${baths}B`,
         })
