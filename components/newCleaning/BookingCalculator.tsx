@@ -79,6 +79,22 @@ export const BookingCalculator = () => {
     })
 
     if (result.success) {
+      // 🟢 STRICT, TYPE-SAFE DATA LAYER CONVERSION INJECTION
+      if (typeof window !== "undefined") {
+        const targetWindow = window as Window & {
+          dataLayer?: Array<Record<string, string | number>>
+        }
+
+        if (targetWindow.dataLayer) {
+          targetWindow.dataLayer.push({
+            event: "form_submission_success",
+            form_type: "inline_lead_capture", // Maps this embed instance accurately to your GTM parameters
+            estimated_value: totalPrice, // Feeds the dynamic matrix calculation directly to Google Ads bidding
+            service_type: `Embedded Quick Calculator - ${beds}B/${baths}B`,
+          })
+        }
+      }
+
       setStatus("success")
     } else {
       setStatus("error")

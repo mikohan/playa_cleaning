@@ -46,6 +46,22 @@ export const BookingCalculatorCarpet = () => {
     const result = await sendSteamEmail({ success: false }, formData)
 
     if (result.success) {
+      // 🟢 STRICT, TYPE-SAFE DATA LAYER CONVERSION INJECTION
+      if (typeof window !== "undefined") {
+        const targetWindow = window as Window & {
+          dataLayer?: Array<Record<string, string | number>>
+        }
+
+        if (targetWindow.dataLayer) {
+          targetWindow.dataLayer.push({
+            event: "form_submission_success",
+            form_type: "inline_lead_capture",
+            estimated_value: 150, // Standard baseline value for custom multi-item requests
+            service_type: `Carpet/Upholstery Custom Request: ${items.trim().slice(0, 80)}`, // Truncates input safely for clean metrics strings
+          })
+        }
+      }
+
       setStatus("success")
     } else {
       setStatus("error")

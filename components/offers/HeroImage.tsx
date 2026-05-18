@@ -1,12 +1,4 @@
-import {
-  CheckCircle2,
-  XCircle,
-  Clock,
-  ShieldCheck,
-  Award,
-  Star,
-  ChevronRight,
-} from "lucide-react"
+import { CheckCircle2, XCircle, Clock, Star, ChevronRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import AliciaImage from "@/public/images/cleaning/hero-4.webp"

@@ -57,6 +57,22 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
       await sendEmail(prevState, formData, "customer")
 
       if (result.success) {
+        // 🟢 STRICT, TYPE-SAFE DATA LAYER CONVERSION INJECTION
+        if (typeof window !== "undefined") {
+          const targetWindow = window as Window & {
+            dataLayer?: Array<Record<string, string | number>>
+          }
+
+          if (targetWindow.dataLayer) {
+            targetWindow.dataLayer.push({
+              event: "form_submission_success",
+              form_type: "inline_lead_capture", // Differentiates modal popups from master calculator logs
+              estimated_value: 129, // Maps directly to the modal's $129 promo baseline
+              service_type: `Modal Quick Quote - ${formData.get("bedrooms")}B/${formData.get("bathrooms")}B`,
+            })
+          }
+        }
+
         handleClose()
         notify()
       }

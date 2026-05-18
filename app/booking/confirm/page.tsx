@@ -55,6 +55,25 @@ function BookingContent() {
         // Optional: Trigger confirmation to customer
         await sendEmail({}, formData, "customer")
 
+        // 🟢 Strict Type Definition for the Google Tag Manager Data Layer object
+        if (typeof window !== "undefined") {
+          const targetWindow = window as Window & {
+            dataLayer?: Array<Record<string, string | number>>
+          }
+
+          if (targetWindow.dataLayer) {
+            targetWindow.dataLayer.push({
+              event: "form_submission_success",
+              form_type:
+                bookingMode === "pay"
+                  ? "calculator_booking"
+                  : "inline_lead_capture",
+              estimated_value: parseFloat(bookingData.price) || 0,
+              service_type: bookingData.type,
+            })
+          }
+        }
+
         if (bookingMode === "pay") {
           const email = (formData.get("email") as string) || ""
           const stripeUrl = `${process.env.NEXT_PUBLIC_STRIPE_URL}?prefilled_email=${encodeURIComponent(email)}`
@@ -115,7 +134,7 @@ function BookingContent() {
                       required
                       name="username"
                       type="text"
-                      placeholder="Vladimir Vostrikov"
+                      placeholder="John Doe"
                       className="w-full rounded-2xl border-border bg-card p-4 pl-12 shadow-sm ring-ring transition-all outline-none focus:ring-2 focus:ring-accent-green"
                     />
                   </div>
