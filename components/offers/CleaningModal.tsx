@@ -69,6 +69,7 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
           targetWindow.dataLayer = targetWindow.dataLayer || []
           targetWindow.dataLayer.push({
             event: "form_submit",
+            event_id: result.eventId,
             form_type: "modal_quick_quote",
             estimated_value: 129,
             service_type: `Modal Quick Quote - ${beds}B/${baths}B`,
