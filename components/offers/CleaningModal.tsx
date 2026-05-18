@@ -62,26 +62,26 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
         const beds = formData.get("bedrooms") || "1"
         const baths = formData.get("bathrooms") || "1"
 
-        // 🟢 SAFE CLIENT-SIDE DATA LAYER INJECTION (Escapes Server Action Thread)
+        // 🟢 DECOUPLED DATA LAYER INJECTION (Fires immediately while DOM components exist)
         if (typeof window !== "undefined") {
-          setTimeout(() => {
-            const targetWindow = window as Window & {
-              dataLayer?: Array<Record<string, string | number>>
-            }
-            targetWindow.dataLayer = targetWindow.dataLayer || []
-            targetWindow.dataLayer.push({
-              event: "form_submission_success",
-              form_type: "inline_lead_capture",
-              estimated_value: 129,
-              service_type: `Modal Quick Quote - ${beds}B/${baths}B`,
-            })
-          }, 0)
+          const targetWindow = window as Window & {
+            dataLayer?: Array<Record<string, string | number>>
+          }
+          targetWindow.dataLayer = targetWindow.dataLayer || []
+          targetWindow.dataLayer.push({
+            event: "form_submission_success",
+            form_type: "modal_quick_quote", // Explicit naming maps parameters cleanly into GTM data vectors
+            estimated_value: 129,
+            service_type: `Modal Quick Quote - ${beds}B/${baths}B`,
+          })
         }
 
-        // Handle UI mutations synchronously here without triggering cascading hooks
-        handleClose()
-        notify()
-        formRef.current?.reset()
+        // 🟢 Minor macro-task execution offset gives GTM container variables plenty of time to clear
+        setTimeout(() => {
+          handleClose()
+          notify()
+          formRef.current?.reset()
+        }, 50)
       }
       return result
     },
