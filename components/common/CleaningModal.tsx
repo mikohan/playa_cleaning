@@ -70,28 +70,18 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
           const beds = (formData.get("bedrooms") as string) || "1"
           const baths = (formData.get("bathrooms") as string) || "1"
 
-          const targetWindow = window as unknown as { dataLayer: object[] }
-          targetWindow.dataLayer = targetWindow.dataLayer || []
+          // Force local shape compliance down to a standard object structure
+          const trackingWindow = window as unknown as {
+            dataLayer: Array<Record<string, unknown>>
+          }
+          trackingWindow.dataLayer = trackingWindow.dataLayer || []
 
-          // 1. Clear any old event data to reset the GTM pipeline state
-          targetWindow.dataLayer.push({
-            event_id: null,
-            form_type: null,
-            estimated_value: null,
-            service_type: null,
-          })
-
-          // 2. Push raw data variables so GTM caches them in its state registry
-          targetWindow.dataLayer.push({
+          trackingWindow.dataLayer.push({
+            event: "form_submission_success",
             event_id: clientSideEventId,
             form_type: "modal_quick_quote",
             estimated_value: 129,
             service_type: `Modal Quick Quote - ${beds}B/${baths}B`,
-          })
-
-          // 3. Fire clean, isolated trigger event
-          targetWindow.dataLayer.push({
-            event: "form_submission_success",
           })
         }
 
