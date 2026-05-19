@@ -8,7 +8,7 @@ import { ButtonShiny } from "../SmallComponents/ButtonShiny"
 import { X } from "lucide-react"
 
 interface CleaningModalProps {
-  text: string
+  text?: string
 }
 
 interface DataLayerPayload {
