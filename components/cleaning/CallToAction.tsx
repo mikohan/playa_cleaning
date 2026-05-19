@@ -1,9 +1,8 @@
 "use client"
-import React, { useActionState, useEffect } from "react"
+import React, { useActionState, useTransition, useRef } from "react"
 import Image from "next/image"
-import { CalendarDays, Phone, CheckCircle2, PartyPopper } from "lucide-react"
-import { toast, ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+import { Phone, CheckCircle2, PartyPopper } from "lucide-react"
+import { toast } from "react-toastify"
 
 // --- IMPORTS FROM YOUR FILES ---
 import { sendEmail, FormState } from "@/lib/resend"
@@ -11,105 +10,102 @@ import AliciaPortrait from "@/public/images/cleaning/hero-4.png"
 import { WaveDivider } from "../common/WaveDivider"
 import { cn } from "@/lib/utils"
 
-// Extend FormState type safely to account for our custom dynamic clientEventId
-interface TrackingFormState extends FormState {
-  clientSideEventId?: string
-}
-
-// Strictly define the expected tracking data structures
-interface DataLayerPayload {
-  event_id?: string | null
-  form_type?: string | null
-  estimated_value?: number | null
-  service_type?: string | null
-  event?: string
-}
-
-interface CustomTrackingWindow extends Window {
-  dataLayer?: DataLayerPayload[]
-}
-
 interface CallToActionProps {
   defaultOption?: string
   option?: string
 }
 
 export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
-  const [state, action, isLoading] = useActionState<
-    TrackingFormState,
-    FormData
-  >(
-    async (prevState: TrackingFormState, formData: FormData) => {
-      // 1. Phone Regex Validation
-      const phone = formData.get("phone") as string
-      const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/
+  const [isPending, startTransition] = useTransition()
+  const hasFiredRef = useRef<boolean>(false)
 
-      if (!phoneRegex.test(phone)) {
-        return {
-          success: false,
-          message: "Please enter a valid phone: (XXX) XXX-XXXX",
-        }
-      }
-
-      // Generate client-side event ID and append to form data before hitting the server action
-      const clientSideEventId = `lead_${Date.now()}_${Math.floor(Math.random() * 1000)}`
-      formData.append("clientEventId", clientSideEventId)
-
+  const [state, action] = useActionState<FormState, FormData>(
+    async (prevState: FormState, formData: FormData) => {
       const result = await sendEmail(prevState, formData)
 
-      // Pass the event ID forward cleanly in the typed state object
-      return { ...result, clientSideEventId }
+      if (result?.success) {
+        toast.success("Quote request sent! We'll reach out shortly.", {
+          position: "top-center",
+          autoClose: 4000,
+        })
+      } else if (result?.message) {
+        toast.error(result.message, {
+          position: "top-center",
+        })
+      }
+
+      // Drop execution block tracking constraint when backend resolves
+      hasFiredRef.current = false
+      return result
     },
     { success: false }
   )
 
-  // Tracking effect tied directly to form submission state resolution
-  useEffect(() => {
-    if (state?.success) {
-      toast.success("Quote request sent! We'll reach out shortly.")
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
-      if (typeof window !== "undefined") {
-        // Find form element to safely pull selected options for payload context
-        const formElement = document.querySelector(
-          "form[data-cta-form]"
-        ) as HTMLFormElement | null
-        let beds = "1"
-        let baths = "1"
+    // 1. Double-Submission guard block check
+    if (hasFiredRef.current) return
+    hasFiredRef.current = true
 
-        if (formElement) {
-          const currentFormData = new FormData(formElement)
-          beds = (currentFormData.get("bedrooms") as string) || "1"
-          baths = (currentFormData.get("bathrooms") as string) || "1"
-        }
+    const currentForm = e.currentTarget
+    const formData = new FormData(currentForm)
 
-        const targetWindow = window as CustomTrackingWindow
-        targetWindow.dataLayer = targetWindow.dataLayer || []
+    const phone = formData.get("phone") as string
+    const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/
 
-        // 1. Reset state tracking pipeline variables
-        targetWindow.dataLayer.push({
-          event_id: null,
-          form_type: null,
-          estimated_value: null,
-          service_type: null,
-        })
-
-        // 2. Register fresh state context variables
-        targetWindow.dataLayer.push({
-          event_id: state.clientSideEventId || `lead_${Date.now()}`,
-          form_type: "inline_cta_offer",
-          estimated_value: 129,
-          service_type: `CTA $129 Offer - ${beds}B/${baths}B`,
-        })
-
-        // 3. Dispatch execution trigger event
-        targetWindow.dataLayer.push({
-          event: "form_submission_success",
-        })
-      }
-    } else if (state?.message && !state?.success) {
-      toast.error(state.message)
+    if (!phoneRegex.test(phone)) {
+      toast.error("Please enter a valid phone: (XXX) XXX-XXXX", {
+        position: "top-center",
+      })
+      hasFiredRef.current = false // Unlock thread execution path
+      return
     }
-  }, [state])
+
+    // 2. Extract input values directly from the DOM state layout
+    const beds = (formData.get("bedrooms") as string) || "1"
+    const baths = (formData.get("bathrooms") as string) || "1"
+    const selectedServiceScope =
+      (formData.get("serviceType") as string) || "standard"
+
+    // 3. Generate baseline tracking parameter details matching your master list format
+    const clientSideEventId = `lead_${Date.now()}_${Math.floor(Math.random() * 1000000)}`
+    const activeFormIdentity = "inline_cta_offer"
+    const dynamicValue = 129
+    const formattedServiceString = `Playa ${selectedServiceScope} Clean (${beds}B/${baths}B)`
+
+    // 4. Fire clean structured atomic properties array straight to dataLayer
+    if (typeof window !== "undefined") {
+      try {
+        const globalScope = window as unknown as {
+          dataLayer: Array<Record<string, unknown>>
+        }
+        globalScope.dataLayer = globalScope.dataLayer || []
+
+        // Push everything in a single solid frame to guarantee no asynchronous split frames
+        globalScope.dataLayer.push({
+          event: "form_submission_success",
+          event_id: clientSideEventId, // {{event_id}}
+          service_type: formattedServiceString, // {{dlv - service_type}}
+          estimated_value: dynamicValue, // {{dlv - estimated_value}}
+          form_type: activeFormIdentity, // {{dlv - form_type}}
+        })
+      } catch (trackingError) {
+        console.error("GTM DataLayer append failed:", trackingError)
+      }
+    }
+
+    // 5. Build dynamic server form metrics keys
+    formData.append("clientEventId", clientSideEventId)
+    formData.append("service_type", formattedServiceString)
+    formData.append("estimated_value", String(dynamicValue))
+    formData.append("form_type", activeFormIdentity)
+
+    // Fire the Transition thread cleanly to execute your resend server-side execution loop
+    startTransition(async () => {
+      await action(formData)
+    })
+  }
 
   // Automatic Phone Masking (Client Side UX)
   const handlePhoneInput = (e: React.FormEvent<HTMLInputElement>) => {
@@ -136,6 +132,8 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
     bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22M19%209l-7%207-7-7%22%2F%3E%3C%2Fsvg%3E')]
     bg-[length:1.25rem] bg-[position:right_1.25rem_center] bg-no-repeat
   `
+
+  const isLoading = isPending
 
   return (
     <section className="relative mx-auto overflow-hidden">
@@ -191,8 +189,7 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
                 </div>
               ) : (
                 <form
-                  action={action}
-                  data-cta-form
+                  onSubmit={handleFormSubmit}
                   className="relative z-20 max-w-xl space-y-4 rounded-[2rem] border border-border bg-card p-2 shadow-sm sm:p-4"
                 >
                   <input
@@ -252,11 +249,9 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="group relative w-full overflow-hidden rounded-2xl bg-primary-blue py-6 text-xl font-black text-white shadow-2xl shadow-primary-blue/20 transition-all hover:bg-primary-blue/90 active:scale-[0.98] disabled:opacity-50"
+                    className="w-full overflow-hidden rounded-2xl bg-primary-blue py-6 text-xl font-black text-white shadow-2xl shadow-primary-blue/20 transition-all hover:bg-primary-blue/90 active:scale-[0.98] disabled:opacity-50"
                   >
-                    <span className="relative z-10">
-                      {isLoading ? "Sending..." : "Get Price"}
-                    </span>
+                    <span>{isLoading ? "Sending..." : "Get Price"}</span>
                   </button>
                 </form>
               )}
@@ -275,7 +270,6 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
             </div>
           </div>
         </div>
-        <ToastContainer position="bottom-right" />
       </div>
     </section>
   )

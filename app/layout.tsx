@@ -15,6 +15,8 @@ import { Footer } from "@/components/common/Footer"
 import { strapiRequest } from "@/lib/strapi"
 import { ServiceData, StrapiResponse } from "@/app/types/serviceTypes"
 import { LocationRecord } from "@/app/types/locationTypes"
+import { ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 // --- Fonts ---
 const jakarta = Plus_Jakarta_Sans({
@@ -134,6 +136,7 @@ export default async function RootLayout({
             <Navbar services={services ?? []} locations={locations ?? []} />
             {children}
             <Footer services={services ?? []} locations={locations ?? []} />
+            <ToastContainer theme="colored" />
           </main>
         </ThemeProvider>
       </body>
