@@ -49,14 +49,11 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
     e.preventDefault()
     setIsLoading(true)
 
-    console.log("--- 🏁 SUBMIT EVENT TRIGGERED ---")
-
     const formData = new FormData(e.currentTarget)
     const phone = formData.get("phone") as string
     const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/
 
     if (!phoneRegex.test(phone)) {
-      console.log("❌ Debug: Validation failed. Phone format incorrect.")
       toast.error("Please enter a valid phone: (XXX) XXX-XXXX")
       setIsLoading(false)
       return
@@ -65,19 +62,8 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
     const clientSideEventId = `lead_${Date.now()}_${Math.floor(Math.random() * 1000)}`
     formData.append("clientEventId", clientSideEventId)
 
-    console.log("📝 Debug: Form fields prepared:", {
-      username: formData.get("username"),
-      phone: formData.get("phone"),
-      bedrooms: formData.get("bedrooms"),
-      bathrooms: formData.get("bathrooms"),
-      serviceType: formData.get("serviceType"),
-      clientEventId: clientSideEventId,
-    })
-
     try {
-      console.log("📡 Debug: Dispatching payload to sendEmail Server Action...")
       const result = await sendEmail({ success: false }, formData)
-      console.log("📥 Debug: Server Action responded with:", result)
 
       if (result && result.success) {
         if (typeof window !== "undefined") {
@@ -95,7 +81,7 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
             service_type: null,
           })
 
-          // 2. Push the raw data variables first so GTM caches them in its state registry
+          // 2. Push raw data variables so GTM caches them in its state registry
           targetWindow.dataLayer.push({
             event_id: clientSideEventId,
             form_type: "modal_quick_quote",
@@ -103,15 +89,10 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
             service_type: `Modal Quick Quote - ${beds}B/${baths}B`,
           })
 
-          // 3. Fire a clean, isolated trigger event containing NO element links
+          // 3. Fire clean, isolated trigger event
           targetWindow.dataLayer.push({
             event: "form_submission_success",
           })
-
-          console.log(
-            "📊 Debug: Cleaned dataLayer array updated:",
-            targetWindow.dataLayer
-          )
         }
 
         setTimeout(() => {
@@ -121,12 +102,11 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
           setIsLoading(false)
         }, 100)
       } else {
-        console.log("❌ Debug: Server action flagged false success status.")
         toast.error(result?.message || "An error occurred.")
         setIsLoading(false)
       }
     } catch (err) {
-      console.error("💥 Debug: Global execution catch caught error:", err)
+      console.error("Critical submission error:", err)
       toast.error("An error occurred. Please try again.")
       setIsLoading(false)
     }

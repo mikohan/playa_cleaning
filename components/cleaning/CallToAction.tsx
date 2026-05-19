@@ -11,14 +11,35 @@ import AliciaPortrait from "@/public/images/cleaning/hero-4.png"
 import { WaveDivider } from "../common/WaveDivider"
 import { cn } from "@/lib/utils"
 
+// Extend FormState type safely to account for our custom dynamic clientEventId
+interface TrackingFormState extends FormState {
+  clientSideEventId?: string
+}
+
+// Strictly define the expected tracking data structures
+interface DataLayerPayload {
+  event_id?: string | null
+  form_type?: string | null
+  estimated_value?: number | null
+  service_type?: string | null
+  event?: string
+}
+
+interface CustomTrackingWindow extends Window {
+  dataLayer?: DataLayerPayload[]
+}
+
 interface CallToActionProps {
   defaultOption?: string
   option?: string
 }
 
 export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
-  const [state, action, isLoading] = useActionState<FormState, FormData>(
-    async (prevState: FormState, formData: FormData) => {
+  const [state, action, isLoading] = useActionState<
+    TrackingFormState,
+    FormData
+  >(
+    async (prevState: TrackingFormState, formData: FormData) => {
       // 1. Phone Regex Validation
       const phone = formData.get("phone") as string
       const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/
@@ -30,17 +51,62 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
         }
       }
 
-      // 2. Execute original logic
+      // Generate client-side event ID and append to form data before hitting the server action
+      const clientSideEventId = `lead_${Date.now()}_${Math.floor(Math.random() * 1000)}`
+      formData.append("clientEventId", clientSideEventId)
+
       const result = await sendEmail(prevState, formData)
-      return result
+
+      // Pass the event ID forward cleanly in the typed state object
+      return { ...result, clientSideEventId }
     },
     { success: false }
   )
 
+  // Tracking effect tied directly to form submission state resolution
   useEffect(() => {
-    if (state.success) {
+    if (state?.success) {
       toast.success("Quote request sent! We'll reach out shortly.")
-    } else if (state.message && !state.success) {
+
+      if (typeof window !== "undefined") {
+        // Find form element to safely pull selected options for payload context
+        const formElement = document.querySelector(
+          "form[data-cta-form]"
+        ) as HTMLFormElement | null
+        let beds = "1"
+        let baths = "1"
+
+        if (formElement) {
+          const currentFormData = new FormData(formElement)
+          beds = (currentFormData.get("bedrooms") as string) || "1"
+          baths = (currentFormData.get("bathrooms") as string) || "1"
+        }
+
+        const targetWindow = window as CustomTrackingWindow
+        targetWindow.dataLayer = targetWindow.dataLayer || []
+
+        // 1. Reset state tracking pipeline variables
+        targetWindow.dataLayer.push({
+          event_id: null,
+          form_type: null,
+          estimated_value: null,
+          service_type: null,
+        })
+
+        // 2. Register fresh state context variables
+        targetWindow.dataLayer.push({
+          event_id: state.clientSideEventId || `lead_${Date.now()}`,
+          form_type: "inline_cta_offer",
+          estimated_value: 129,
+          service_type: `CTA $129 Offer - ${beds}B/${baths}B`,
+        })
+
+        // 3. Dispatch execution trigger event
+        targetWindow.dataLayer.push({
+          event: "form_submission_success",
+        })
+      }
+    } else if (state?.message && !state?.success) {
       toast.error(state.message)
     }
   }, [state])
@@ -104,7 +170,7 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
                 </h2>
               </div>
 
-              {state.success ? (
+              {state?.success ? (
                 <div className="max-w-xl animate-in rounded-[2rem] border-2 border-dashed border-primary-blue/20 bg-primary-blue/5 p-10 text-center duration-500 fade-in zoom-in">
                   <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary-blue text-white shadow-lg shadow-primary-blue/20">
                     <PartyPopper size={32} />
@@ -126,6 +192,7 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
               ) : (
                 <form
                   action={action}
+                  data-cta-form
                   className="relative z-20 max-w-xl space-y-4 rounded-[2rem] border border-border bg-card p-2 shadow-sm sm:p-4"
                 >
                   <input
