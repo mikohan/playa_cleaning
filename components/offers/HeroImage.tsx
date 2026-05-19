@@ -3,7 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import AliciaImage from "@/public/images/cleaning/hero-4.webp"
 import { GoogleStars } from "../cleaning/GoogleStars"
-import { CleaningModal } from "@/components/offers/CleaningModal"
+import { CleaningModal } from "@/components/common/CleaningModal"
 import { LogoTicker } from "../cleaning/LogoTicker"
 interface ServiceSection {
   category: string

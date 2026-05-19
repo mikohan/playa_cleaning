@@ -102,7 +102,7 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
       (formData.get("serviceType") as string | null) || "deep"
 
     // Hard dynamic tracking calculation points
-    const dynamicValue = 139
+    const dynamicValue = 165
     const formattedServiceString = `Playa ${selectedServiceScope} Clean (${beds}B/${baths}B)`
     const activeFormIdentity = "modal_quick_quote"
 

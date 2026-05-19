@@ -1,7 +1,21 @@
 "use server"
 
 import { Resend, CreateEmailOptions } from "resend"
-import { createHash } from "crypto"
+import { headers } from "next/headers"
+import { sendMetaCapiEvent } from "./meta-capi"
+
+// ==========================================
+// TESTING & ENVIRONMENT CONFIGURATION
+// ==========================================
+const TEST_EVENT_CODE =
+  process.env.NODE_ENV !== "production" ? "TEST19157" : undefined // Change this anytime to match your Meta dashboard
+const ENABLE_EMAIL_SENDING = true // Set to true when you want Resend to start sending emails again
+
+// Unified Configuration Properties
+const resend = new Resend(process.env.RESEND_API_KEY)
+const FROM_EMAIL =
+  process.env.RESEND_FROM_EMAIL || "Playa Cleaning <info@angaracleaning.com>"
+const MANAGER_EMAIL = process.env.COMPANY_EMAIL || "angaralabllc@gmail.com"
 
 export type FormState = {
   success?: boolean
@@ -10,38 +24,23 @@ export type FormState = {
   eventId?: string
 }
 
-// Unified Configuration Properties
-const resend = new Resend(process.env.RESEND_API_KEY)
-const FROM_EMAIL =
-  process.env.RESEND_FROM_EMAIL || "Playa Cleaning <info@angaracleaning.com>"
-const MANAGER_EMAIL = process.env.COMPANY_EMAIL || "angaralabllc@gmail.com"
-
-/**
- * Securely hashes sensitive data strings into SHA-256 formatting for Meta CAPI compliance
- */
-function sha256Hash(value: string): string {
-  return createHash("sha256").update(value.trim().toLowerCase()).digest("hex")
-}
-
 interface PipelinePayload {
   eventIdPrefix: string
   clientEventId?: string
   subject: string
-  textMessage: string // Enforced strict plain text
+  textMessage: string
   userData: {
     phone: string
     email?: string
   }
   customData: {
     value: number
-    contentName: string
-    contentCategory: string
   }
 }
 
 /**
  * CORE PIPELINE ENGINE (Private)
- * Orchestrates Transactional Emails (Strict Plain Text) and Meta Conversion API logs.
+ * Orchestrates Transactional Emails and standardizes Meta Conversion API delivery.
  */
 async function executeLeadPipeline(
   payload: PipelinePayload
@@ -51,83 +50,63 @@ async function executeLeadPipeline(
     `${payload.eventIdPrefix}_${Date.now()}_${Math.floor(Math.random() * 1000000)}`
 
   try {
-    // 1. Dispatch strict plain-text email to management via Resend Engine
-    const emailOptions: CreateEmailOptions = {
-      from: FROM_EMAIL,
-      to: [MANAGER_EMAIL],
-      subject: payload.subject,
-      text: payload.textMessage, // No HTML fallback options allowed here
-    }
-
-    const emailTransmission = await resend.emails.send(emailOptions)
-
-    if (emailTransmission.error) {
-      console.error(
-        `Resend Transmission Intercept Error [${payload.eventIdPrefix}]:`,
-        emailTransmission.error
-      )
-      return {
-        success: false,
-        message: emailTransmission.error.message,
-        eventId: sharedEventId,
-      }
-    }
-
-    // 2. Meta Conversions API Execution Loop
-    const pixelId = process.env.META_PIXEL_ID
-    const accessToken = process.env.META_CAPI_TOKEN
-
-    if (pixelId && accessToken) {
-      const cleanPhone = payload.userData.phone.replace(/[^\d]/g, "")
-      const cleanEmail = payload.userData.email?.trim().toLowerCase()
-
-      const capiPayload = {
-        data: [
-          {
-            event_name: "Lead",
-            event_time: Math.floor(Date.now() / 1000),
-            event_id: sharedEventId,
-            action_source: "website",
-            user_data: {
-              ph: cleanPhone ? [sha256Hash(cleanPhone)] : [],
-              em:
-                cleanEmail && cleanEmail !== "no email"
-                  ? [sha256Hash(cleanEmail)]
-                  : [],
-            },
-            custom_data: {
-              currency: "USD",
-              value: payload.customData.value,
-              content_category: payload.customData.contentCategory,
-              content_name: payload.customData.contentName.slice(0, 75),
-            },
-          },
-        ],
-        test_event_code: "TEST83239",
+    // 1. Conditional Email Dispatch
+    if (ENABLE_EMAIL_SENDING) {
+      const emailOptions: CreateEmailOptions = {
+        from: FROM_EMAIL,
+        to: [MANAGER_EMAIL],
+        subject: payload.subject,
+        text: payload.textMessage,
       }
 
-      fetch(
-        `https://graph.facebook.com/v19.0/${pixelId}/events?access_token=${accessToken}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(capiPayload),
+      const emailTransmission = await resend.emails.send(emailOptions)
+
+      if (emailTransmission.error) {
+        console.error(
+          `🚨 Resend Error [${payload.eventIdPrefix}]:`,
+          emailTransmission.error
+        )
+        return {
+          success: false,
+          message: emailTransmission.error.message,
+          eventId: sharedEventId,
         }
+      }
+    } else {
+      console.log(
+        `[PIPELINE] Email sending is currently disabled via config toggle.`
       )
-        .then((res) => res.json())
-        .then((resData) =>
-          console.log(
-            `Meta CAPI Success Log [${payload.eventIdPrefix}]:`,
-            resData
-          )
-        )
-        .catch((err) =>
-          console.error(
-            `Meta CAPI Transmission Failure [${payload.eventIdPrefix}]:`,
-            err
-          )
-        )
     }
+
+    // 2. Extract Client Network Meta Info from Next.js Headers
+    const reqHeaders = await headers()
+    const userAgent = reqHeaders.get("user-agent") || ""
+    const ipAddress =
+      reqHeaders.get("x-forwarded-for")?.split(",")[0] ||
+      reqHeaders.get("x-real-ip") ||
+      "127.0.0.1"
+
+    // 3. Hand off the data packet to your helper module file
+    const capiResult = await sendMetaCapiEvent({
+      eventName: "Lead",
+      eventId: sharedEventId,
+      value: payload.customData.value,
+      testEventCode: TEST_EVENT_CODE || undefined,
+      user: {
+        phone: payload.userData.phone,
+        email:
+          payload.userData.email && payload.userData.email !== "No Email"
+            ? payload.userData.email
+            : undefined,
+        clientIpAddress: ipAddress,
+        clientUserAgent: userAgent,
+      },
+    })
+
+    console.log(
+      `Meta CAPI Result [${payload.eventIdPrefix}]:`,
+      JSON.stringify(capiResult)
+    )
 
     return {
       success: true,
@@ -136,7 +115,7 @@ async function executeLeadPipeline(
     }
   } catch (err: unknown) {
     console.error(
-      `Unhandled Core Pipeline Exception [${payload.eventIdPrefix}]:`,
+      `💥 Unhandled Core Pipeline Exception [${payload.eventIdPrefix}]:`,
       err
     )
     const msg =
@@ -153,9 +132,6 @@ async function executeLeadPipeline(
 // EXPORTED ENTRY POINTS (Public API)
 // ==========================================
 
-/**
- * 1. Standard / Quick Quote Modal Form Action Handles
- */
 export const sendEmail = async (
   prevState: FormState,
   formData: FormData
@@ -179,16 +155,8 @@ NEW LEAD RECEIVED:
 --------------------------
 Name: ${username}
 Phone: ${phone}
-
-DETAILS:
-Bedrooms: ${bedrooms}
-Bathrooms: ${bathrooms}
-Service: ${serviceType}
-
-SOURCE INFO:
-Sent From: ${pageUrl}
-Notes: ${customNotes}
-Time: ${orderTime}
+DETAILS: Bedrooms: ${bedrooms} / Bathrooms: ${bathrooms} / Service: ${serviceType}
+SOURCE: Sent From: ${pageUrl} / Time: ${orderTime}
   `.trim()
 
   return executeLeadPipeline({
@@ -197,17 +165,10 @@ Time: ${orderTime}
     subject: `NEW LEAD: ${bedrooms}BR/${bathrooms}BA - ${username}`,
     textMessage: textBody,
     userData: { phone },
-    customData: {
-      value: 129,
-      contentCategory: "General Cleaning Request Quick Form",
-      contentName: `Playa ${serviceType} Clean (${bedrooms}B/${bathrooms}B)`,
-    },
+    customData: { value: 165 },
   })
 }
 
-/**
- * 2. Carpet & Upholstery Deep Steam Cleaning Form Action Handles
- */
 export const sendSteamEmail = async (
   prevState: FormState,
   formData: FormData
@@ -224,16 +185,12 @@ export const sendSteamEmail = async (
   })
 
   const leadTable = `
-LEAD DETAILS: PLAYA CLEANING
---------------------------------------------------
-SERVICE TYPE: CARPET & UPHOLSTERY CLEANING
+LEAD DETAILS: PLAYA CLEANING (CARPET & UPHOLSTERY)
 --------------------------------------------------
 CUSTOMER:     ${username}
 PHONE:        ${phone}
 EMAIL:        ${email}
 ITEMS:        ${itemsToClean}
---------------------------------------------------
-RECEIVED:     ${orderTime}
 --------------------------------------------------
   `.trim()
 
@@ -243,17 +200,10 @@ RECEIVED:     ${orderTime}
     subject: `🔥 STEAM LEAD: ${username}`,
     textMessage: leadTable,
     userData: { phone, email },
-    customData: {
-      value: 150,
-      contentCategory: "Upholstery & Carpet Cleaning Request",
-      contentName: itemsToClean.replace(/["\r\n]+/g, " ").trim(),
-    },
+    customData: { value: 150 },
   })
 }
 
-/**
- * 3. Interactive Quote Matrix Booking Calculator Execution Wrapper
- */
 export async function sendBookingEmail(formData: {
   beds: string
   baths: string
@@ -264,8 +214,8 @@ export async function sendBookingEmail(formData: {
 NEW BOOKING INQUIRY (CALCULATOR)
 --------------------------------------------------
 Phone: ${formData.phone}
-Service Layout: ${formData.beds} Bedrooms / ${formData.baths} Bathrooms
-Quoted Price Target: $${formData.price}
+Layout: ${formData.beds} Beds / ${formData.baths} Baths
+Quoted Target: $${formData.price}
 --------------------------------------------------
   `.trim()
 
@@ -274,10 +224,6 @@ Quoted Price Target: $${formData.price}
     subject: `New Booking Request: ${formData.beds} Bed / ${formData.baths} Bath`,
     textMessage: calculatorTextBody,
     userData: { phone: formData.phone },
-    customData: {
-      value: formData.price,
-      contentCategory: "Embedded Calculator Quick Lead",
-      contentName: `${formData.beds} Bed / ${formData.baths} Bath Matrix Lead`,
-    },
+    customData: { value: formData.price },
   })
 }
