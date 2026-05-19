@@ -60,7 +60,7 @@ function BookingContent() {
           }
           targetWindow.dataLayer = targetWindow.dataLayer || []
           targetWindow.dataLayer.push({
-            event: "form_submit", // Restored to old name exactly as requested
+            event: "form_submission_success", // Restored to old name exactly as requested
             form_type:
               bookingMode === "pay"
                 ? "calculator_booking"

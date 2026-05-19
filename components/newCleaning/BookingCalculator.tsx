@@ -88,7 +88,7 @@ export const BookingCalculator = () => {
 
         targetWindow.dataLayer = targetWindow.dataLayer || []
         targetWindow.dataLayer.push({
-          event: "form_submit", // Restored to match your active GTM custom configuration setup
+          event: "form_submission_success", // Restored to match your active GTM custom configuration setup
           event_id: result.eventId,
           form_type: "embedded_calculator",
           estimated_value: totalPrice,

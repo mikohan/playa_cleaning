@@ -61,7 +61,7 @@ export const BookingCalculatorCarpet = () => {
 
         targetWindow.dataLayer = targetWindow.dataLayer || []
         targetWindow.dataLayer.push({
-          event: "form_submit", // Restored to legacy name for multi-form tracking consistency
+          event: "form_submission_success", // Restored to legacy name for multi-form tracking consistency
           event_id: result.eventId,
           form_type: "custom_upholstery_quote",
           estimated_value: 150, // Standard baseline configuration for custom item runs

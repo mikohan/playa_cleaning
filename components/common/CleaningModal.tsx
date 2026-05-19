@@ -83,7 +83,7 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
         targetWindow.dataLayer = targetWindow.dataLayer || []
 
         const trackingPayload: GtmFormSubmitPayload = {
-          event: "form_submit",
+          event: "form_submission_success",
           event_id: String(state.eventId),
           form_type: "modal_quick_quote",
           estimated_value: 129,
