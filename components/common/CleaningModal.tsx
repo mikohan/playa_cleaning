@@ -7,20 +7,16 @@ import "react-toastify/dist/ReactToastify.css"
 import { ButtonShiny } from "../SmallComponents/ButtonShiny"
 import { X } from "lucide-react"
 
-type CleaningModalProps = {
-  text?: string | undefined
-}
-
 type GtmFormSubmitPayload = {
-  event: "form_submit"
+  event: string
   event_id: string
-  form_type: "modal_quick_quote"
+  form_type: string
   estimated_value: number
   service_type: string
 }
 
-type SafeWindowTracking = {
-  dataLayer?: Array<GtmFormSubmitPayload>
+type CleaningModalProps = {
+  text?: string | undefined
 }
 
 export const CleaningModal = ({ text }: CleaningModalProps) => {
@@ -56,7 +52,6 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
     }
   }
 
-  // 1. Core Server Action orchestration wrapper
   const [state, action, isLoading] = useActionState<FormState, FormData>(
     async (prevState: FormState, formData: FormData) => {
       const phone = formData.get("phone") as string
@@ -67,18 +62,14 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
         return { success: false, message: "Invalid phone format" }
       }
 
-      // Fire manager email sequence (Contains Meta CAPI triggers internally)
       const result = await sendEmail(prevState, formData, "manager")
-
-      // Secondary backup sequence routing cleanly
       await sendEmail(prevState, formData, "customer")
-
       return result
     },
     { success: false }
   )
 
-  // 2. Client Side Side-Effect tracking pipeline (No 'any' keywords)
+  // Tracking Effect Hook Pipeline
   useEffect(() => {
     if (state && state.success && state.eventId) {
       if (typeof window !== "undefined") {
@@ -86,30 +77,32 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
         const beds = String(formData?.get("bedrooms") || "1")
         const baths = String(formData?.get("bathrooms") || "1")
 
-        const trackingWindow = window as unknown as SafeWindowTracking
-        trackingWindow.dataLayer = trackingWindow.dataLayer || []
+        // Cast window properties inline to cleanly adhere to the lowercase primitive 'object' rule
+        const targetWindow = window as unknown as { dataLayer?: object[] }
 
-        trackingWindow.dataLayer.push({
+        targetWindow.dataLayer = targetWindow.dataLayer || []
+
+        const trackingPayload: GtmFormSubmitPayload = {
           event: "form_submit",
-          event_id: state.eventId,
+          event_id: String(state.eventId),
           form_type: "modal_quick_quote",
-          estimated_value: 165,
+          estimated_value: 129,
           service_type: `Modal Quick Quote - ${beds}B/${baths}B`,
-        })
+        }
+
+        targetWindow.dataLayer.push(trackingPayload as unknown as object)
       }
-      console.log(state.eventId)
 
       const postSubmitDelay = setTimeout(() => {
         handleClose()
         notify()
         formRef.current?.reset()
-      }, 50)
+      }, 500)
 
       return () => clearTimeout(postSubmitDelay)
     }
   }, [state])
 
-  // Native HTML Dialog layout wrapper loop handles scroll constraint states securely
   useEffect(() => {
     const dialog = modalRef.current
     if (!dialog) return
@@ -124,7 +117,6 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
 
   const buttonText = text ? text : "Get Price"
 
-  // Unified UI design classes mapping definitions
   const inputClassName = `
     w-full appearance-none rounded-2xl border-2 px-5 py-4 text-base font-medium transition-all outline-none
     bg-slate-50 border-slate-100 text-slate-900 placeholder:text-slate-400

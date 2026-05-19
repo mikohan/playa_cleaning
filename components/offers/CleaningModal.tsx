@@ -1,179 +1,252 @@
-"use server"
-import { Resend } from "resend"
-import { createHash } from "crypto" // Built-in Node tool used for required Meta SHA-256 hashing
+"use client"
+import { useState, useEffect, useRef, useActionState } from "react"
+import { FormState, sendEmail } from "@/lib/resend"
+import { AnimatedButton } from "../SmallComponents/AnimatedButton"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import { ButtonShiny } from "../SmallComponents/ButtonShiny"
+import { X, ChevronDown } from "lucide-react"
 
-const companyWebsite = process.env.NEXT_PUBLIC_COMPANY_WEBSITE || ""
-
-export type FormState = {
-  success?: boolean
-  error?: string
-  message?: string
-  eventId?: string // Added to pass the shared tracking token back to the browser
+type CleaningModalProps = {
+  text?: string | undefined
 }
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
-/**
- * Helper function to securely hash user parameters into SHA-256 for Meta CAPI compliance
- */
-function sha256Hash(value: string): string {
-  return createHash("sha256").update(value.trim().toLowerCase()).digest("hex")
+type GtmFormSubmitPayload = {
+  event: "form_submit"
+  event_id: string
+  form_type: "modal_quick_quote"
+  estimated_value: number
+  service_type: string
 }
 
-export const sendEmail = async (
-  prevState: FormState,
-  formData: FormData,
-  toWhom: "manager" | "customer" = "manager"
-): Promise<FormState> => {
-  // 1. Generate a unified unique event ID token immediately on execution
-  // This binds the server event and browser event together natively
-  const sharedEventId = `lead_${Date.now()}_${Math.floor(Math.random() * 1000)}`
+type SafeWindowTracking = {
+  dataLayer?: Array<GtmFormSubmitPayload>
+}
 
-  // 2. Data Extraction
-  const username = (formData.get("username") as string) || "New Client"
-  const phone = (formData.get("phone") as string) || "No Phone Provided"
-  const customerEmail = (formData.get("email") as string) || ""
-  const bedrooms = (formData.get("bedrooms") as string) || "N/A"
-  const bathrooms = (formData.get("bathrooms") as string) || "N/A"
-  const serviceType = (formData.get("serviceType") as string) || "Standard"
-  const pageFrom = (formData.get("pageFrom") as string) || "Main"
+export const CleaningModal = ({ text }: CleaningModalProps) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const modalRef = useRef<HTMLDialogElement>(null)
+  const formRef = useRef<HTMLFormElement>(null)
 
-  // Hidden Tracking / Source Fields
-  const pageUrl = (formData.get("pageUrl") as string) || "Unknown Source"
-  const customNotes =
-    (formData.get("customNotes") as string) || "No extra notes provided."
+  const handleOpen = () => setIsOpen(true)
+  const handleClose = () => setIsOpen(false)
 
-  // 🌟 FIX: Even on validation failures, ensure you return the eventId so the browser tracking loop handles it safely
-  if (toWhom === "customer" && !customerEmail) {
-    return {
-      success: false,
-      message: "No customer email provided.",
-      eventId: sharedEventId,
-    }
-  }
-
-  const managerEmail = process.env.COMPANY_EMAIL || "angaralabllc@gmail.com"
-  const targetEmail = toWhom === "customer" ? customerEmail : managerEmail
-  const fromEmail = "Playa Cleaning <info@angaracleaning.com>"
-
-  const orderTime = new Date().toLocaleString("en-US", {
-    timeZone: "America/Los_Angeles",
-  })
-
-  // 3. Plain Text Templates
-  const managerText = `
-NEW LEAD RECEIVED:
---------------------------
-Name: ${username}
-Phone: ${phone}
-Email: ${customerEmail}
-
-DETAILS:
-Bedrooms: ${bedrooms}
-Bathrooms: ${bathrooms}
-Service: ${serviceType}
-PageFrom: ${pageFrom}
-
-SOURCE INFO:
-Sent From: ${pageUrl}
-Notes: ${customNotes}
-
-Time: ${orderTime}
-  `.trim()
-
-  const customerText = `
-Hi ${username},
-
-Thank you for reaching out to Playa Cleaning! We have received your request for a cleaning quote. 
-
-One of our team members will review your details and text/call you shortly with a price and availability.
-
-Best regards,
-The Playa Cleaning Team
-${companyWebsite}
-  `.trim()
-
-  try {
-    // 4. Dispatch Email Notification Via Resend
-    const { error } = await resend.emails.send({
-      from: fromEmail,
-      to: [targetEmail],
-      subject:
-        toWhom === "manager"
-          ? `NEW LEAD: ${bedrooms}BR/${bathrooms}BA - ${username}`
-          : "We received your cleaning quote request!",
-      text: toWhom === "manager" ? managerText : customerText,
+  const notify = () =>
+    toast.success("Request sent! We'll text/call you with a price shortly.", {
+      position: "top-center",
+      autoClose: 4000,
+      hideProgressBar: true,
     })
 
-    if (error) {
-      console.error("Resend API Error:", error)
-      return {
-        success: false,
-        message: error.message,
-        eventId: sharedEventId, // Pass the ID out even during api connection drops
-      }
-    }
+  const handlePhoneInput = (e: React.FormEvent<HTMLInputElement>) => {
+    const target = e.currentTarget
+    let value = target.value.replace(/\D/g, "")
+    if (value.length > 10) value = value.slice(0, 10)
 
-    // 5. META CONVERSIONS API FIRE
-    // Only fire CAPI during the 'manager' email sequence to prevent dual-firing duplicate data on customer copies
-    if (toWhom === "manager") {
-      const pixelId = process.env.META_PIXEL_ID
-      const accessToken = process.env.META_CAPI_TOKEN
+    const areaCode = value.slice(0, 3)
+    const middle = value.slice(3, 6)
+    const last = value.slice(6, 10)
 
-      if (pixelId && accessToken) {
-        // Normalize the phone number structure (Meta prefers raw strings of digits)
-        const cleanPhone = phone.replace(/[^\d]/g, "")
-
-        const capiPayload = {
-          data: [
-            {
-              event_name: "Lead",
-              event_time: Math.floor(Date.now() / 1000),
-              event_id: sharedEventId, // Must match browser exact tag value
-              action_source: "website",
-              user_data: {
-                ph: cleanPhone ? [sha256Hash(cleanPhone)] : [],
-                em: customerEmail ? [sha256Hash(customerEmail)] : [],
-              },
-              custom_data: {
-                currency: "USD",
-              },
-            },
-          ],
-          test_event_code: "TEST83239",
-        }
-
-        // Fire and forget server request so it doesn't block client execution load times
-        fetch(
-          `https://graph.facebook.com/v19.0/${pixelId}/events?access_token=${accessToken}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(capiPayload),
-          }
-        )
-          .then((res) => res.json())
-          .then((resData) => console.log("Meta CAPI Log:", resData))
-          .catch((err) => console.error("Meta CAPI Transmission Error:", err))
-      } else {
-        console.warn(
-          "Meta credentials missing from environment variables. Skipping CAPI execution."
-        )
-      }
-    }
-
-    // Return success state along with the eventId to the front-end client UI
-    return {
-      success: true,
-      message: "Email sent successfully!",
-      eventId: sharedEventId,
-    }
-  } catch (err: unknown) {
-    console.error("Server Action Exception:", err)
-    return {
-      success: false,
-      message: "An unexpected error occurred. Please try again!",
-      eventId: sharedEventId, // Ensure fallback string pattern matches browser expectations
+    if (value.length > 6) {
+      target.value = `(${areaCode}) ${middle}-${last}`
+    } else if (value.length > 3) {
+      target.value = `(${areaCode}) ${middle}`
+    } else if (value.length > 0) {
+      target.value = `(${areaCode}`
     }
   }
+
+  // 1. Next.js useActionState handling backend communication orchestrations
+  const [state, action, isLoading] = useActionState<FormState, FormData>(
+    async (prevState: FormState, formData: FormData) => {
+      const phone = formData.get("phone") as string
+      const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/
+
+      if (!phoneRegex.test(phone)) {
+        toast.error("Please enter a valid phone: (XXX) XXX-XXXX")
+        return { success: false, message: "Invalid phone format" }
+      }
+
+      // Execute email delivery via manager routing logic
+      return await sendEmail(prevState, formData, "manager")
+    },
+    { success: false }
+  )
+
+  // 2. Browser-isolated runtime script loop targeting GTM sync matching
+  useEffect(() => {
+    if (state && state.success && state.eventId) {
+      console.log("🔥 BROWSER CAUGHT CONVERSION ID:", state.eventId)
+
+      if (typeof window !== "undefined") {
+        const formData = formRef.current ? new FormData(formRef.current) : null
+        const beds = String(formData?.get("bedrooms") || "1")
+        const baths = String(formData?.get("bathrooms") || "1")
+
+        // Cast safely through unknown to match our explicit tracking types with zero loose types
+        const trackingWindow = window as unknown as SafeWindowTracking
+
+        trackingWindow.dataLayer = trackingWindow.dataLayer || []
+        trackingWindow.dataLayer.push({
+          event: "form_submit",
+          event_id: state.eventId,
+          form_type: "modal_quick_quote",
+          estimated_value: 129,
+          service_type: `Modal Quick Quote - ${beds}B/${baths}B`,
+        })
+      }
+
+      // Briefly pause closing sequence animations so browser handles execution loops seamlessly
+      const pipelineDelay = setTimeout(() => {
+        handleClose()
+        notify()
+        formRef.current?.reset()
+      }, 50)
+
+      return () => clearTimeout(pipelineDelay)
+    }
+  }, [state])
+
+  // Native HTML Dialog Element modal handling constraints
+  useEffect(() => {
+    const dialog = modalRef.current
+    if (!dialog) return
+    if (isOpen) {
+      dialog.showModal()
+      document.body.style.overflow = "hidden"
+    } else {
+      dialog.close()
+      document.body.style.overflow = "unset"
+    }
+  }, [isOpen])
+
+  const buttonText = text ? text : "Get Price"
+
+  const inputClassName = `
+    w-full appearance-none rounded-2xl border-2 px-5 py-4 text-base font-medium transition-all outline-none
+    bg-muted/50 border-border text-foreground placeholder:text-muted-foreground
+    focus:border-primary-blue focus:bg-background focus:ring-4 focus:ring-primary-blue/10
+    dark:bg-slate-900/50 dark:border-slate-800 dark:focus:border-primary-blue
+  `
+
+  return (
+    <>
+      {/* TRIGGER */}
+      <div onClick={handleOpen} className="group inline-block cursor-pointer">
+        <AnimatedButton>
+          <ButtonShiny
+            text={text}
+            size="lg"
+            bgColor="var(--color-primary-blue)"
+          />
+        </AnimatedButton>
+      </div>
+
+      <dialog
+        ref={modalRef}
+        onClick={(e) => e.target === modalRef.current && handleClose()}
+        className="bg-transparent outline-none backdrop:bg-slate-950/70 backdrop:backdrop-blur-sm"
+      >
+        <div
+          className="relative w-[95%] max-w-md transform animate-in rounded-[2.5rem] border border-border bg-background p-8 text-foreground shadow-2xl transition-all duration-300 fade-in zoom-in md:p-12"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Close Button */}
+          <button
+            onClick={handleClose}
+            className="absolute top-6 right-6 text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <X size={24} />
+          </button>
+
+          <div className="mb-8 text-center">
+            <h2 className="text-3xl font-black tracking-tight text-foreground uppercase italic">
+              Playa<span className="text-primary-blue">Cleaning</span>
+            </h2>
+            <p className="mt-2 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
+              Fast Quote • Los Angeles, CA
+            </p>
+          </div>
+
+          <form ref={formRef} action={action} className="space-y-4">
+            <div className="grid grid-cols-1 gap-3">
+              <input
+                required
+                name="username"
+                type="text"
+                placeholder="Your Name"
+                className={inputClassName}
+              />
+              <input
+                required
+                name="phone"
+                type="tel"
+                placeholder="(213) 598-77-63"
+                onInput={handlePhoneInput}
+                className={inputClassName}
+              />
+            </div>
+            <div>
+              <input
+                type="hidden"
+                name="pageUrl"
+                value={
+                  typeof window !== "undefined" ? window.location.href : ""
+                }
+              />
+              <input
+                type="hidden"
+                name="customNotes"
+                value="Playa Cleaning $129 Offer"
+              />
+            </div>
+
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                {/* Bedrooms Select Wrapper */}
+                <div className="group relative">
+                  <select name="bedrooms" className={inputClassName}>
+                    <option value="1">1 Bedroom</option>
+                    <option value="2">2 Bedrooms</option>
+                    <option value="3">3 Bedrooms</option>
+                    <option value="4+">4+ Bedrooms</option>
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-muted-foreground transition-colors group-focus-within:text-primary-blue">
+                    <ChevronDown size={18} strokeWidth={2.5} />
+                  </div>
+                </div>
+
+                {/* Bathrooms Select Wrapper */}
+                <div className="group relative">
+                  <select name="bathrooms" className={inputClassName}>
+                    <option value="1">1 Bath</option>
+                    <option value="2">2 Baths</option>
+                    <option value="3+">3+ Baths</option>
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-muted-foreground transition-colors group-focus-within:text-primary-blue">
+                    <ChevronDown size={18} strokeWidth={2.5} />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full rounded-2xl bg-primary-blue py-5 text-xl font-black tracking-tight text-white uppercase shadow-xl shadow-primary-blue/30 transition-all hover:opacity-90 active:scale-95 disabled:bg-primary-blue/40"
+            >
+              {isLoading ? "Sending..." : buttonText}
+            </button>
+
+            <p className="px-4 text-center text-[10px] leading-relaxed font-medium text-muted-foreground">
+              By requesting a quote, you agree to be contacted via call/text
+              regarding your request.
+            </p>
+          </form>
+        </div>
+      </dialog>
+
+      <ToastContainer theme="colored" />
+    </>
+  )
 }
