@@ -12,9 +12,10 @@ type CleaningModalProps = {
 }
 
 type GtmFormSubmitPayload = {
-  event: "form_submit"
+  // Update this line to match your new event string type
+  event: "form_submission_success"
   event_id: string
-  form_type: "modal_quick_quote"
+  form_type: string
   estimated_value: number
   service_type: string
 }
@@ -73,40 +74,39 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
     { success: false }
   )
 
-  // 2. Browser-isolated runtime script loop targeting GTM sync matching
+  // Tracking Effect Hook Pipeline
   useEffect(() => {
     if (state && state.success && state.eventId) {
-      console.log("🔥 BROWSER CAUGHT CONVERSION ID:", state.eventId)
-
       if (typeof window !== "undefined") {
         const formData = formRef.current ? new FormData(formRef.current) : null
         const beds = String(formData?.get("bedrooms") || "1")
         const baths = String(formData?.get("bathrooms") || "1")
 
-        // Cast safely through unknown to match our explicit tracking types with zero loose types
-        const trackingWindow = window as unknown as SafeWindowTracking
+        const targetWindow = window as unknown as { dataLayer?: object[] }
 
-        trackingWindow.dataLayer = trackingWindow.dataLayer || []
-        trackingWindow.dataLayer.push({
-          event: "form_submit",
-          event_id: state.eventId,
+        targetWindow.dataLayer = targetWindow.dataLayer || []
+
+        const trackingPayload: GtmFormSubmitPayload = {
+          // 🌟 Changed name here to completely avoid GTM auto-interception
+          event: "form_submission_success",
+          event_id: String(state.eventId),
           form_type: "modal_quick_quote",
           estimated_value: 129,
           service_type: `Modal Quick Quote - ${beds}B/${baths}B`,
-        })
+        }
+
+        targetWindow.dataLayer.push(trackingPayload as unknown as object)
       }
 
-      // Briefly pause closing sequence animations so browser handles execution loops seamlessly
-      const pipelineDelay = setTimeout(() => {
+      const postSubmitDelay = setTimeout(() => {
         handleClose()
         notify()
         formRef.current?.reset()
-      }, 50)
+      }, 500)
 
-      return () => clearTimeout(pipelineDelay)
+      return () => clearTimeout(postSubmitDelay)
     }
   }, [state])
-
   // Native HTML Dialog Element modal handling constraints
   useEffect(() => {
     const dialog = modalRef.current
