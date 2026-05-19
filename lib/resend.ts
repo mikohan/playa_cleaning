@@ -7,8 +7,8 @@ import { sendMetaCapiEvent } from "./meta-capi"
 // ==========================================
 // TESTING & ENVIRONMENT CONFIGURATION
 // ==========================================
-const TEST_EVENT_CODE =
-  process.env.NODE_ENV !== "production" ? "TEST19157" : undefined // Change this anytime to match your Meta dashboard
+const TEST_EVENT_CODE = "TEST19157"
+// process.env.NODE_ENV !== "production" ? "TEST19157" : undefined // Change this anytime to match your Meta dashboard
 const ENABLE_EMAIL_SENDING = true // Set to true when you want Resend to start sending emails again
 
 // Unified Configuration Properties
