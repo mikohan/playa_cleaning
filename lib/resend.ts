@@ -1,181 +1,130 @@
 "use server"
 import { Resend } from "resend"
-import { createHash } from "crypto" // Built-in Node tool used for required Meta SHA-256 hashing
-
-const companyWebsite = process.env.NEXT_PUBLIC_COMPANY_WEBSITE || ""
+import { createHash } from "crypto"
 
 export type FormState = {
   success?: boolean
   error?: string
   message?: string
-  eventId?: string // Added to pass the shared tracking token back to the browser
+  eventId?: string
 }
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-/**
- * Helper function to securely hash user parameters into SHA-256 for Meta CAPI compliance
- */
 function sha256Hash(value: string): string {
   return createHash("sha256").update(value.trim().toLowerCase()).digest("hex")
 }
 
 export const sendEmail = async (
   prevState: FormState,
-  formData: FormData,
-  toWhom: "manager" | "customer" = "manager"
+  formData: FormData
 ): Promise<FormState> => {
-  // 1. Generate a unified unique event ID token immediately on execution
-  // This binds the server event and browser event together natively
-  const sharedEventId = `lead_${Date.now()}_${Math.floor(Math.random() * 1000)}`
+  // Extract the unique token created by the browser form submission event
+  const sharedEventId =
+    (formData.get("clientEventId") as string) ||
+    `lead_${Date.now()}_${Math.floor(Math.random() * 1000)}`
 
-  // 2. Data Extraction
+  // Data Extraction
   const username = (formData.get("username") as string) || "New Client"
   const phone = (formData.get("phone") as string) || "No Phone Provided"
-  const customerEmail = (formData.get("email") as string) || ""
-  const bedrooms = (formData.get("bedrooms") as string) || "N/A"
-  const bathrooms = (formData.get("bathrooms") as string) || "N/A"
-  const serviceType = (formData.get("serviceType") as string) || "Standard"
-  const pageFrom = (formData.get("pageFrom") as string) || "Main"
-
-  // Hidden Tracking / Source Fields
+  const bedrooms = (formData.get("bedrooms") as string) || "1"
+  const bathrooms = (formData.get("bathrooms") as string) || "1"
+  const serviceType = (formData.get("serviceType") as string) || "Deep"
   const pageUrl = (formData.get("pageUrl") as string) || "Unknown Source"
   const customNotes =
     (formData.get("customNotes") as string) || "No extra notes provided."
 
-  if (toWhom === "customer" && !customerEmail) {
-    return {
-      success: false,
-      message: "No customer email provided.",
-      eventId: sharedEventId,
-    }
-  }
-
   const managerEmail = process.env.COMPANY_EMAIL || "angaralabllc@gmail.com"
-  const targetEmail = toWhom === "customer" ? customerEmail : managerEmail
   const fromEmail = "Playa Cleaning <info@angaracleaning.com>"
-
   const orderTime = new Date().toLocaleString("en-US", {
     timeZone: "America/Los_Angeles",
   })
 
-  // 3. Plain Text Templates
   const managerText = `
 NEW LEAD RECEIVED:
 --------------------------
 Name: ${username}
 Phone: ${phone}
-Email: ${customerEmail}
 
 DETAILS:
 Bedrooms: ${bedrooms}
 Bathrooms: ${bathrooms}
 Service: ${serviceType}
-PageFrom: ${pageFrom}
 
 SOURCE INFO:
 Sent From: ${pageUrl}
 Notes: ${customNotes}
-
 Time: ${orderTime}
   `.trim()
 
-  const customerText = `
-Hi ${username},
-
-Thank you for reaching out to Playa Cleaning! We have received your request for a cleaning quote. 
-
-One of our team members will review your details and text/call you shortly with a price and availability.
-
-Best regards,
-The Playa Cleaning Team
-${companyWebsite}
-  `.trim()
-
   try {
-    // 4. Dispatch Email Notification Via Resend
-    const { error } = await resend.emails.send({
+    // Send Notification to Manager
+    const managerEmailPayload = await resend.emails.send({
       from: fromEmail,
-      to: [targetEmail],
-      subject:
-        toWhom === "manager"
-          ? `NEW LEAD: ${bedrooms}BR/${bathrooms}BA - ${username}`
-          : "We received your cleaning quote request!",
-      text: toWhom === "manager" ? managerText : customerText,
+      to: [managerEmail],
+      subject: `NEW LEAD: ${bedrooms}BR/${bathrooms}BA - ${username}`,
+      text: managerText,
     })
 
-    if (error) {
-      console.error("Resend API Error:", error)
+    if (managerEmailPayload.error) {
+      console.error("Resend Manager Email Error:", managerEmailPayload.error)
       return {
         success: false,
-        message: error.message,
+        message: managerEmailPayload.error.message,
         eventId: sharedEventId,
       }
     }
 
-    // 5. META CONVERSIONS API FIRE (Awaited Runtime Fix)
-    // Only fire CAPI during the 'manager' email sequence to prevent dual-firing duplicate data on customer copies
-    if (toWhom === "manager") {
-      const pixelId = process.env.META_PIXEL_ID
-      const accessToken = process.env.META_CAPI_TOKEN
+    // META CONVERSIONS API FIRE
+    const pixelId = process.env.META_PIXEL_ID
+    const accessToken = process.env.META_CAPI_TOKEN
 
-      if (pixelId && accessToken) {
-        // Normalize the phone number structure (Meta prefers raw strings of digits)
-        const cleanPhone = phone.replace(/[^\d]/g, "")
-
-        const capiPayload = {
-          data: [
-            {
-              event_name: "Lead",
-              event_time: Math.floor(Date.now() / 1000),
-              event_id: sharedEventId, // Must match browser exact tag value
-              action_source: "website",
-              user_data: {
-                ph: cleanPhone ? [sha256Hash(cleanPhone)] : [],
-                em: customerEmail ? [sha256Hash(customerEmail)] : [],
-              },
-              custom_data: {
-                currency: "USD",
-              },
+    if (pixelId && accessToken) {
+      const cleanPhone = phone.replace(/[^\d]/g, "")
+      const capiPayload = {
+        data: [
+          {
+            event_name: "Lead",
+            event_time: Math.floor(Date.now() / 1000),
+            event_id: sharedEventId,
+            action_source: "website",
+            user_data: {
+              ph: cleanPhone ? [sha256Hash(cleanPhone)] : [],
             },
-          ],
-          test_event_code: "TEST83239", // Live testing console monitoring match code
-        }
+            custom_data: {
+              currency: "USD",
+              value: 129,
+            },
+          },
+        ],
+        test_event_code: "TEST83239",
+      }
 
-        try {
-          // 🌟 Fix: Await the response fully so the server container does not drop the request thread
-          const capiResponse = await fetch(
-            `https://graph.facebook.com/v19.0/${pixelId}/events?access_token=${accessToken}`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(capiPayload),
-            }
-          )
-
-          const resData = await capiResponse.json()
-          console.log("Meta CAPI Server Response:", resData)
-        } catch (capiErr: unknown) {
-          console.error("Meta CAPI Execution Error:", capiErr)
-        }
-      } else {
-        console.warn(
-          "Meta credentials missing from environment variables. Skipping CAPI execution."
+      try {
+        const capiResponse = await fetch(
+          `https://graph.facebook.com/v19.0/${pixelId}/events?access_token=${accessToken}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(capiPayload),
+          }
         )
+        await capiResponse.json()
+      } catch (capiErr) {
+        console.error("Meta CAPI Execution Error:", capiErr)
       }
     }
 
-    // Return success state along with the eventId to the front-end client UI
     return {
       success: true,
-      message: "Email sent successfully!",
+      message: "Form processed successfully!",
       eventId: sharedEventId,
     }
-  } catch (err: unknown) {
+  } catch (err) {
     console.error("Server Action Exception:", err)
     return {
       success: false,
-      message: "An unexpected error occurred. Please try again!",
+      message: "An unexpected error occurred.",
       eventId: sharedEventId,
     }
   }

@@ -15,6 +15,9 @@ interface CapiEventParams {
   testEventCode?: string // Used temporarily for testing logs
 }
 
+/**
+ * Securely hash user parameters into SHA-256 for Meta CAPI compliance
+ */
 function sha256Hash(value: string): string {
   return createHash("sha256").update(value.trim().toLowerCase()).digest("hex")
 }
@@ -34,20 +37,26 @@ export async function sendMetaCapiEvent({
     return { success: false }
   }
 
-  // Sanitize and format data for hashing arrays
-  const cleanPhone = user.phone.replace(/[^\d]/g, "") // Strips formatting: (310) 555-0123 -> 3105550123
+  // 1. Sanitize and Normalize Phone Format (Meta demands country code prefix)
+  let cleanPhone = user.phone.replace(/[^\d]/g, "")
+  if (cleanPhone.length === 10) {
+    cleanPhone = `1${cleanPhone}` // Prepends US/Canada country code '1' if omitted
+  }
+
+  // 2. Safely capture email strings if they contain actual data
+  const hasValidEmail = user.email && user.email.trim().length > 0
 
   const payload = {
     data: [
       {
         event_name: eventName,
         event_time: Math.floor(Date.now() / 1000),
-        event_id: eventId, // MUST match browser event_id down to the character
+        event_id: eventId, // Matches browser event_id down to the character
         action_source: "website",
         user_data: {
-          ph: [sha256Hash(cleanPhone)],
-          ...(user.email ? { em: [sha256Hash(user.email)] } : {}),
-          ...(user.clientIpAddress
+          ph: cleanPhone ? [sha256Hash(cleanPhone)] : [],
+          ...(hasValidEmail ? { em: [sha256Hash(user.email!)] } : {}),
+          ...(user.clientIpAddress && user.clientIpAddress !== "Unknown"
             ? { client_ip_address: user.clientIpAddress }
             : {}),
           ...(user.clientUserAgent

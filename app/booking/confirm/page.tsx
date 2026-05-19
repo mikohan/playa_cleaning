@@ -49,7 +49,7 @@ function BookingContent() {
     try {
       // 3. Trigger the Server Action for the Manager
       // We pass an empty object as prevState since we aren't using useActionState here
-      const result = await sendEmail({}, formData, "manager")
+      const result = await sendEmail({}, formData)
 
       // STUCTURAL FIX: Only pass the data layer event if the transaction is explicitly successful
       if (result && result.success) {

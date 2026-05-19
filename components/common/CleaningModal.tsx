@@ -1,19 +1,11 @@
 "use client"
-import { useState, useEffect, useRef, useActionState } from "react"
-import { FormState, sendEmail } from "@/lib/resend"
+import { useState, useEffect, useRef } from "react"
+import { sendEmail } from "@/lib/resend"
 import { AnimatedButton } from "../SmallComponents/AnimatedButton"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { ButtonShiny } from "../SmallComponents/ButtonShiny"
 import { X } from "lucide-react"
-
-type GtmFormSubmitPayload = {
-  event: string
-  event_id: string
-  form_type: string
-  estimated_value: number
-  service_type: string
-}
 
 type CleaningModalProps = {
   text?: string | undefined
@@ -21,6 +13,7 @@ type CleaningModalProps = {
 
 export const CleaningModal = ({ text }: CleaningModalProps) => {
   const [isOpen, setIsOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const modalRef = useRef<HTMLDialogElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
 
@@ -52,67 +45,84 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
     }
   }
 
-  // Preserve form choice state in tracking return object parameters
-  const [state, action, isLoading] = useActionState<
-    FormState & { bedrooms?: string; bathrooms?: string },
-    FormData
-  >(
-    async (prevState, formData: FormData) => {
-      const phone = formData.get("phone") as string
-      const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsLoading(true)
 
-      if (!phoneRegex.test(phone)) {
-        toast.error("Please enter a valid phone: (XXX) XXX-XXXX")
-        return { success: false, message: "Invalid phone format" }
-      }
+    console.log("--- 🏁 SUBMIT EVENT TRIGGERED ---")
 
-      const bedrooms = formData.get("bedrooms") as string
-      const bathrooms = formData.get("bathrooms") as string
+    const formData = new FormData(e.currentTarget)
+    const phone = formData.get("phone") as string
+    const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/
 
-      const result = await sendEmail(prevState, formData, "manager")
-      await sendEmail(prevState, formData, "customer")
+    if (!phoneRegex.test(phone)) {
+      console.log("❌ Debug: Validation failed. Phone format incorrect.")
+      toast.error("Please enter a valid phone: (XXX) XXX-XXXX")
+      setIsLoading(false)
+      return
+    }
 
-      // Inject selected metrics straight into state data layer parameters
-      return {
-        ...result,
-        bedrooms: bedrooms || "1",
-        bathrooms: bathrooms || "1",
-      }
-    },
-    { success: false }
-  )
+    const clientSideEventId = `lead_${Date.now()}_${Math.floor(Math.random() * 1000)}`
+    formData.append("clientEventId", clientSideEventId)
 
-  // Tracking Effect Hook Pipeline
-  useEffect(() => {
-    if (state && state.success && state.eventId) {
-      if (typeof window !== "undefined") {
-        // Read directly from the persistent immutable state container instead of the DOM
-        const beds = state.bedrooms || "1"
-        const baths = state.bathrooms || "1"
+    console.log("📝 Debug: Form fields prepared:", {
+      username: formData.get("username"),
+      phone: formData.get("phone"),
+      bedrooms: formData.get("bedrooms"),
+      bathrooms: formData.get("bathrooms"),
+      serviceType: formData.get("serviceType"),
+      clientEventId: clientSideEventId,
+    })
 
-        const targetWindow = window as unknown as { dataLayer?: object[] }
-        targetWindow.dataLayer = targetWindow.dataLayer || []
+    try {
+      console.log("📡 Debug: Dispatching payload to sendEmail Server Action...")
+      const result = await sendEmail({ success: false }, formData)
+      console.log("📥 Debug: Server Action responded with:", result)
 
-        const trackingPayload: GtmFormSubmitPayload = {
-          event: "form_submission_success",
-          event_id: String(state.eventId),
-          form_type: "modal_quick_quote",
-          estimated_value: 129,
-          service_type: `Modal Quick Quote - ${beds}B/${baths}B`,
+      if (result && result.success) {
+        if (typeof window !== "undefined") {
+          const beds = (formData.get("bedrooms") as string) || "1"
+          const baths = (formData.get("bathrooms") as string) || "1"
+
+          const targetWindow = window as unknown as { dataLayer?: object[] }
+          targetWindow.dataLayer = targetWindow.dataLayer || []
+
+          const gtmPayload = {
+            event: "form_submission_success",
+            event_id: clientSideEventId,
+            form_type: "modal_quick_quote",
+            estimated_value: 129,
+            service_type: `Modal Quick Quote - ${beds}B/${baths}B`,
+          }
+
+          console.log(
+            "🚀 Debug: Pushing to window.dataLayer right now:",
+            gtmPayload
+          )
+          targetWindow.dataLayer.push(gtmPayload)
+          console.log(
+            "📊 Debug: Current window.dataLayer contents:",
+            targetWindow.dataLayer
+          )
         }
 
-        targetWindow.dataLayer.push(trackingPayload as unknown as object)
+        setTimeout(() => {
+          handleClose()
+          notify()
+          formRef.current?.reset()
+          setIsLoading(false)
+        }, 100)
+      } else {
+        console.log("❌ Debug: Server action flagged false success status.")
+        toast.error(result?.message || "An error occurred.")
+        setIsLoading(false)
       }
-
-      const postSubmitDelay = setTimeout(() => {
-        handleClose()
-        notify()
-        formRef.current?.reset()
-      }, 500)
-
-      return () => clearTimeout(postSubmitDelay)
+    } catch (err) {
+      console.error("💥 Debug: Global execution catch caught error:", err)
+      toast.error("An error occurred. Please try again.")
+      setIsLoading(false)
     }
-  }, [state])
+  }
 
   useEffect(() => {
     const dialog = modalRef.current
@@ -142,7 +152,6 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
 
   return (
     <>
-      {/* TRIGGER */}
       <div onClick={handleOpen} className="group inline-block cursor-pointer">
         <AnimatedButton>
           <ButtonShiny
@@ -162,7 +171,6 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
           className="relative w-[95%] max-w-md transform animate-in rounded-[2.5rem] bg-white p-8 shadow-2xl transition-all duration-300 fade-in zoom-in md:p-12"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Close Button */}
           <button
             onClick={handleClose}
             className="absolute top-6 right-6 text-slate-300 transition-colors hover:text-slate-600"
@@ -179,7 +187,7 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
             </p>
           </div>
 
-          <form ref={formRef} action={action} className="space-y-4">
+          <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
             <input
               type="hidden"
               name="pageUrl"
@@ -249,7 +257,6 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
           </form>
         </div>
       </dialog>
-
       <ToastContainer theme="colored" />
     </>
   )

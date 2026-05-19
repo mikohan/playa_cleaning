@@ -31,7 +31,7 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
       }
 
       // 2. Execute original logic
-      const result = await sendEmail(prevState, formData, "manager")
+      const result = await sendEmail(prevState, formData)
       return result
     },
     { success: false }
