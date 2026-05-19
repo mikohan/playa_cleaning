@@ -11,9 +11,22 @@ type CleaningModalProps = {
   text?: string | undefined
 }
 
+type GtmFormSubmitPayload = {
+  event: "form_submit"
+  event_id: string
+  form_type: "modal_quick_quote"
+  estimated_value: number
+  service_type: string
+}
+
+type SafeWindowTracking = {
+  dataLayer?: Array<GtmFormSubmitPayload>
+}
+
 export const CleaningModal = ({ text }: CleaningModalProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const modalRef = useRef<HTMLDialogElement>(null)
+  const formRef = useRef<HTMLFormElement>(null)
 
   const handleOpen = () => setIsOpen(true)
   const handleClose = () => setIsOpen(false)
@@ -25,7 +38,6 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
       hideProgressBar: true,
     })
 
-  // 1. Phone Masking Logic (Client Side UX)
   const handlePhoneInput = (e: React.FormEvent<HTMLInputElement>) => {
     const target = e.currentTarget
     let value = target.value.replace(/\D/g, "")
@@ -44,9 +56,9 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
     }
   }
 
+  // 1. Core Server Action orchestration wrapper
   const [state, action, isLoading] = useActionState<FormState, FormData>(
     async (prevState: FormState, formData: FormData) => {
-      // 2. Phone Regex Validation
       const phone = formData.get("phone") as string
       const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/
 
@@ -55,18 +67,49 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
         return { success: false, message: "Invalid phone format" }
       }
 
+      // Fire manager email sequence (Contains Meta CAPI triggers internally)
       const result = await sendEmail(prevState, formData, "manager")
+
+      // Secondary backup sequence routing cleanly
       await sendEmail(prevState, formData, "customer")
 
-      if (result.success) {
-        handleClose()
-        notify()
-      }
       return result
     },
     { success: false }
   )
 
+  // 2. Client Side Side-Effect tracking pipeline (No 'any' keywords)
+  useEffect(() => {
+    if (state && state.success && state.eventId) {
+      if (typeof window !== "undefined") {
+        const formData = formRef.current ? new FormData(formRef.current) : null
+        const beds = String(formData?.get("bedrooms") || "1")
+        const baths = String(formData?.get("bathrooms") || "1")
+
+        const trackingWindow = window as unknown as SafeWindowTracking
+        trackingWindow.dataLayer = trackingWindow.dataLayer || []
+
+        trackingWindow.dataLayer.push({
+          event: "form_submit",
+          event_id: state.eventId,
+          form_type: "modal_quick_quote",
+          estimated_value: 165,
+          service_type: `Modal Quick Quote - ${beds}B/${baths}B`,
+        })
+      }
+      console.log(state.eventId)
+
+      const postSubmitDelay = setTimeout(() => {
+        handleClose()
+        notify()
+        formRef.current?.reset()
+      }, 50)
+
+      return () => clearTimeout(postSubmitDelay)
+    }
+  }, [state])
+
+  // Native HTML Dialog layout wrapper loop handles scroll constraint states securely
   useEffect(() => {
     const dialog = modalRef.current
     if (!dialog) return
@@ -78,8 +121,21 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
       document.body.style.overflow = "unset"
     }
   }, [isOpen])
-  // Text button logic
+
   const buttonText = text ? text : "Get Price"
+
+  // Unified UI design classes mapping definitions
+  const inputClassName = `
+    w-full appearance-none rounded-2xl border-2 px-5 py-4 text-base font-medium transition-all outline-none
+    bg-slate-50 border-slate-100 text-slate-900 placeholder:text-slate-400
+    focus:border-primary-blue focus:bg-white focus:ring-4 focus:ring-blue-500/10
+  `
+
+  const selectClassName = `
+    ${inputClassName}
+    bg-[url('data:image/svg+xml,%3Csvg_xmlns=%22http://www.w3.org/2000/svg%22_fill=%22none%22_viewBox=%220_0_24_24%22_stroke=%22%2394a3b8%22_stroke-width=%222.5%22%3E%3Cpath_stroke-linecap=%22round%22_stroke-linejoin=%22round%22_d=%22M19.5_8.25l-7.5_7.5-7.5-7.5%22_/%3E%3C/svg%3E')]
+    bg-no-repeat bg-[position:right_1rem_center] bg-[length:1.25rem] pr-10
+  `
 
   return (
     <>
@@ -97,7 +153,7 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
       <dialog
         ref={modalRef}
         onClick={(e) => e.target === modalRef.current && handleClose()}
-        className="outline-none backdrop:bg-slate-900/60 backdrop:backdrop-blur-sm"
+        className="bg-transparent outline-none backdrop:bg-slate-900/60 backdrop:backdrop-blur-sm"
       >
         <div
           className="relative w-[95%] max-w-md transform animate-in rounded-[2.5rem] bg-white p-8 shadow-2xl transition-all duration-300 fade-in zoom-in md:p-12"
@@ -120,45 +176,45 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
             </p>
           </div>
 
-          <form action={action} className="space-y-4">
+          <form ref={formRef} action={action} className="space-y-4">
             <input
               type="hidden"
-              name="pageFrom"
+              name="pageUrl"
               value={typeof window !== "undefined" ? window.location.href : ""}
             />
+            <input
+              type="hidden"
+              name="customNotes"
+              value="Playa Cleaning Modal Quick Quote Quick Form"
+            />
+
             <div className="grid grid-cols-1 gap-3">
               <input
                 required
                 name="username"
                 type="text"
                 placeholder="Your Name"
-                className="input-style"
+                className={inputClassName}
               />
               <input
                 required
                 name="phone"
                 type="tel"
                 placeholder="(213) 598-77-63"
-                onInput={handlePhoneInput} // Added Masking
-                className="input-style"
+                onInput={handlePhoneInput}
+                className={inputClassName}
               />
             </div>
 
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
-                <select
-                  name="bedrooms"
-                  className="input-style select-style appearance-none bg-white"
-                >
+                <select name="bedrooms" className={selectClassName}>
                   <option value="1">1 Bedroom</option>
                   <option value="2">2 Bedrooms</option>
                   <option value="3">3 Bedrooms</option>
                   <option value="4+">4+ Bedrooms</option>
                 </select>
-                <select
-                  name="bathrooms"
-                  className="input-style select-style appearance-none bg-white"
-                >
+                <select name="bathrooms" className={selectClassName}>
                   <option value="1">1 Bath</option>
                   <option value="2">2 Baths</option>
                   <option value="3+">3+ Baths</option>
@@ -167,7 +223,7 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
 
               <select
                 name="serviceType"
-                className="input-style select-style appearance-none bg-white font-bold text-primary-blue"
+                className={`${selectClassName} font-bold text-primary-blue`}
               >
                 <option value="deep">Deep Cleaning (Recommended)</option>
                 <option value="standard">Standard Maintenance</option>
@@ -180,10 +236,10 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
               disabled={isLoading}
               className="w-full rounded-2xl bg-primary-blue py-5 text-xl font-black tracking-tight text-white uppercase shadow-xl shadow-blue-500/30 transition-all hover:bg-blue-700 active:scale-95 disabled:bg-blue-300"
             >
-              {isLoading ? "Sending..." : "Get My Price"}
+              {isLoading ? "Sending..." : buttonText}
             </button>
 
-            <p className="px-4 text-center text-[10px] font-medium text-slate-400">
+            <p className="px-4 text-center text-[10px] leading-relaxed font-medium text-slate-400">
               By requesting a quote, you agree to be contacted via call/text
               regarding your request.
             </p>
@@ -191,36 +247,7 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
         </div>
       </dialog>
 
-      <ToastContainer />
-
-      <style jsx>{`
-        .input-style {
-          width: 100%;
-          border-radius: 16px;
-          border: 2px solid #f1f5f9;
-          background-color: #f8fafc;
-          padding: 16px 20px;
-          font-size: 16px;
-          font-weight: 500;
-          transition: all 0.2s ease;
-          outline: none;
-        }
-        .input-style:focus {
-          border-color: var(--color-primary-blue);
-          background-color: #fff;
-          box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
-        }
-        .input-style::placeholder {
-          color: #94a3b8;
-        }
-        .select-style {
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' /%3E%3C/svg%3E");
-          background-repeat: no-repeat;
-          background-position: right 1rem center;
-          background-size: 1.25rem;
-          padding-right: 2.5rem;
-        }
-      `}</style>
+      <ToastContainer theme="colored" />
     </>
   )
 }

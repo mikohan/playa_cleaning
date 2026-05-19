@@ -44,7 +44,11 @@ export const sendEmail = async (
     (formData.get("customNotes") as string) || "No extra notes provided."
 
   if (toWhom === "customer" && !customerEmail) {
-    return { success: false, message: "No customer email provided." }
+    return {
+      success: false,
+      message: "No customer email provided.",
+      eventId: sharedEventId,
+    }
   }
 
   const managerEmail = process.env.COMPANY_EMAIL || "angaralabllc@gmail.com"
@@ -102,10 +106,14 @@ ${companyWebsite}
 
     if (error) {
       console.error("Resend API Error:", error)
-      return { success: false, message: error.message }
+      return {
+        success: false,
+        message: error.message,
+        eventId: sharedEventId,
+      }
     }
 
-    // 5. META CONVERSIONS API FIRE
+    // 5. META CONVERSIONS API FIRE (Awaited Runtime Fix)
     // Only fire CAPI during the 'manager' email sequence to prevent dual-firing duplicate data on customer copies
     if (toWhom === "manager") {
       const pixelId = process.env.META_PIXEL_ID
@@ -128,26 +136,28 @@ ${companyWebsite}
               },
               custom_data: {
                 currency: "USD",
-                // You can attach custom calculated values if your form uses a matrix, default baseline setup here
               },
             },
           ],
-          // UNCOMMENT LINE BELOW FOR LIVE TESTING: Paste string code directly from Event Manager dashboard
-          test_event_code: "TEST83239",
+          test_event_code: "TEST83239", // Live testing console monitoring match code
         }
 
-        // Fire and forget server request so it doesn't block client execution load times
-        fetch(
-          `https://graph.facebook.com/v19.0/${pixelId}/events?access_token=${accessToken}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(capiPayload),
-          }
-        )
-          .then((res) => res.json())
-          .then((resData) => console.log("Meta CAPI Log:", resData))
-          .catch((err) => console.error("Meta CAPI Transmission Error:", err))
+        try {
+          // 🌟 Fix: Await the response fully so the server container does not drop the request thread
+          const capiResponse = await fetch(
+            `https://graph.facebook.com/v19.0/${pixelId}/events?access_token=${accessToken}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(capiPayload),
+            }
+          )
+
+          const resData = await capiResponse.json()
+          console.log("Meta CAPI Server Response:", resData)
+        } catch (capiErr: unknown) {
+          console.error("Meta CAPI Execution Error:", capiErr)
+        }
       } else {
         console.warn(
           "Meta credentials missing from environment variables. Skipping CAPI execution."
@@ -166,6 +176,7 @@ ${companyWebsite}
     return {
       success: false,
       message: "An unexpected error occurred. Please try again!",
+      eventId: sharedEventId,
     }
   }
 }
