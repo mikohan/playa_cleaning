@@ -84,24 +84,32 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
           const beds = (formData.get("bedrooms") as string) || "1"
           const baths = (formData.get("bathrooms") as string) || "1"
 
-          const targetWindow = window as unknown as { dataLayer?: object[] }
+          const targetWindow = window as unknown as { dataLayer: object[] }
           targetWindow.dataLayer = targetWindow.dataLayer || []
 
-          const gtmPayload = {
-            event: "form_submission_success",
+          // 1. Clear any old event data to reset the GTM pipeline state
+          targetWindow.dataLayer.push({
+            event_id: null,
+            form_type: null,
+            estimated_value: null,
+            service_type: null,
+          })
+
+          // 2. Push the raw data variables first so GTM caches them in its state registry
+          targetWindow.dataLayer.push({
             event_id: clientSideEventId,
             form_type: "modal_quick_quote",
             estimated_value: 129,
             service_type: `Modal Quick Quote - ${beds}B/${baths}B`,
-          }
+          })
+
+          // 3. Fire a clean, isolated trigger event containing NO element links
+          targetWindow.dataLayer.push({
+            event: "form_submission_success",
+          })
 
           console.log(
-            "🚀 Debug: Pushing to window.dataLayer right now:",
-            gtmPayload
-          )
-          targetWindow.dataLayer.push(gtmPayload)
-          console.log(
-            "📊 Debug: Current window.dataLayer contents:",
+            "📊 Debug: Cleaned dataLayer array updated:",
             targetWindow.dataLayer
           )
         }
