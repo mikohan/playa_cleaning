@@ -52,8 +52,12 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
     }
   }
 
-  const [state, action, isLoading] = useActionState<FormState, FormData>(
-    async (prevState: FormState, formData: FormData) => {
+  // Preserve form choice state in tracking return object parameters
+  const [state, action, isLoading] = useActionState<
+    FormState & { bedrooms?: string; bathrooms?: string },
+    FormData
+  >(
+    async (prevState, formData: FormData) => {
       const phone = formData.get("phone") as string
       const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/
 
@@ -62,9 +66,18 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
         return { success: false, message: "Invalid phone format" }
       }
 
+      const bedrooms = formData.get("bedrooms") as string
+      const bathrooms = formData.get("bathrooms") as string
+
       const result = await sendEmail(prevState, formData, "manager")
       await sendEmail(prevState, formData, "customer")
-      return result
+
+      // Inject selected metrics straight into state data layer parameters
+      return {
+        ...result,
+        bedrooms: bedrooms || "1",
+        bathrooms: bathrooms || "1",
+      }
     },
     { success: false }
   )
@@ -73,13 +86,11 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
   useEffect(() => {
     if (state && state.success && state.eventId) {
       if (typeof window !== "undefined") {
-        const formData = formRef.current ? new FormData(formRef.current) : null
-        const beds = String(formData?.get("bedrooms") || "1")
-        const baths = String(formData?.get("bathrooms") || "1")
+        // Read directly from the persistent immutable state container instead of the DOM
+        const beds = state.bedrooms || "1"
+        const baths = state.bathrooms || "1"
 
-        // Cast window properties inline to cleanly adhere to the lowercase primitive 'object' rule
         const targetWindow = window as unknown as { dataLayer?: object[] }
-
         targetWindow.dataLayer = targetWindow.dataLayer || []
 
         const trackingPayload: GtmFormSubmitPayload = {
