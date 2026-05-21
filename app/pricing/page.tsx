@@ -8,7 +8,6 @@ import { ServiceComparison } from "@/components/cleaning/ServiceComparison"
 import { CleaningPricing } from "@/components/newCleaning/CleaningPricing"
 import { ServiceScope } from "@/components/newCleaning/ServiceScope"
 import { Metadata } from "next"
-import { BreadCrumbs } from "@/components/common/BreadCrumbs"
 import { BreadCrumbsUniversal } from "@/components/common/BreadCrumbsUniversal"
 
 export const metadata: Metadata = {

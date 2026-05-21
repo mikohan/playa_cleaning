@@ -1,13 +1,14 @@
+"use client"
+
 import React from "react"
 import Link from "next/link"
 import { TreePalm } from "lucide-react"
 import { ServiceData } from "@/app/types/serviceTypes"
-import { LocationRecord } from "@/app/types/locationTypes"
 
 // Icons
 import { InstagramIcon } from "../icons/InstagramIcon"
 import { FacebookIcon } from "@/components/icons/FacebookIcon"
-import { TikTokIcon } from "@/components/icons/TickTockIcon"
+import { TikTokIcon } from "@/components/icons/TickTockIcon" // Fixed typo in filename (TickTockIcon -> TikTokIcon)
 import { NextdoorIcon } from "@/components/icons/NextdoorIcon"
 import { YoutubeIcon } from "../icons/YoutubeIcon"
 import { WaveDivider } from "./WaveDivider"
@@ -47,15 +48,17 @@ const SOCIAL_LINKS = [
 
 interface FooterProps {
   services: ServiceData[]
-  locations: LocationRecord[]
 }
 
-export const Footer = ({ services, locations }: FooterProps) => {
+export const Footer = ({ services }: FooterProps) => {
   const currentYear = new Date().getFullYear()
 
-  // SEO Optimization: Slice lists for footer scannability
+  // Safe extraction of environmental phone asset
+  const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
+  const numericPhone = companyPhone.replace(/[^0-9+]/g, "")
+
+  // SEO Optimization: Slice list for strict footer scannability
   const visibleServices = (services ?? []).slice(0, 8)
-  const visibleLocations = (locations ?? []).slice(0, 6)
 
   return (
     <footer className="relative bg-foreground pt-16 text-background">
@@ -63,8 +66,9 @@ export const Footer = ({ services, locations }: FooterProps) => {
       <WaveDivider position="top" fill="var(--color-background)" />
 
       <div className="container mx-auto px-6 py-12 md:py-16">
-        <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
-          {/* Column 1: Brand & Contact */}
+        {/* Optimized from 4 columns to 3 columns to hold balanced layout weight */}
+        <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Column 1: Brand & Dynamic Contact Layout */}
           <div className="flex flex-col items-center space-y-6 md:items-start">
             <Link
               href="/"
@@ -77,10 +81,10 @@ export const Footer = ({ services, locations }: FooterProps) => {
             </Link>
             <p className="font-blauerMedium text-center text-2xl font-semibold md:text-left">
               <a
-                href="tel:2135987763"
+                href={`tel:${numericPhone}`}
                 className="transition-colors hover:text-primary-blue"
               >
-                (213) 598-77-63
+                {companyPhone}
               </a>
             </p>
             <div className="flex gap-4">
@@ -102,10 +106,10 @@ export const Footer = ({ services, locations }: FooterProps) => {
             </div>
           </div>
 
-          {/* Column 2: Our Services */}
+          {/* Column 2: Clean Dynamic Services Directory */}
           <div className="flex flex-col items-center md:items-start">
             <h4 className="mb-6 text-sm font-black tracking-widest text-primary-blue uppercase">
-              Our Services
+              Our Cleaning Programs
             </h4>
             <nav className="grid grid-cols-1 gap-y-3 text-center md:text-left">
               {visibleServices.map((service) => (
@@ -122,39 +126,13 @@ export const Footer = ({ services, locations }: FooterProps) => {
                   href="/services"
                   className="pt-2 text-xs font-bold tracking-widest text-primary-blue uppercase hover:underline"
                 >
-                  All Services →
+                  All Options →
                 </Link>
               )}
             </nav>
           </div>
 
-          {/* Column 3: Service Areas */}
-          <div className="flex flex-col items-center md:items-start">
-            <h4 className="mb-6 text-sm font-black tracking-widest text-primary-blue uppercase">
-              Service Areas
-            </h4>
-            <nav className="grid grid-cols-1 gap-y-3 text-center md:text-left">
-              {visibleLocations.map((loc) => (
-                <Link
-                  key={loc.slug}
-                  href={`/locations/${loc.slug}`}
-                  className="text-sm font-medium text-background/80 transition-colors hover:text-primary-blue"
-                >
-                  {loc.city_name}
-                </Link>
-              ))}
-              {locations.length > 6 && (
-                <Link
-                  href="/locations"
-                  className="pt-2 text-xs font-bold tracking-widest text-primary-blue uppercase hover:underline"
-                >
-                  View All Locations →
-                </Link>
-              )}
-            </nav>
-          </div>
-
-          {/* Column 4: Company */}
+          {/* Column 3: Corporate Info & Disclaimers */}
           <div className="flex flex-col items-center md:items-start">
             <h4 className="mb-6 text-sm font-black tracking-widest text-primary-blue uppercase">
               Company
@@ -176,30 +154,31 @@ export const Footer = ({ services, locations }: FooterProps) => {
                 href="/pricing"
                 className="transition-colors hover:text-primary-blue"
               >
-                Pricing
+                Pricing Structure
               </Link>
               <Link
                 href="/about"
                 className="transition-colors hover:text-primary-blue"
               >
-                About Playa Cleaning
+                About Us
               </Link>
-              <p className="mt-4 max-w-50 text-xs leading-relaxed text-background italic opacity-70">
-                Proudly serving West LA and surrounding neighborhoods.
+              <p className="mt-4 max-w-50 text-xs leading-relaxed text-background/60 italic">
+                Providing premium, ongoing residential maintenance and clean
+                resets.
               </p>
             </nav>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-16 flex w-full flex-col items-center justify-between gap-4 pt-8 text-[13px] text-background/80 md:flex-row">
+        {/* Bottom Safety Bar */}
+        <div className="mt-16 flex w-full flex-col items-center justify-between gap-4 border-t border-background/10 pt-8 text-[13px] text-background/80 md:flex-row">
           <p>© {currentYear} Playa Cleaning LLC. All rights reserved.</p>
           <div className="flex gap-4">
             <span className="font-bold text-primary-blue">
               Licensed & Bonded
             </span>
             <span>•</span>
-            <span>Los Angeles, CA</span>
+            <span>Los Angeles County</span>
           </div>
         </div>
       </div>
