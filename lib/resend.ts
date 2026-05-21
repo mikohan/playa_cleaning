@@ -7,8 +7,8 @@ import { sendMetaCapiEvent } from "./meta-capi"
 // ==========================================
 // TESTING & ENVIRONMENT CONFIGURATION
 // ==========================================
-const TEST_EVENT_CODE = "TEST19157"
-const ENABLE_EMAIL_SENDING = true
+const TEST_EVENT_CODE = "TEST82899"
+const ENABLE_EMAIL_SENDING = false
 
 // Unified Configuration Properties
 const resend = new Resend(process.env.RESEND_API_KEY)
