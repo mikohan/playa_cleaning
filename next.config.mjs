@@ -27,6 +27,13 @@ const nextConfig = {
   reactStrictMode: true,
   async redirects() {
     return [
+      // 0. HEDI COMPLIANCE PURGE: Permanently remove risky nested housing offer landing path
+      {
+        source: "/services/premium-home-cleaning-offer/culver-city",
+        destination: "/services/home-cleaning",
+        permanent: true,
+      },
+
       // 1. FIX SERVICE SLUG MISMATCHES (Old/Short -> New Strapi Slugs)
       {
         source: "/services/maid-service/(.+)",
