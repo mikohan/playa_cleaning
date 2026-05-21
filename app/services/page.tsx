@@ -8,7 +8,7 @@ import { StrapiResponse, ServiceData } from "@/app/types/serviceTypes"
 import { LocationTicker } from "@/components/cleaning/LocationTicker"
 
 // ─────────────────────────────────────────────────────────────
-// 1. MAXIMUM SEO METADATA INFUSION
+// 1. MAXIMUM SEO METADATA INFUSION - SANITIZED FOR POLICY SAFETY
 // ─────────────────────────────────────────────────────────────
 
 export const metadata: Metadata = {
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Top-Rated Cleaning Services in LA | Playa Cleaning",
     description:
-      "From Santa Monica and Venice to DTLA, we provide meticulous, top-tier professional cleaning services for homes, apartments, and offices.",
+      "From Santa Monica and Venice to DTLA, we provide meticulous, top-tier professional cleaning services for homes, living areas, and offices.",
     url: "https://www.playacleaning.com/services",
     siteName: "Playa Cleaning",
     images: [
