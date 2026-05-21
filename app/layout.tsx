@@ -7,7 +7,6 @@ import "lenis/dist/lenis.css"
 
 import { cn } from "@/lib/utils"
 import { ThemeProvider } from "@/components/theme-provider"
-import { ClientWrapper } from "@/components/common/ClientWrapper"
 import { Navbar } from "@/components/common/Navbar"
 import { Footer } from "@/components/common/Footer"
 
@@ -135,7 +134,7 @@ export default async function RootLayout({
             {/* Pass both to Navbar for the "Services" and "Locations" dropdowns */}
             <Navbar services={services ?? []} locations={locations ?? []} />
             {children}
-            <Footer services={services ?? []} locations={locations ?? []} />
+            <Footer services={services ?? []} />
             <ToastContainer theme="colored" />
           </main>
         </ThemeProvider>
