@@ -27,6 +27,8 @@ interface Props {
 
 const STRAPI_URL = process.env.STRAPI_URL || "https://cms.playacleaning.com"
 
+const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
+
 // ─────────────────────────────────────────────────────────────
 // Dynamic Metadata Infusion
 // ─────────────────────────────────────────────────────────────
@@ -129,7 +131,7 @@ export default async function ServicePage({ params }: Props) {
         "@id": "https://www.playacleaning.com/#organization",
         name: "Playa Cleaning",
         url: "https://www.playacleaning.com",
-        telephone: "+1-213-598-77-63",
+        telephone: companyPhone,
         priceRange: "$$",
         image: "https://www.playacleaning.com/logo.png",
         address: {

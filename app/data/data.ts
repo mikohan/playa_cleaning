@@ -103,12 +103,12 @@ export const testimonials: ITestimonial[] = [
     userName: "Howard Fleischer",
   },
   {
-    text: "Just had my first service from Angara Cleaning for an intensive open space deep detailing clean. Words can’t express how satisfied and happy we are. They were punctual and very nice. Found my new cleaning professionals, thank you again!",
+    text: "Just had my first service from Playa Cleaning for an intensive open space deep detailing clean. Words can’t express how satisfied and happy we are. They were punctual and very nice. Found my new cleaning professionals, thank you again!",
     image: WhitneyPakui,
     userName: "Whithney Paqui",
   },
   {
-    text: "I book Angara Cleaning Services every month and they never disappoint! Their team is always thorough and professional. This time, they deep cleaned my kitchen scrubbing every corner, cleaning inside my appliances. My kitchen feels fresh and it’s like new again. I highly recommend them and will definitely continue using their services!",
+    text: "I book Playa Cleaning Services every month and they never disappoint! Their team is always thorough and professional. This time, they deep cleaned my kitchen scrubbing every corner, cleaning inside my appliances. My kitchen feels fresh and it’s like new again. I highly recommend them and will definitely continue using their services!",
     image: MedetZhanurbay,
     userName: "Medet Zhandyrbai",
   },

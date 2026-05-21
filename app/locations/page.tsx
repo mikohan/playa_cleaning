@@ -11,6 +11,7 @@ import { CallToAction } from "@/components/cleaning/CallToAction"
 const STRAPI_URL =
   process.env.NEXT_PUBLIC_STRAPI_URL || "https://cms.playacleaning.com"
 
+const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
 // ─────────────────────────────────────────────────────────────
 // Data Fetching
 // ─────────────────────────────────────────────────────────────
@@ -99,7 +100,7 @@ function LocationsSchema({ locations }: { locations: LocationRecord[] }) {
         "@id": "https://www.playacleaning.com/#organization",
         name: "Playa Cleaning",
         url: "https://www.playacleaning.com",
-        telephone: "+1-213-598-77-63",
+        telephone: companyPhone,
         priceRange: "$$",
         image: "https://cms.playacleaning.com/uploads/hero_4_8f4caab2a5.webp",
         address: {

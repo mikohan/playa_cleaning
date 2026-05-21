@@ -21,6 +21,7 @@ import GoogleMap from "@/components/common/GoogleMap"
 import { BreadCrumbsUniversal } from "@/components/common/BreadCrumbsUniversal"
 
 const STRAPI_URL = process.env.STRAPI_URL || "https://cms.playacleaning.com"
+const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
 
 // ─────────────────────────────────────────────────────────────
 // Type Declarations for Structured Schema Data
@@ -232,7 +233,7 @@ function JsonLd({
       image: location.location_image?.url
         ? `${STRAPI_URL}${location.location_image.url}`
         : "",
-      telephone: "+1-213-598-77-63",
+      telephone: companyPhone,
       url: pageUrl,
       priceRange: "$$",
       description: dynamicDescription,

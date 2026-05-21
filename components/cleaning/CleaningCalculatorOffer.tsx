@@ -6,16 +6,12 @@ import {
   Plus,
   Minus,
   Check,
-  Refrigerator,
-  Cookie,
   Eye,
-  Move,
   Waves,
   Zap,
   ShieldCheck,
   ArrowRight,
   Info,
-  Fence,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { WaveDivider } from "../common/WaveDivider"
@@ -24,11 +20,7 @@ import { WaveDivider } from "../common/WaveDivider"
 import { INCLUSIONS, PRICING_ADDONS } from "@/app/data/pricing"
 import { PRICING_MATRICES } from "@/app/data/pricing"
 
-/**
- * PRICING MATRICES are in the app/data/pricing.ts file
- */
 const STANDARD_MATRIX = PRICING_MATRICES.STANDARD
-
 const DEEP_MATRIX = PRICING_MATRICES.DEEP
 const PRICING = PRICING_ADDONS
 
@@ -42,17 +34,18 @@ export function CleaningCalculator({
 
   const [beds, setBeds] = useState<string>("2")
   const [baths, setBaths] = useState<string>("2")
+  // Safe default target: standard, deep, heavy (instead of move)
   const [type, setType] = useState<keyof typeof INCLUSIONS>("standard")
   const [selectedToggles, setSelectedToggles] = useState<string[]>([])
   const [counters, setCounters] = useState({ windows: 0, blinds: 0 })
 
   const isIncluded = useCallback(
-    (id: string) => INCLUSIONS[type].includes(id),
+    (id: string) => INCLUSIONS[type]?.includes(id) || false,
     [type]
   )
 
   const totalPrice = useMemo(() => {
-    // 1. Select the correct matrix (Move In/Out uses Deep as base)
+    // 1. Select the correct matrix (Heavy detailing uses Deep as base)
     const activeMatrix = type === "standard" ? STANDARD_MATRIX : DEEP_MATRIX
 
     // 2. Pull the exact base price
@@ -67,9 +60,9 @@ export function CleaningCalculator({
       basePrice = defaultBase + parseInt(beds) * 25 + parseInt(baths) * 30
     }
 
-    // 3. Apply Move In/Out premium if applicable
+    // 3. Apply heavy-duty/turnover premium if applicable
     let subtotal = basePrice
-    if (type === "move") {
+    if (type === "heavy" || type === "move") {
       subtotal = basePrice * PRICING.moveMultiplier
     }
 
@@ -142,7 +135,7 @@ export function CleaningCalculator({
           <div className="space-y-10 lg:col-span-7">
             <header>
               <h2 className="mb-2 text-xl font-bold tracking-tight uppercase md:text-3xl">
-                Estimate Your Transformation
+                Estimate Your固定 Transformation
               </h2>
               <p className="text-sm text-muted-foreground italic md:text-base">
                 Our Price Lock Guarantee ensures no surprises at the door.
@@ -158,6 +151,7 @@ export function CleaningCalculator({
                 {Object.keys(STANDARD_MATRIX).map((num) => (
                   <button
                     key={num}
+                    type="button"
                     onClick={() => setBeds(num)}
                     className={cn(
                       "h-12 w-16 rounded-xl border-2 text-sm font-bold transition-all",
@@ -181,6 +175,7 @@ export function CleaningCalculator({
                 {["1", "2", "3", "4", "5+"].map((num) => (
                   <button
                     key={num}
+                    type="button"
                     onClick={() => setBaths(num)}
                     className={cn(
                       "h-12 w-16 rounded-xl border-2 text-sm font-bold transition-all",
@@ -198,12 +193,13 @@ export function CleaningCalculator({
             {/* 03. Service Depth */}
             <div className="space-y-4">
               <label className="text-xs font-bold tracking-[0.2em] text-primary uppercase">
-                03. Service Depth
+                03. Service Detail Level
               </label>
               <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                 {Object.keys(INCLUSIONS).map((k) => (
                   <button
                     key={k}
+                    type="button"
                     onClick={() => setType(k as keyof typeof INCLUSIONS)}
                     className={cn(
                       "rounded-2xl border-2 p-5 text-left transition-all",
@@ -213,14 +209,18 @@ export function CleaningCalculator({
                     )}
                   >
                     <p className="font-bold text-foreground capitalize">
-                      {k === "move" ? "Move In/Out" : k}
+                      {k === "standard"
+                        ? "Standard Care"
+                        : k === "deep"
+                          ? "Deep Detail"
+                          : "Intensive Canvas"}
                     </p>
                     <p className="mt-1 text-[10px] leading-tight text-muted-foreground">
                       {k === "standard"
-                        ? "Regular upkeep."
+                        ? "Regular home upkeep."
                         : k === "deep"
-                          ? "Deep reset + Oven + 5 Windows."
-                          : "Full detailing + Fridge + Oven."}
+                          ? "Deep reset + Oven restoration + 5 Windows."
+                          : "Complete baseline transformation + Appliances details."}
                     </p>
                   </button>
                 ))}
@@ -248,6 +248,7 @@ export function CleaningCalculator({
                     </div>
                     <div className="flex items-center gap-3">
                       <button
+                        type="button"
                         onClick={() =>
                           updateCounter(id as "windows" | "blinds", -1)
                         }
@@ -259,6 +260,7 @@ export function CleaningCalculator({
                         {counters[id as keyof typeof counters]}
                       </span>
                       <button
+                        type="button"
                         onClick={() =>
                           updateCounter(id as "windows" | "blinds", 1)
                         }
@@ -276,11 +278,13 @@ export function CleaningCalculator({
                   ["fridge", "oven", "moveAppliances", "pets"] as AddonKey[]
                 ).map((id) => {
                   const item = PRICING.addons[id]
+                  if (!item) return null
                   const included = isIncluded(id)
                   const active = selectedToggles.includes(id) || included
                   return (
                     <button
                       key={id}
+                      type="button"
                       disabled={included}
                       onClick={() => toggleAddon(id)}
                       className={cn(
@@ -350,13 +354,14 @@ export function CleaningCalculator({
                     className="animate-pulse fill-primary text-primary"
                   />
                   <span>
-                    Next Slot:{" "}
+                    Next Available Opening:{" "}
                     <span className="font-bold text-foreground italic underline decoration-primary underline-offset-4">
-                      Tomorrow @ 9:00 AM
+                      Tomorrow Session
                     </span>
                   </span>
                 </div>
                 <button
+                  type="button"
                   onClick={handleRedirect}
                   className="flex w-full items-center justify-center gap-3 rounded-2xl bg-primary py-2 font-bold text-primary-foreground shadow-lg transition-all hover:scale-[1.02] md:py-7 md:text-xl"
                 >

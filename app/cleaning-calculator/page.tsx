@@ -1,9 +1,6 @@
 import React from "react"
 import Image from "next/image"
 import { Metadata } from "next"
-import { Navbar } from "@/components/common/Navbar"
-import { Footer } from "@/components/common/Footer"
-import { BreadCrumbs } from "@/components/common/BreadCrumbs"
 import {
   Sparkles,
   ShieldCheck,
@@ -17,12 +14,12 @@ import { BreadCrumbsUniversal } from "@/components/common/BreadCrumbsUniversal"
 export const metadata: Metadata = {
   title: "Instant Cleaning Quote | Playa Cleaning Los Angeles",
   description:
-    "Get an instant price for your home cleaning in Los Angeles. Select your bedrooms and bathrooms to see our flat-rate pricing for Standard, Deep, and Move-Out cleans.",
+    "Get an instant price for your residential deep cleaning in Los Angeles. Select your layout to view our flat-rate pricing for standard upkeep and intensive home prep cleans.",
   keywords: [
     "cleaning calculator LA",
     "maid service price estimator",
     "house cleaning cost Los Angeles",
-    "Angara Steamers pricing",
+    "Playa Cleaning pricing",
     "Playa Cleaning quote",
   ],
 
@@ -35,7 +32,7 @@ export const metadata: Metadata = {
     siteName: "Playa Cleaning",
     images: [
       {
-        url: "/og-image.jpg", // Create a high-quality 1200x630 image
+        url: "/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Playa Cleaning Instant Quote Tool",
@@ -50,7 +47,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "How much does house cleaning cost in LA?",
     description:
-      "Use our instant calculator to get a flat-rate quote for your apartment or house in seconds.",
+      "Use our instant calculator to get a flat-rate quote for your home or layout in seconds.",
     images: ["/og-calculator-preview.jpg"],
     creator: "@playacleaning",
   },
@@ -70,6 +67,10 @@ export const metadata: Metadata = {
 }
 
 export default function CalculatorPage() {
+  const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
+  // Clean phone string for the tel: anchor tag
+  const numericPhone = companyPhone.replace(/[^0-9+]/g, "")
+
   return (
     <main className="min-h-screen bg-background font-jakarta text-foreground">
       <BreadCrumbsUniversal />
@@ -91,19 +92,19 @@ export default function CalculatorPage() {
 
             <p className="max-w-xl text-xl leading-relaxed font-medium text-foreground/80 [word-spacing:0.05rem]">
               No surprises, no hidden fees. Use our professional estimator to
-              get a precise quote for your Los Angeles home or office in under
-              60 seconds.
+              get a precise quote for your Los Angeles home or space in under 60
+              seconds.
             </p>
           </div>
 
-          {/* Alicia Side Profile */}
+          {/* Coordinator Side Profile */}
           <div className="hidden lg:col-span-5 lg:block">
             <div className="relative ml-auto aspect-square max-w-150">
               <div className="absolute inset-0 animate-[spin_20s_linear_infinite] rounded-full border-2 border-dashed border-primary-blue/20" />
               <div className="relative h-full w-full overflow-hidden rounded-full border-8 border-background shadow-2xl">
                 <Image
                   src={OlesyaImage}
-                  alt="Alicia, Lead Coordinator"
+                  alt="Lead Coordinator"
                   fill
                   className="object-cover"
                   priority
@@ -120,7 +121,6 @@ export default function CalculatorPage() {
 
         {/* --- CALCULATOR PLACEHOLDER --- */}
         <section className="py-12">
-          {/* THIS IS WHERE YOUR COMPONENT GOES */}
           <CleaningCalculator showHeader={false} />
         </section>
 
@@ -135,9 +135,9 @@ export default function CalculatorPage() {
             </h3>
             <p className="text-sm leading-relaxed text-muted-foreground [word-spacing:0.02rem]">
               Whether you need <strong>deep cleaning services near me</strong>{" "}
-              or a<strong> house cleaning</strong> quote, our system accounts
-              for the square footage and specific needs of your LA home to
-              ensure accuracy.
+              or a meticulous <strong>house cleaning</strong> quote, our system
+              accounts for the square footage and specific needs of your LA home
+              to ensure complete accuracy.
             </p>
           </div>
 
@@ -149,10 +149,9 @@ export default function CalculatorPage() {
               Specialized Services
             </h3>
             <p className="text-sm leading-relaxed text-muted-foreground [word-spacing:0.02rem]">
-              Get instant rates for <strong>upholstery cleaning</strong> and
-              <strong> furniture steam cleaning</strong> through Angara
-              Streamers. Perfect for removing stains from your{" "}
-              <strong>sofa cleaning service</strong> needs.
+              Get instant rates for premium <strong>upholstery cleaning</strong>{" "}
+              and heavy-duty <strong>furniture cleaning</strong>. Perfect for
+              removing tough spots and fully refreshing your home layout.
             </p>
           </div>
 
@@ -161,13 +160,13 @@ export default function CalculatorPage() {
               <ShieldCheck size={24} />
             </div>
             <h3 className="text-lg font-black tracking-tight">
-              Move-Out Precision
+              Detailed Transitions
             </h3>
             <p className="text-sm leading-relaxed text-muted-foreground [word-spacing:0.02rem]">
-              Planning an <strong>apartment move out cleaning</strong>? Our
-              calculator is optimized for{" "}
-              <strong>end of tenancy cleaning</strong> requirements, helping you
-              secure your security deposit with a data-backed estimate.
+              Scheduling an intensive <strong>empty home detail clean</strong>?
+              Our calculator is optimized for complete{" "}
+              <strong>turnover maintenance</strong> requirements, delivering an
+              elite, top-to-bottom hygienic clean before or after moving gear.
             </p>
           </div>
         </section>
@@ -178,10 +177,10 @@ export default function CalculatorPage() {
             Need a manual quote?
           </p>
           <a
-            href="tel:2135987763"
+            href={`tel:${numericPhone}`}
             className="text-2xl font-black text-primary-blue decoration-2 underline-offset-8 hover:underline"
           >
-            (213) 598-77-63
+            {companyPhone}
           </a>
         </div>
       </div>

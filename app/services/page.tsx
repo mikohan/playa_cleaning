@@ -11,6 +11,7 @@ import { LocationTicker } from "@/components/cleaning/LocationTicker"
 // 1. MAXIMUM SEO METADATA INFUSION - SANITIZED FOR POLICY SAFETY
 // ─────────────────────────────────────────────────────────────
 
+const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
 export const metadata: Metadata = {
   title: "Professional Cleaning Services in Los Angeles | Playa Cleaning",
   description:
@@ -88,7 +89,7 @@ export default async function ServicesListPage() {
         "@id": "https://www.playacleaning.com/#organization",
         name: "Playa Cleaning",
         url: "https://www.playacleaning.com",
-        telephone: "+1-213-598-77-63",
+        telephone: companyPhone,
         priceRange: "$$",
         image: "https://cms.playacleaning.com/uploads/hero_4_8f4caab2a5.webp",
         address: {

@@ -82,7 +82,7 @@ export default async function Page() {
   const locations = await getFooterLocations()
 
   // Dynamic values parsed from Environment or targeted fallback structures
-  const phoneNumber = process.env.COMPANY_PHONE || "(213) 598-7763"
+  const phoneNumber = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
 
   // Dynamically map locations into Administrative Area objects for areaServed
   const dynamicAreas =
