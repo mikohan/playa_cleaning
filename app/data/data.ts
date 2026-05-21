@@ -68,7 +68,7 @@ export const testimonials: ITestimonial[] = [
     userName: "Luis Ortiz",
   },
   {
-    text: "I couldn’t be happier with the cleaning service by Olesia! She did an amazing job on my apartment in Playa Vista. The attention to detail was impressive, from the bathroom to the kitchen. She was professional, reliable, and left the place looking better than I expected. Highly recommend to anyone looking for a thorough and trustworthy cleaner!",
+    text: "I couldn’t be happier with the cleaning service by Olesia! She did an amazing job on my living space in Playa Vista. The attention to detail was impressive, from the bathroom to the kitchen. She was professional, reliable, and left the place looking better than I expected. Highly recommend to anyone looking for a thorough and trustworthy cleaner!",
     image: BenMichael,
     userName: "Ben Michael",
   },
@@ -83,7 +83,7 @@ export const testimonials: ITestimonial[] = [
     userName: "Brianna Villa",
   },
   {
-    text: "All I can say is WOW. I was honestly blown away by how amazing Alesia is!!! We hired her for move-out cleaning before we handed over the apartment. I'd never seen the apartment this fresh and clean. Alesia was incredibly thorough and went through literally every little tiny corner of the place. The floors are sparkling. I cannot recommend her enough!! THANK YOU Alesia!!!",
+    text: "All I can say is WOW. I was honestly blown away by how amazing Alesia is!!! We hired her for a deep preparation clean before we handed over the space. I'd never seen the residential unit this fresh and clean. Alesia was incredibly thorough and went through literally every little tiny corner of the place. The floors are sparkling. I cannot recommend her enough!! THANK YOU Alesia!!!",
     image: SamEdwards,
     userName: "Sam Edwards",
   },
@@ -103,7 +103,7 @@ export const testimonials: ITestimonial[] = [
     userName: "Howard Fleischer",
   },
   {
-    text: "Just had my first service from Angara Cleaning for a Move—in Move out cleaning. Words can’t express how satisfied and happy we are. They were punctual and very nice. Found my new cleaning professionals, thank you again!",
+    text: "Just had my first service from Angara Cleaning for an intensive open space deep detailing clean. Words can’t express how satisfied and happy we are. They were punctual and very nice. Found my new cleaning professionals, thank you again!",
     image: WhitneyPakui,
     userName: "Whithney Paqui",
   },
@@ -128,7 +128,7 @@ export const testimonials: ITestimonial[] = [
     userName: "Betsy Brooks",
   },
   {
-    text: "Very nice and professional people, extremely attentive to the details. I’ve never seen our apartment so sparkling clean, even when we’ve just moved after deep cleaning from our landlord. They did more than I asked about and quality/price is great. Also, they do carpet and upholstery cleaning. Real gem that is hard to find!",
+    text: "Very nice and professional people, extremely attentive to the details. I’ve never seen our layout so sparkling clean, even when we’ve just settled in after deep cleaning from our property team. They did more than I asked about and quality/price is great. Also, they do carpet and upholstery cleaning. Real gem that is hard to find!",
     image: EvgeniaOstrovskaya,
     userName: "Ievgeniia Ostrovska",
   },
@@ -138,12 +138,12 @@ export const testimonials: ITestimonial[] = [
     userName: "Ira Koroleva",
   },
   {
-    text: "Today I got the carpet cleaned in a 3 bedroom apartment for a great price. They were on time and ready to get the job done. Their service was above and beyond I will definitely be using them again. Thank you for your kindness and prompt response and service. Super appreciate you 🌟💯🌟💯",
+    text: "Today I got the carpet cleaned in a 3 bedroom home for a great price. They were on time and ready to get the job done. Their service was above and beyond I will definitely be using them again. Thank you for your kindness and prompt response and service. Super appreciate you 🌟💯🌟💯",
     image: BankrollBombshell,
     userName: "Bankroll Bombshell",
   },
   {
-    text: "Olesya and the team did a wonderful job cleaning our apartment, this was hands down the best deep cleaning service I have used so far. They left our apartment spotless.",
+    text: "Olesya and the team did a wonderful job cleaning our living space, this was hands down the best deep cleaning service I have used so far. They left our home spotless.",
     image: ShushanArakelyan,
     userName: "Shushan Arakelyan",
   },
@@ -168,12 +168,12 @@ export const testimonials: ITestimonial[] = [
     userName: "Chris Pizzi",
   },
   {
-    text: "I’m usually not big on doing reviews however after my experience with this carpet cleaning company I was really left with no choice but to leave one so here it goes, I stay in a 3 bedroom apartment with 5 kids 3 under the age of 5 and so my carpets have endured extreme damage from food , juice and marker and due to prior obligations I was unable to stay home while they went to work on my floors and my oldest child was home but sleeping so I had no choice but to wait until they were gone and finished with the task at hand lol but anyway I eventually got home and was literally blown away because pretty much every stain had been lifted and I forgot to mention that I also have a area rug that I been contemplating throwing away for the past 6 months because it was so dirty I thought why not pay the $220 to buy a new one because it was no point in keeping a dingy one weeeelll I’m glad I didn’t because it looks pretty darn new to me now but wait there’s more ……I had dishes in my sink that I didn’t get the chance to clean up before leaving this morning and would you freaking believe it if I told you my dishes and sink had been wiped clean and neatly stacked to dry!!! Now I’m not saying this service will be included for anyone else because who knows buuutttt what I know is my experience and I don’t want anyone else moving forward I found my guys and I’m sticking to them :)",
+    text: "I’m usually not big on doing reviews however after my experience with this carpet cleaning company I was really left with no choice but to leave one so here it goes, I stay in a 3 bedroom space with 5 kids 3 under the age of 5 and so my carpets have endured extreme damage from food , juice and marker and due to prior obligations I was unable to stay home while they went to work on my floors and my oldest child was home but sleeping so I had no choice but to wait until they were gone and finished with the task at hand lol but anyway I eventually got home and was literally blown away because pretty much every stain had been lifted and I forgot to mention that I also have a area rug that I been contemplating throwing away for the past 6 months because it was so dirty I thought why not pay the $220 to buy a new one because it was no point in keeping a dingy one weeeelll I’m glad I didn’t because it looks pretty darn new to me now but wait there’s more ……I had dishes in my sink that I didn’t get the chance to clean up before leaving this morning and would you freaking believe it if I told you my dishes and sink had been wiped clean and neatly stacked to dry!!! Now I’m not saying this service will be included for anyone else because who knows buuutttt what I know is my experience and I don’t want anyone else moving forward I found my guys and I’m sticking to them :)",
     image: BlankaDominguez,
     userName: "Blanka Dominguez",
   },
   {
-    text: "The team did a phenomenal job deep cleaning my apartment. I couldn’t be happier with the service provided!",
+    text: "The team did a phenomenal job deep cleaning my living environment. I couldn’t be happier with the service provided!",
     image: JillianChamberlain,
     userName: "Jillian Chamberlain",
   },
