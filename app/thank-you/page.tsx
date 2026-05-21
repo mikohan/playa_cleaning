@@ -37,6 +37,11 @@ export const metadata: Metadata = {
 }
 
 export default function ThankYouPage() {
+  // Safe runtime environmental string resolution
+  const ownerName = process.env.NEXT_PUBLIC_COMPANY_OWNER || "Alicia"
+  const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
+  const numericPhone = companyPhone.replace(/[^0-9+]/g, "")
+
   return (
     <div>
       <div className="flex min-h-screen items-center justify-center p-4 md:p-8">
@@ -46,10 +51,11 @@ export default function ThankYouPage() {
             <div className="relative aspect-square bg-muted md:aspect-auto">
               <Image
                 src={AliciaPortrait}
-                alt="Olesya Vostrikova"
+                alt={`${ownerName} - Founder of Playa Cleaning`} // Fixed hidden hardcoded name string leak
                 fill
                 className="object-cover"
                 priority
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
               {/* Simple Gradient Overlay for text legibility at bottom */}
               <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent md:hidden" />
@@ -73,9 +79,9 @@ export default function ThankYouPage() {
                 </h1>
 
                 <p className="text-lg leading-relaxed text-muted-foreground">
-                  Alicia and the team are reviewing your details now. We will
-                  reach out via text or phone shortly with your custom price
-                  estimate.
+                  {ownerName} and the team are reviewing your details now. We
+                  will reach out via text or phone shortly with your custom
+                  price estimate.
                 </p>
 
                 {/* Next Steps List - Clean and Minimal */}
@@ -108,18 +114,18 @@ export default function ThankYouPage() {
                     <ArrowRight size={18} />
                   </Link>
                   <a
-                    href="tel:2135987763"
+                    href={`tel:${numericPhone}`}
                     className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-background py-4 text-sm font-bold transition-all hover:bg-muted"
                   >
                     <Phone size={18} className="text-primary-blue" />
-                    (213) 598-77-63
+                    {companyPhone}
                   </a>
                 </div>
 
                 {/* Social/Trust Link */}
                 <div className="flex items-center justify-between border-t border-border pt-8">
                   <p className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
-                    Playa Vista & Los Angeles
+                    Playa Vista & Los Angeles County
                   </p>
                 </div>
               </div>

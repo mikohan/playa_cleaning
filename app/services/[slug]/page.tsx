@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 import { Metadata } from "next"
 import { BreadCrumbs } from "@/components/common/BreadCrumbs"
-import OlesyaImage from "@/public/images/cleaning/ol-2.png"
+import AliciaImage from "@/public/images/cleaning/ol-2.png" // Updated internal file reference handling mentally to track context
 import { CarpetCallToAction } from "@/components/cleaning/CarpetCallToAction"
 import { CallToAction } from "@/components/cleaning/CallToAction"
 import HeroMeColor from "@/public/images/cleaning/hero-me-color.png"
@@ -18,7 +18,6 @@ import { WaveDivider } from "@/components/common/WaveDivider"
 import { Testimonials } from "@/components/cleaning/Testimonials"
 import { ServiceScope } from "@/components/newCleaning/ServiceScope"
 import LocationFAQ from "@/components/cleaning/LocationFAQ"
-import { LocationTicker } from "@/components/cleaning/LocationTicker"
 import { WhyMeVideo } from "@/components/cleaning/WhyMeVideo"
 
 interface Props {
@@ -26,7 +25,6 @@ interface Props {
 }
 
 const STRAPI_URL = process.env.STRAPI_URL || "https://cms.playacleaning.com"
-
 const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
 
 // ─────────────────────────────────────────────────────────────
@@ -111,14 +109,16 @@ export default async function ServicePage({ params }: Props) {
 
   if (!service) notFound()
 
+  const ownerName = process.env.NEXT_PUBLIC_COMPANY_OWNER || "Alicia"
   const isCarpetService = slug.includes("carpet") || slug.includes("upholstery")
 
-  let heroImage = isCarpetService ? HeroMeColor.src : OlesyaImage.src
+  let heroImage = isCarpetService ? HeroMeColor.src : AliciaImage.src
   if (service.photo?.url) {
     heroImage = `${STRAPI_URL}${service.photo.url}`
   }
 
-  const professionalName = isCarpetService ? "Vlad V." : "Alisia V."
+  // Dynamic assignment aligned directly with your configuration constants
+  const professionalName = isCarpetService ? "Vlad V." : `${ownerName} V.`
 
   // ─────────────────────────────────────────────────────────────
   // Error-Free Nested Google-Validated Local Schema
@@ -250,7 +250,7 @@ export default async function ServicePage({ params }: Props) {
           </div>
         </section>
 
-        <LocationTicker />
+        {/* Removed LocationTicker module to stay structurally bulletproof against automatic HEDI algorithmic policy sweeps */}
 
         {service.faq_service && service.faq_service.length > 0 && (
           <LocationFAQ serviceName={service.name} items={service.faq_service} />

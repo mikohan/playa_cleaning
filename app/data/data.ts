@@ -58,7 +58,7 @@ export const testimonials: ITestimonial[] = [
     userName: "Zamir Zafirov",
   },
   {
-    text: "Playa Cleaning did an excellent job! Alesia and her team were professional, friendly, and thorough. My place looks absolutely spotless and feels so fresh. I’m really happy with the results and will definitely use them again for regular scheduled cleans. Feels so great coming back to a super clean home. Definitely recommend!",
+    text: "Playa Cleaning did an excellent job! Alicia and her team were professional, friendly, and thorough. My place looks absolutely spotless and feels so fresh. I’m really happy with the results and will definitely use them again for regular scheduled cleans. Feels so great coming back to a super clean home. Definitely recommend!",
     image: SarahS,
     userName: "Sara S.",
   },
@@ -68,12 +68,12 @@ export const testimonials: ITestimonial[] = [
     userName: "Luis Ortiz",
   },
   {
-    text: "I couldn’t be happier with the cleaning service by Olesia! She did an amazing job on my living space in Playa Vista. The attention to detail was impressive, from the bathroom to the kitchen. She was professional, reliable, and left the place looking better than I expected. Highly recommend to anyone looking for a thorough and trustworthy cleaner!",
+    text: "I couldn’t be happier with the cleaning service by Alicia! She did an amazing job on my living space in Playa Vista. The attention to detail was impressive, from the bathroom to the kitchen. She was professional, reliable, and left the place looking better than I expected. Highly recommend to anyone looking for a thorough and trustworthy cleaner!",
     image: BenMichael,
     userName: "Ben Michael",
   },
   {
-    text: "I’m beyond impressed with the service! My 3 bedroom home is spotless every detail was taken care of with precision and professionalism. The Alice team was amazing, super thorough, and left everything looking brand new. Absolutely top-notch! I’ll definitely be booking again! Loved in my upstairs",
+    text: "I’m beyond impressed with the service! My 3 bedroom home is spotless every detail was taken care of with precision and professionalism. The Alicia team was amazing, super thorough, and left everything looking brand new. Absolutely top-notch! I’ll definitely be booking again! Loved in my upstairs",
     image: BerkatGizatov,
     userName: "Bekzat Gizatov",
   },
@@ -83,7 +83,7 @@ export const testimonials: ITestimonial[] = [
     userName: "Brianna Villa",
   },
   {
-    text: "All I can say is WOW. I was honestly blown away by how amazing Alesia is!!! We hired her for a deep preparation clean before we handed over the space. I'd never seen the residential unit this fresh and clean. Alesia was incredibly thorough and went through literally every little tiny corner of the place. The floors are sparkling. I cannot recommend her enough!! THANK YOU Alesia!!!",
+    text: "All I can say is WOW. I was honestly blown away by how amazing Alicia is!!! We hired her for a deep preparation clean before we handed over the space. I'd never seen the residential unit this fresh and clean. Alicia was incredibly thorough and went through literally every little tiny corner of the place. The floors are sparkling. I cannot recommend her enough!! THANK YOU Alicia!!!",
     image: SamEdwards,
     userName: "Sam Edwards",
   },
@@ -133,7 +133,7 @@ export const testimonials: ITestimonial[] = [
     userName: "Ievgeniia Ostrovska",
   },
   {
-    text: "Truly deep cleaning, I had no other service clean behind all the furniture, even the heaviest items. They also suggest organizing the drawers and fridge. I keep my gardening stuff on the balcony, and it's always dirty, I found it nice and pretty today. My home looks great after cleaning and Olesia is friendly and attentive.",
+    text: "Truly deep cleaning, I had no other service clean behind all the furniture, even the heaviest items. They also suggest organizing the drawers and fridge. I keep my gardening stuff on the balcony, and it's always dirty, I found it nice and pretty today. My home looks great after cleaning and Alicia is friendly and attentive.",
     image: IraKoroleva,
     userName: "Ira Koroleva",
   },
@@ -143,7 +143,7 @@ export const testimonials: ITestimonial[] = [
     userName: "Bankroll Bombshell",
   },
   {
-    text: "Olesya and the team did a wonderful job cleaning our living space, this was hands down the best deep cleaning service I have used so far. They left our home spotless.",
+    text: "Alicia and the team did a wonderful job cleaning our living space, this was hands down the best deep cleaning service I have used so far. They left our home spotless.",
     image: ShushanArakelyan,
     userName: "Shushan Arakelyan",
   },
@@ -158,7 +158,7 @@ export const testimonials: ITestimonial[] = [
     userName: "Justin Ramirez",
   },
   {
-    text: "Thanks Vlad and Alice a lot for your job. I’m satisfied with their work inside and outside of work. I’m especially amazed with their work on couch. God bless you!",
+    text: "Thanks Vlad and Alicia a lot for your job. I’m satisfied with their work inside and outside of work. I’m especially amazed with their work on couch. God bless you!",
     image: Dias,
     userName: "Dias Sarbay",
   },

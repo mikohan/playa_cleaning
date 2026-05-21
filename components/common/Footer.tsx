@@ -8,7 +8,7 @@ import { ServiceData } from "@/app/types/serviceTypes"
 // Icons
 import { InstagramIcon } from "../icons/InstagramIcon"
 import { FacebookIcon } from "@/components/icons/FacebookIcon"
-import { TikTokIcon } from "@/components/icons/TickTockIcon" // Fixed typo in filename (TickTockIcon -> TikTokIcon)
+import { TikTokIcon } from "@/components/icons/TikTokIcon"
 import { NextdoorIcon } from "@/components/icons/NextdoorIcon"
 import { YoutubeIcon } from "../icons/YoutubeIcon"
 import { WaveDivider } from "./WaveDivider"
@@ -53,8 +53,11 @@ interface FooterProps {
 export const Footer = ({ services }: FooterProps) => {
   const currentYear = new Date().getFullYear()
 
-  // Safe extraction of environmental phone asset
+  // Dynamic branding parameters
+  const ownerName = process.env.NEXT_PUBLIC_COMPANY_OWNER || "Alicia"
   const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
+  const companyEmail =
+    process.env.NEXT_PUBLIC_COMPANY_EMAIL || "order@playacleaning.com"
   const numericPhone = companyPhone.replace(/[^0-9+]/g, "")
 
   // SEO Optimization: Slice list for strict footer scannability
@@ -69,7 +72,7 @@ export const Footer = ({ services }: FooterProps) => {
         {/* Optimized from 4 columns to 3 columns to hold balanced layout weight */}
         <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
           {/* Column 1: Brand & Dynamic Contact Layout */}
-          <div className="flex flex-col items-center space-y-6 md:items-start">
+          <div className="flex flex-col items-center space-y-5 md:items-start">
             <Link
               href="/"
               className="group flex items-center gap-3 transition-opacity hover:opacity-90"
@@ -79,15 +82,27 @@ export const Footer = ({ services }: FooterProps) => {
                 Playa<span className="text-primary-blue">Cleaning</span>
               </span>
             </Link>
-            <p className="font-blauerMedium text-center text-2xl font-semibold md:text-left">
-              <a
-                href={`tel:${numericPhone}`}
-                className="transition-colors hover:text-primary-blue"
-              >
-                {companyPhone}
-              </a>
-            </p>
-            <div className="flex gap-4">
+
+            <div className="flex flex-col items-center space-y-2 md:items-start">
+              <p className="font-blauerMedium text-center text-2xl font-semibold md:text-left">
+                <a
+                  href={`tel:${numericPhone}`}
+                  className="transition-colors hover:text-primary-blue"
+                >
+                  {companyPhone}
+                </a>
+              </p>
+              <p className="text-center text-sm font-medium text-background/80 md:text-left">
+                <a
+                  href={`mailto:${companyEmail}`}
+                  className="underline underline-offset-4 transition-colors hover:text-primary-blue"
+                >
+                  {companyEmail}
+                </a>
+              </p>
+            </div>
+
+            <div className="flex gap-4 pt-2">
               {SOCIAL_LINKS.map((social) => {
                 const IconComponent = social.icon
                 return (
@@ -163,8 +178,8 @@ export const Footer = ({ services }: FooterProps) => {
                 About Us
               </Link>
               <p className="mt-4 max-w-50 text-xs leading-relaxed text-background/60 italic">
-                Providing premium, ongoing residential maintenance and clean
-                resets.
+                Managed by {ownerName} & team. Premium residential resets and
+                scheduled upkeep.
               </p>
             </nav>
           </div>
