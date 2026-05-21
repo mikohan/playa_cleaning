@@ -5,6 +5,8 @@ interface CapiUserParams {
   email?: string
   clientIpAddress?: string
   clientUserAgent?: string
+  fbc?: string // Added to clear the interface type constraint error
+  fbp?: string // Added for complete parameter footprint parity
 }
 
 interface CapiEventParams {

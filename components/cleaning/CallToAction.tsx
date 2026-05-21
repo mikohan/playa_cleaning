@@ -9,6 +9,7 @@ import { sendEmail, FormState } from "@/lib/resend"
 import AliciaPortrait from "@/public/images/cleaning/hero-4.png"
 import { WaveDivider } from "../common/WaveDivider"
 import { cn } from "@/lib/utils"
+import Cookies from "js-cookie"
 
 interface CallToActionProps {
   defaultOption?: string
@@ -192,6 +193,26 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
                   onSubmit={handleFormSubmit}
                   className="relative z-20 max-w-xl space-y-4 rounded-[2rem] border border-border bg-card p-2 shadow-sm sm:p-4"
                 >
+                  <input
+                    type="hidden"
+                    name="fbc"
+                    value={Cookies.get("_fbc") || ""}
+                  />
+                  <input
+                    type="hidden"
+                    name="fbp"
+                    value={Cookies.get("_fbp") || ""}
+                  />
+                  <input
+                    type="hidden"
+                    name="fbc"
+                    value={Cookies.get("_fbc") || ""}
+                  />
+                  <input
+                    type="hidden"
+                    name="fbp"
+                    value={Cookies.get("_fbp") || ""}
+                  />
                   <input
                     type="hidden"
                     name="pageUrl"

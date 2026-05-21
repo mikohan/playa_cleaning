@@ -8,8 +8,7 @@ import { sendMetaCapiEvent } from "./meta-capi"
 // TESTING & ENVIRONMENT CONFIGURATION
 // ==========================================
 const TEST_EVENT_CODE = "TEST19157"
-// process.env.NODE_ENV !== "production" ? "TEST19157" : undefined // Change this anytime to match your Meta dashboard
-const ENABLE_EMAIL_SENDING = true // Set to true when you want Resend to start sending emails again
+const ENABLE_EMAIL_SENDING = true
 
 // Unified Configuration Properties
 const resend = new Resend(process.env.RESEND_API_KEY)
@@ -32,6 +31,8 @@ interface PipelinePayload {
   userData: {
     phone: string
     email?: string
+    fbc?: string // Added parameter tracking values
+    fbp?: string
   }
   customData: {
     value: number
@@ -100,6 +101,8 @@ async function executeLeadPipeline(
             : undefined,
         clientIpAddress: ipAddress,
         clientUserAgent: userAgent,
+        fbc: payload.userData.fbc || undefined, // Extracted tracking params sent to CAPI helper
+        fbp: payload.userData.fbp || undefined,
       },
     })
 
@@ -143,8 +146,10 @@ export const sendEmail = async (
   const bathrooms = (formData.get("bathrooms") as string) || "1"
   const serviceType = (formData.get("serviceType") as string) || "Deep"
   const pageUrl = (formData.get("pageUrl") as string) || "Unknown Source"
-  const customNotes =
-    (formData.get("customNotes") as string) || "No extra notes provided."
+
+  // Extract Click & Browser cookies sent from front-end form states
+  const fbc = (formData.get("fbc") as string) || undefined
+  const fbp = (formData.get("fbp") as string) || undefined
 
   const orderTime = new Date().toLocaleString("en-US", {
     timeZone: "America/Los_Angeles",
@@ -164,7 +169,7 @@ SOURCE: Sent From: ${pageUrl} / Time: ${orderTime}
     clientEventId,
     subject: `NEW LEAD: ${bedrooms}BR/${bathrooms}BA - ${username}`,
     textMessage: textBody,
-    userData: { phone },
+    userData: { phone, fbc, fbp },
     customData: { value: 165 },
   })
 }
@@ -179,6 +184,9 @@ export const sendSteamEmail = async (
   const email = (formData.get("email") as string) || "No Email"
   const itemsToClean =
     (formData.get("itemsToClean") as string) || "Not specified"
+
+  const fbc = (formData.get("fbc") as string) || undefined
+  const fbp = (formData.get("fbp") as string) || undefined
 
   const orderTime = new Date().toLocaleString("en-US", {
     timeZone: "America/Los_Angeles",
@@ -199,7 +207,7 @@ ITEMS:        ${itemsToClean}
     clientEventId,
     subject: `🔥 STEAM LEAD: ${username}`,
     textMessage: leadTable,
-    userData: { phone, email },
+    userData: { phone, email, fbc, fbp },
     customData: { value: 150 },
   })
 }
@@ -209,6 +217,8 @@ export async function sendBookingEmail(formData: {
   baths: string
   phone: string
   price: number
+  fbc?: string
+  fbp?: string
 }) {
   const calculatorTextBody = `
 NEW BOOKING INQUIRY (CALCULATOR)
@@ -223,7 +233,11 @@ Quoted Target: $${formData.price}
     eventIdPrefix: "calc_lead",
     subject: `New Booking Request: ${formData.beds} Bed / ${formData.baths} Bath`,
     textMessage: calculatorTextBody,
-    userData: { phone: formData.phone },
+    userData: {
+      phone: formData.phone,
+      fbc: formData.fbc,
+      fbp: formData.fbp,
+    },
     customData: { value: formData.price },
   })
 }

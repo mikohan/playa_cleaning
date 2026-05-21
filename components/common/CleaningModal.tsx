@@ -6,6 +6,7 @@ import { AnimatedButton } from "../SmallComponents/AnimatedButton"
 import { toast } from "react-toastify"
 import { ButtonShiny } from "../SmallComponents/ButtonShiny"
 import { X } from "lucide-react"
+import Cookies from "js-cookie"
 
 interface CleaningModalProps {
   text?: string
@@ -247,6 +248,8 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
           </div>
 
           <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+            <input type="hidden" name="fbc" value={Cookies.get("_fbc") || ""} />
+            <input type="hidden" name="fbp" value={Cookies.get("_fbp") || ""} />
             <input
               type="hidden"
               name="pageUrl"
