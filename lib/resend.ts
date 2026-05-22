@@ -7,7 +7,7 @@ import { sendMetaCapiEvent } from "./meta-capi"
 // ==========================================
 // TESTING & ENVIRONMENT CONFIGURATION
 // ==========================================
-const TEST_EVENT_CODE = "TEST82899"
+const TEST_EVENT_CODE = "TEST92942"
 const ENABLE_EMAIL_SENDING = false
 
 // Unified Configuration Properties
