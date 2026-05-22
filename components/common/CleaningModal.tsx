@@ -7,6 +7,7 @@ import { toast } from "react-toastify"
 import { ButtonShiny } from "../SmallComponents/ButtonShiny"
 import { X } from "lucide-react"
 import Cookies from "js-cookie"
+import { Turnstile } from "@marsidev/react-turnstile"
 
 interface CleaningModalProps {
   text?: string
@@ -23,6 +24,7 @@ interface DataLayerPayload {
 export const CleaningModal = ({ text }: CleaningModalProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [turnstileToken, setTurnstileToken] = useState<string>("")
 
   const modalRef = useRef<HTMLDialogElement | null>(null)
   const formRef = useRef<HTMLFormElement | null>(null)
@@ -45,6 +47,7 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
   const handleOpen = () => setIsOpen(true)
   const handleClose = () => {
     setIsOpen(false)
+    setTurnstileToken("") // Clear security token token when modal unmounts
     hasFiredRef.current = false // Safely drop the guard when modal closes
   }
 
@@ -83,6 +86,18 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
     hasFiredRef.current = true
 
     const formData = new FormData(e.currentTarget)
+
+    // 2. Strict Managed Mode Verification Check
+    const token =
+      turnstileToken || (formData.get("cf-turnstile-response") as string)
+    if (!token) {
+      toast.error("Please complete the security verification box below.", {
+        position: "top-center",
+      })
+      hasFiredRef.current = false
+      return
+    }
+
     const phone = formData.get("phone") as string | null
     const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/
 
@@ -107,18 +122,18 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
     const formattedServiceString = `Playa ${selectedServiceScope} Clean (${beds}B/${baths}B)`
     const activeFormIdentity = "modal_quick_quote"
 
-    // 2. Lock dynamic event ID matching
+    // Lock dynamic event ID matching
     const currentActiveEventId = generateFreshEventId()
     eventIdRef.current = currentActiveEventId
 
-    // 3. Dispatch Tracking Pipeline using your exact Master List Variables
+    // Dispatch Tracking Pipeline using your exact Master List Variables
     try {
       pushToGlobalTracker({
         event: "form_submission_success",
-        event_id: currentActiveEventId, // {{event_id}}
-        service_type: formattedServiceString, // {{dlv - service_type}}
-        estimated_value: dynamicValue, // {{dlv - estimated_value}}
-        form_type: activeFormIdentity, // {{dlv - form_type}}
+        event_id: currentActiveEventId,
+        service_type: formattedServiceString,
+        estimated_value: dynamicValue,
+        form_type: activeFormIdentity,
       })
     } catch (trackingError) {
       console.error("Tracking array entry exception intercept:", trackingError)
@@ -129,6 +144,7 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
     formData.append("service_type", formattedServiceString)
     formData.append("estimated_value", String(dynamicValue))
     formData.append("form_type", activeFormIdentity)
+    formData.append("turnstileToken", token) // Backend parameter payload mapping
 
     // Clear event processing callstack frame loop before handling api action
     await new Promise((resolve) => setTimeout(resolve, 150))
@@ -303,6 +319,20 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
                 <option value="move">Move In / Move Out</option>
               </select>
             </div>
+
+            {/* MANAGED MODE WIDGET - MOUNT PROTECTION TARGET */}
+            {isOpen && (
+              <div className="flex min-h-[65px] w-full justify-center py-2">
+                <Turnstile
+                  siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
+                  onSuccess={(token) => setTurnstileToken(token)}
+                  options={{
+                    theme: "light",
+                    size: "normal",
+                  }}
+                />
+              </div>
+            )}
 
             <button
               type="submit"
