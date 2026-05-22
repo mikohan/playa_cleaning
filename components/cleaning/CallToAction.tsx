@@ -1,8 +1,9 @@
 "use client"
-import React, { useActionState, useTransition, useRef } from "react"
+import React, { useActionState, useTransition, useRef, useState } from "react"
 import Image from "next/image"
 import { Phone, CheckCircle2, PartyPopper } from "lucide-react"
 import { toast } from "react-toastify"
+import { Turnstile } from "@marsidev/react-turnstile"
 
 // --- IMPORTS FROM YOUR FILES ---
 import { sendEmail, FormState } from "@/lib/resend"
@@ -19,6 +20,7 @@ interface CallToActionProps {
 export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
   const [isPending, startTransition] = useTransition()
   const hasFiredRef = useRef<boolean>(false)
+  const [turnstileToken, setTurnstileToken] = useState<string>("")
 
   const [state, action] = useActionState<FormState, FormData>(
     async (prevState: FormState, formData: FormData) => {
@@ -52,6 +54,21 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
     const currentForm = e.currentTarget
     const formData = new FormData(currentForm)
 
+    // 2. Extract Turnstile token from either reactive state or direct DOM fallback
+    const token =
+      turnstileToken || (formData.get("cf-turnstile-response") as string)
+
+    if (!token) {
+      toast.error(
+        "Security verification pending. Please wait a moment or try again.",
+        {
+          position: "top-center",
+        }
+      )
+      hasFiredRef.current = false
+      return
+    }
+
     const phone = formData.get("phone") as string
     const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/
 
@@ -63,19 +80,19 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
       return
     }
 
-    // 2. Extract input values directly from the DOM state layout
+    // 3. Extract input values directly from the DOM state layout
     const beds = (formData.get("bedrooms") as string) || "1"
     const baths = (formData.get("bathrooms") as string) || "1"
     const selectedServiceScope =
       (formData.get("serviceType") as string) || "standard"
 
-    // 3. Generate baseline tracking parameter details matching your master list format
+    // 4. Generate baseline tracking parameter details matching your master list format
     const clientSideEventId = `lead_${Date.now()}_${Math.floor(Math.random() * 1000000)}`
     const activeFormIdentity = "inline_cta_offer"
     const dynamicValue = 129
     const formattedServiceString = `Playa ${selectedServiceScope} Clean (${beds}B/${baths}B)`
 
-    // 4. Fire clean structured atomic properties array straight to dataLayer
+    // 5. Fire clean structured atomic properties array straight to dataLayer
     if (typeof window !== "undefined") {
       try {
         const globalScope = window as unknown as {
@@ -83,24 +100,24 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
         }
         globalScope.dataLayer = globalScope.dataLayer || []
 
-        // Push everything in a single solid frame to guarantee no asynchronous split frames
         globalScope.dataLayer.push({
           event: "form_submission_success",
-          event_id: clientSideEventId, // {{event_id}}
-          service_type: formattedServiceString, // {{dlv - service_type}}
-          estimated_value: dynamicValue, // {{dlv - estimated_value}}
-          form_type: activeFormIdentity, // {{dlv - form_type}}
+          event_id: clientSideEventId,
+          service_type: formattedServiceString,
+          estimated_value: dynamicValue,
+          form_type: activeFormIdentity,
         })
       } catch (trackingError) {
         console.error("GTM DataLayer append failed:", trackingError)
       }
     }
 
-    // 5. Build dynamic server form metrics keys
+    // 6. Build dynamic server form metrics keys + security token
     formData.append("clientEventId", clientSideEventId)
     formData.append("service_type", formattedServiceString)
     formData.append("estimated_value", String(dynamicValue))
     formData.append("form_type", activeFormIdentity)
+    formData.append("turnstileToken", token) // Explicit mapping to match Server Pipeline parameters
 
     // Fire the Transition thread cleanly to execute your resend server-side execution loop
     startTransition(async () => {
@@ -195,26 +212,6 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
                 >
                   <input
                     type="hidden"
-                    name="fbc"
-                    value={Cookies.get("_fbc") || ""}
-                  />
-                  <input
-                    type="hidden"
-                    name="fbp"
-                    value={Cookies.get("_fbp") || ""}
-                  />
-                  <input
-                    type="hidden"
-                    name="fbc"
-                    value={Cookies.get("_fbc") || ""}
-                  />
-                  <input
-                    type="hidden"
-                    name="fbp"
-                    value={Cookies.get("_fbp") || ""}
-                  />
-                  <input
-                    type="hidden"
                     name="pageUrl"
                     value={
                       typeof window !== "undefined" ? window.location.href : ""
@@ -225,6 +222,31 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
                     name="customNotes"
                     value="Playa Cleaning $129 Offer"
                   />
+
+                  {/* COOKIE TRACKING VARIABLES */}
+                  <input
+                    type="hidden"
+                    name="fbc"
+                    value={Cookies.get("_fbc") || ""}
+                  />
+                  <input
+                    type="hidden"
+                    name="fbp"
+                    value={Cookies.get("_fbp") || ""}
+                  />
+
+                  {/* CLOUDFLARE TURNSTILE MANAGED MODE CONTAINER */}
+                  {/* Keep layout safe without breaking background script telemetry */}
+                  <div
+                    className="absolute h-0 w-0 overflow-hidden opacity-0"
+                    aria-hidden="true"
+                  >
+                    <Turnstile
+                      siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
+                      onSuccess={(token) => setTurnstileToken(token)}
+                    />
+                  </div>
+
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     <input
                       required

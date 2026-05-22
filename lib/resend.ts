@@ -8,7 +8,7 @@ import { sendMetaCapiEvent } from "./meta-capi"
 // TESTING & ENVIRONMENT CONFIGURATION
 // ==========================================
 const TEST_EVENT_CODE = "TEST82899"
-const ENABLE_EMAIL_SENDING = true
+const ENABLE_EMAIL_SENDING = false
 
 // Unified Configuration Properties
 const resend = new Resend(process.env.RESEND_API_KEY)
@@ -26,12 +26,13 @@ export type FormState = {
 interface PipelinePayload {
   eventIdPrefix: string
   clientEventId?: string
+  turnstileToken?: string // Explicitly typed optional string container
   subject: string
   textMessage: string
   userData: {
     phone: string
     email?: string
-    fbc?: string // Added parameter tracking values
+    fbc?: string
     fbp?: string
   }
   customData: {
@@ -51,7 +52,45 @@ async function executeLeadPipeline(
     `${payload.eventIdPrefix}_${Date.now()}_${Math.floor(Math.random() * 1000000)}`
 
   try {
-    // 1. Conditional Email Dispatch
+    // 1. CLOUDFLARE TURNSTILE TOKEN VALIDATION BLOCK
+    // Prevents automated scrapers from directly triggering email dispatches or tracking data frames.
+    if (!payload.turnstileToken) {
+      console.warn(
+        `🛑 [PIPELINE REJECTION]: Missing security validation token for event: ${sharedEventId}`
+      )
+      return {
+        success: false,
+        message: "Security verification token missing. Please try again.",
+        eventId: sharedEventId,
+      }
+    }
+
+    const verifyRes = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          secret: process.env.TURNSTILE_SECRET_KEY,
+          response: payload.turnstileToken,
+        }),
+      }
+    )
+
+    const verifyResult = await verifyRes.json()
+
+    if (!verifyResult.success) {
+      console.warn(
+        `🤖 [BOT DETECTED]: Turnstile verification failed for event: ${sharedEventId}`
+      )
+      return {
+        success: false,
+        message: "Security validation failed. Automated bot traffic suspected.",
+        eventId: sharedEventId,
+      }
+    }
+
+    // 2. Conditional Email Dispatch
     if (ENABLE_EMAIL_SENDING) {
       const emailOptions: CreateEmailOptions = {
         from: FROM_EMAIL,
@@ -79,7 +118,7 @@ async function executeLeadPipeline(
       )
     }
 
-    // 2. Extract Client Network Meta Info from Next.js Headers
+    // 3. Extract Client Network Meta Info from Next.js Headers
     const reqHeaders = await headers()
     const userAgent = reqHeaders.get("user-agent") || ""
     const ipAddress =
@@ -87,7 +126,7 @@ async function executeLeadPipeline(
       reqHeaders.get("x-real-ip") ||
       "127.0.0.1"
 
-    // 3. Hand off the data packet to your helper module file
+    // 4. Hand off the data packet to your helper module file
     const capiResult = await sendMetaCapiEvent({
       eventName: "Lead",
       eventId: sharedEventId,
@@ -101,7 +140,7 @@ async function executeLeadPipeline(
             : undefined,
         clientIpAddress: ipAddress,
         clientUserAgent: userAgent,
-        fbc: payload.userData.fbc || undefined, // Extracted tracking params sent to CAPI helper
+        fbc: payload.userData.fbc || undefined,
         fbp: payload.userData.fbp || undefined,
       },
     })
@@ -140,6 +179,7 @@ export const sendEmail = async (
   formData: FormData
 ): Promise<FormState> => {
   const clientEventId = formData.get("clientEventId") as string
+  const turnstileToken = formData.get("turnstileToken") as string // Gather token from form append signature
   const username = (formData.get("username") as string) || "New Client"
   const phone = (formData.get("phone") as string) || "No Phone Provided"
   const bedrooms = (formData.get("bedrooms") as string) || "1"
@@ -147,7 +187,6 @@ export const sendEmail = async (
   const serviceType = (formData.get("serviceType") as string) || "Deep"
   const pageUrl = (formData.get("pageUrl") as string) || "Unknown Source"
 
-  // Extract Click & Browser cookies sent from front-end form states
   const fbc = (formData.get("fbc") as string) || undefined
   const fbp = (formData.get("fbp") as string) || undefined
 
@@ -167,6 +206,7 @@ SOURCE: Sent From: ${pageUrl} / Time: ${orderTime}
   return executeLeadPipeline({
     eventIdPrefix: "lead",
     clientEventId,
+    turnstileToken,
     subject: `NEW LEAD: ${bedrooms}BR/${bathrooms}BA - ${username}`,
     textMessage: textBody,
     userData: { phone, fbc, fbp },
@@ -179,6 +219,7 @@ export const sendSteamEmail = async (
   formData: FormData
 ): Promise<FormState> => {
   const clientEventId = formData.get("clientEventId") as string
+  const turnstileToken = formData.get("turnstileToken") as string // Protects your upholstery channel
   const username = (formData.get("username") as string) || "New Client"
   const phone = (formData.get("phone") as string) || "No Phone"
   const email = (formData.get("email") as string) || "No Email"
@@ -205,6 +246,7 @@ ITEMS:        ${itemsToClean}
   return executeLeadPipeline({
     eventIdPrefix: "steam_lead",
     clientEventId,
+    turnstileToken,
     subject: `🔥 STEAM LEAD: ${username}`,
     textMessage: leadTable,
     userData: { phone, email, fbc, fbp },
@@ -219,6 +261,7 @@ export async function sendBookingEmail(formData: {
   price: number
   fbc?: string
   fbp?: string
+  turnstileToken?: string // Built to receive manual property drops from modular calculators
 }) {
   const calculatorTextBody = `
 NEW BOOKING INQUIRY (CALCULATOR)
@@ -233,6 +276,7 @@ Quoted Target: $${formData.price}
     eventIdPrefix: "calc_lead",
     subject: `New Booking Request: ${formData.beds} Bed / ${formData.baths} Bath`,
     textMessage: calculatorTextBody,
+    turnstileToken: formData.turnstileToken,
     userData: {
       phone: formData.phone,
       fbc: formData.fbc,
