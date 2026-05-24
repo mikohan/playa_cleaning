@@ -9,6 +9,7 @@ import { sendMetaCapiEvent } from "./meta-capi"
 // ==========================================
 const TEST_EVENT_CODE = "TEST92942"
 const ENABLE_EMAIL_SENDING = true
+const DISABLE_TURNSTILE_SERVER = true // Set to true to bypass Cloudflare verification on server actions
 
 // Unified Configuration Properties
 const resend = new Resend(process.env.RESEND_API_KEY)
@@ -26,7 +27,7 @@ export type FormState = {
 interface PipelinePayload {
   eventIdPrefix: string
   clientEventId?: string
-  turnstileToken?: string // Explicitly typed optional string container
+  turnstileToken?: string
   subject: string
   textMessage: string
   userData: {
@@ -53,40 +54,47 @@ async function executeLeadPipeline(
 
   try {
     // 1. CLOUDFLARE TURNSTILE TOKEN VALIDATION BLOCK
-    // Prevents automated scrapers from directly triggering email dispatches or tracking data frames.
-    if (!payload.turnstileToken) {
-      console.warn(
-        `🛑 [PIPELINE REJECTION]: Missing security validation token for event: ${sharedEventId}`
+    if (DISABLE_TURNSTILE_SERVER) {
+      console.log(
+        `⚠️ [PIPELINE]: Turnstile server-side verification is TEMPORARILY BYPASSED for testing.`
       )
-      return {
-        success: false,
-        message: "Security verification token missing. Please try again.",
-        eventId: sharedEventId,
+    } else {
+      // Regular production verification steps
+      if (!payload.turnstileToken) {
+        console.warn(
+          `🛑 [PIPELINE REJECTION]: Missing security validation token for event: ${sharedEventId}`
+        )
+        return {
+          success: false,
+          message: "Security verification token missing. Please try again.",
+          eventId: sharedEventId,
+        }
       }
-    }
 
-    const verifyRes = await fetch(
-      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          secret: process.env.TURNSTILE_SECRET_KEY,
-          response: payload.turnstileToken,
-        }),
-      }
-    )
-
-    const verifyResult = await verifyRes.json()
-
-    if (!verifyResult.success) {
-      console.warn(
-        `🤖 [BOT DETECTED]: Turnstile verification failed for event: ${sharedEventId}`
+      const verifyRes = await fetch(
+        "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            secret: process.env.TURNSTILE_SECRET_KEY,
+            response: payload.turnstileToken,
+          }),
+        }
       )
-      return {
-        success: false,
-        message: "Security validation failed. Automated bot traffic suspected.",
-        eventId: sharedEventId,
+
+      const verifyResult = await verifyRes.json()
+
+      if (!verifyResult.success) {
+        console.warn(
+          `🤖 [BOT DETECTED]: Turnstile verification failed for event: ${sharedEventId}`
+        )
+        return {
+          success: false,
+          message:
+            "Security validation failed. Automated bot traffic suspected.",
+          eventId: sharedEventId,
+        }
       }
     }
 
@@ -179,7 +187,7 @@ export const sendEmail = async (
   formData: FormData
 ): Promise<FormState> => {
   const clientEventId = formData.get("clientEventId") as string
-  const turnstileToken = formData.get("turnstileToken") as string // Gather token from form append signature
+  const turnstileToken = formData.get("turnstileToken") as string
   const username = (formData.get("username") as string) || "New Client"
   const phone = (formData.get("phone") as string) || "No Phone Provided"
   const bedrooms = (formData.get("bedrooms") as string) || "1"
@@ -219,7 +227,7 @@ export const sendSteamEmail = async (
   formData: FormData
 ): Promise<FormState> => {
   const clientEventId = formData.get("clientEventId") as string
-  const turnstileToken = formData.get("turnstileToken") as string // Protects your upholstery channel
+  const turnstileToken = formData.get("turnstileToken") as string
   const username = (formData.get("username") as string) || "New Client"
   const phone = (formData.get("phone") as string) || "No Phone"
   const email = (formData.get("email") as string) || "No Email"
@@ -261,7 +269,7 @@ export async function sendBookingEmail(formData: {
   price: number
   fbc?: string
   fbp?: string
-  turnstileToken?: string // Built to receive manual property drops from modular calculators
+  turnstileToken?: string
 }) {
   const calculatorTextBody = `
 NEW BOOKING INQUIRY (CALCULATOR)

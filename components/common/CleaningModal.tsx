@@ -9,6 +9,11 @@ import { X } from "lucide-react"
 import Cookies from "js-cookie"
 import { Turnstile } from "@marsidev/react-turnstile"
 
+// ==========================================
+// TEMPORARY BYPASS TOGGLE
+// ==========================================
+const DISABLE_TURNSTILE_TESTING = true // Change to false to turn Turnstile back on
+
 interface CleaningModalProps {
   text?: string
 }
@@ -87,9 +92,11 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
 
     const formData = new FormData(e.currentTarget)
 
-    // 2. Strict Managed Mode Verification Check
-    const token =
-      turnstileToken || (formData.get("cf-turnstile-response") as string)
+    // 2. Strict Managed Mode Verification Check (Bypassed if toggle is true)
+    const token = DISABLE_TURNSTILE_TESTING
+      ? "bypassed_testing_token"
+      : turnstileToken || (formData.get("cf-turnstile-response") as string)
+
     if (!token) {
       toast.error("Please complete the security verification box below.", {
         position: "top-center",
@@ -320,8 +327,8 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
               </select>
             </div>
 
-            {/* MANAGED MODE WIDGET - MOUNT PROTECTION TARGET */}
-            {isOpen && (
+            {/* MANAGED MODE WIDGET - Only mounts and displays if Turnstile is enabled */}
+            {isOpen && !DISABLE_TURNSTILE_TESTING && (
               <div className="flex min-h-[65px] w-full justify-center py-2">
                 <Turnstile
                   siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
