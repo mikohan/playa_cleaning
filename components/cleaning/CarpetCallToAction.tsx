@@ -136,7 +136,10 @@ export const CarpetCallToAction = () => {
                       required
                       name="phone"
                       type="tel"
-                      placeholder="(213) 598-77-63"
+                      placeholder={
+                        process.env.NEXT_PUBLIC_COMPANY_PHONE ||
+                        "(213) 598-7763"
+                      }
                       onInput={handlePhoneInput}
                       className={inputClass}
                     />
@@ -174,7 +177,7 @@ export const CarpetCallToAction = () => {
                   <div className="rounded-full bg-muted p-3">
                     <Phone size={20} className="text-primary-blue" />
                   </div>
-                  (213) 598-77-63
+                  {process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"}
                 </a>
               </div>
             </div>

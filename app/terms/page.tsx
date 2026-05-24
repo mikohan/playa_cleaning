@@ -20,7 +20,7 @@ export default function TermsOfService() {
           Last Updated: April 24, 2026
         </p>
 
-        <div className="prose prose-slate max-w-none space-y-10">
+        <div className="prose max-w-none space-y-10 prose-slate">
           <section>
             <h2 className="text-2xl font-bold text-primary-blue">
               1. Overview
@@ -131,12 +131,13 @@ export default function TermsOfService() {
             <p>Questions about these terms? Reach out to us:</p>
             <ul className="mt-4 space-y-1">
               <li>
-                <strong>Phone:</strong> (213) 598-77-63
+                <strong>Phone:</strong>{" "}
+                {process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"}
               </li>
               <li>
                 <strong>Email:</strong>{" "}
                 {process.env.NEXT_PUBLIC_COMPANY_EMAIL ||
-                  "angaralabllc@gmail.com"}
+                  "order@playacleaning.com"}
               </li>
               <li>
                 <strong>Location:</strong> Los Angeles, CA

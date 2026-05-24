@@ -258,7 +258,10 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
                       required
                       name="phone"
                       type="tel"
-                      placeholder="(213) 598-77-63"
+                      placeholder={
+                        process.env.NEXT_PUBLIC_COMPANY_PHONE ||
+                        "(213) 598-7763"
+                      }
                       onInput={handlePhoneInput}
                       className="w-full rounded-2xl border-none bg-background p-5 text-base text-foreground shadow-sm ring-1 ring-border transition-all outline-none focus:ring-2 focus:ring-primary-blue"
                     />
@@ -307,7 +310,7 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
                   <div className="rounded-full bg-muted p-3">
                     <Phone size={20} className="text-primary-blue" />
                   </div>
-                  (213) 598-77-63
+                  {process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"}
                 </a>
               </div>
             </div>

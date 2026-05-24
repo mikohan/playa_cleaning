@@ -296,7 +296,9 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
                 required
                 name="phone"
                 type="tel"
-                placeholder="(213) 598-77-63"
+                placeholder={
+                  process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
+                }
                 onInput={handlePhoneInput}
                 className={inputClassName}
               />
