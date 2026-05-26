@@ -2,7 +2,7 @@
 
 import React from "react"
 import Link from "next/link"
-import { TreePalm } from "lucide-react"
+import { TreePalm, MapPin } from "lucide-react"
 import { ServiceData } from "@/app/types/serviceTypes"
 
 // Icons
@@ -69,7 +69,6 @@ export const Footer = ({ services }: FooterProps) => {
       <WaveDivider position="top" fill="var(--color-background)" />
 
       <div className="container mx-auto px-6 py-12 md:py-16">
-        {/* Optimized from 4 columns to 3 columns to hold balanced layout weight */}
         <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-3">
           {/* Column 1: Brand & Dynamic Contact Layout */}
           <div className="flex flex-col items-center space-y-5 md:items-start">
@@ -147,7 +146,7 @@ export const Footer = ({ services }: FooterProps) => {
             </nav>
           </div>
 
-          {/* Column 3: Corporate Info & Disclaimers */}
+          {/* Column 3: Corporate Info & Address */}
           <div className="flex flex-col items-center md:items-start">
             <h4 className="mb-6 text-sm font-black tracking-widest text-primary-blue uppercase">
               Company
@@ -177,16 +176,38 @@ export const Footer = ({ services }: FooterProps) => {
               >
                 About Us
               </Link>
-              <p className="mt-4 max-w-50 text-xs leading-relaxed text-background/60 italic">
-                Managed by {ownerName} & team. Premium residential resets and
-                scheduled upkeep.
-              </p>
+
+              {/* Verified Physical Office / Mailing Location */}
+              <div className="mt-4 flex flex-col items-center gap-2 border-t border-background/10 pt-4 text-xs text-background/70 md:items-start">
+                <div className="flex items-start gap-2 text-left">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary-blue" />
+                  <div>
+                    <p className="font-bold text-background">Headquarters:</p>
+                    <p>13163 Fountain Park Dr.</p>
+                    <p>Playa Vista, CA 90094</p>
+                  </div>
+                </div>
+                <p className="mt-2 max-w-50 leading-relaxed italic">
+                  Managed by {ownerName} & team. Premium residential resets and
+                  scheduled upkeep.
+                </p>
+              </div>
             </nav>
           </div>
         </div>
 
+        {/* Legal Identity Cross-Reference Disclosures for Google Ad Verification */}
+        <div className="mt-12 border-t border-background/10 pt-6 text-center text-xs leading-relaxed text-background/50 md:text-left">
+          <p>
+            Playa Cleaning is a registered consumer brand proudly owned,
+            operated, and legally fulfilled by Angara Lab LLC. All commercial
+            billing transactions, advertising campaigns, and local scheduling
+            structures are corporate properties of Angara Lab LLC.
+          </p>
+        </div>
+
         {/* Bottom Safety Bar */}
-        <div className="mt-16 flex w-full flex-col items-center justify-between gap-4 border-t border-background/10 pt-8 text-[13px] text-background/80 md:flex-row">
+        <div className="mt-4 flex w-full flex-col items-center justify-between gap-4 border-t border-background/5 pt-6 text-[13px] text-background/80 md:flex-row">
           <p>© {currentYear} Playa Cleaning LLC. All rights reserved.</p>
           <div className="flex gap-4">
             <span className="font-bold text-primary-blue">
