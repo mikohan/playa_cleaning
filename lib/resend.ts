@@ -32,6 +32,7 @@ interface PipelinePayload {
   textMessage: string
   userData: {
     phone: string
+    username?: string
     email?: string
     fbc?: string
     fbp?: string
@@ -142,6 +143,8 @@ async function executeLeadPipeline(
       testEventCode: TEST_EVENT_CODE || undefined,
       user: {
         phone: payload.userData.phone,
+        first_name: payload.userData.username,
+        fn: payload.userData.username,
         email:
           payload.userData.email && payload.userData.email !== "No Email"
             ? payload.userData.email
@@ -266,6 +269,7 @@ export async function sendBookingEmail(formData: {
   beds: string
   baths: string
   phone: string
+  username?: string
   price: number
   fbc?: string
   fbp?: string

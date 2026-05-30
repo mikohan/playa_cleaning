@@ -24,6 +24,8 @@ interface DataLayerPayload {
   service_type: string
   estimated_value: number
   form_type: string
+  username: string // Added
+  phone: string // Added
 }
 
 export const CleaningModal = ({ text }: CleaningModalProps) => {
@@ -107,6 +109,7 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
 
     const phone = formData.get("phone") as string | null
     const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/
+    const userName = formData.get("username") as string
 
     // Form input validation checks
     if (!phone || !phoneRegex.test(phone)) {
@@ -141,6 +144,8 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
         service_type: formattedServiceString,
         estimated_value: dynamicValue,
         form_type: activeFormIdentity,
+        username: userName, // Added
+        phone: phone, // Added
       })
     } catch (trackingError) {
       console.error("Tracking array entry exception intercept:", trackingError)

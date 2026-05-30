@@ -3,6 +3,8 @@ import { createHash } from "crypto"
 interface CapiUserParams {
   phone: string
   email?: string
+  first_name?: string
+  fn?: string
   clientIpAddress?: string
   clientUserAgent?: string
   fbc?: string // Added to clear the interface type constraint error
