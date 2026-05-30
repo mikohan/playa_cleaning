@@ -71,6 +71,7 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
 
     const phone = formData.get("phone") as string
     const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/
+    const username = formData.get("username") as string
 
     if (!phoneRegex.test(phone)) {
       toast.error("Please enter a valid phone: (XXX) XXX-XXXX", {
@@ -89,7 +90,7 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
     // 4. Generate baseline tracking parameter details matching your master list format
     const clientSideEventId = `lead_${Date.now()}_${Math.floor(Math.random() * 1000000)}`
     const activeFormIdentity = "inline_cta_offer"
-    const dynamicValue = 129
+    const dynamicValue = 165
     const formattedServiceString = `Playa ${selectedServiceScope} Clean (${beds}B/${baths}B)`
 
     // 5. Fire clean structured atomic properties array straight to dataLayer
@@ -106,6 +107,8 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
           service_type: formattedServiceString,
           estimated_value: dynamicValue,
           form_type: activeFormIdentity,
+          username: username,
+          phone: phone,
         })
       } catch (trackingError) {
         console.error("GTM DataLayer append failed:", trackingError)
