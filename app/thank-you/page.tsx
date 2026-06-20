@@ -1,134 +1,96 @@
-import React from "react"
+"use client"
+
+import React, { useEffect, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import { PartyPopper, ArrowRight, CheckCircle2, Phone } from "lucide-react"
 import AliciaPortrait from "@/public/images/cleaning/hero-4.png"
-import { Metadata } from "next"
-
-export const metadata: Metadata = {
-  title: "Thank You | Playa Cleaning",
-  description:
-    "Your cleaning quote request has been received. Alicia and the team will reach out shortly with your estimate.",
-
-  // CRITICAL: Prevent this page from showing up in Google search results
-  robots: {
-    index: false,
-    follow: false,
-  },
-
-  // Open Graph
-  openGraph: {
-    title: "Request Received | Playa Cleaning",
-    description:
-      "We've received your details and are preparing your custom cleaning estimate.",
-    url: "https://playacleaning.com/thank-you",
-    siteName: "Playa Cleaning",
-    images: [
-      {
-        url: "/og-thank-you.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Playa Cleaning Confirmation",
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-}
 
 export default function ThankYouPage() {
-  // Safe runtime environmental string resolution
+  const searchParams = useSearchParams()
+  const hasTriggered = useRef(false)
+
+  const status = searchParams.get("status")
+  const sessionId = searchParams.get("session_id")
+
+  useEffect(() => {
+    if (status === "paid" && sessionId && !hasTriggered.current) {
+      hasTriggered.current = true
+      fetch("/api/notify-payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId }),
+      })
+    }
+  }, [status, sessionId])
+
   const ownerName = process.env.NEXT_PUBLIC_COMPANY_OWNER || "Alicia"
   const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
   const numericPhone = companyPhone.replace(/[^0-9+]/g, "")
 
   return (
-    <div>
-      <div className="flex min-h-screen items-center justify-center p-4 md:p-8">
-        <div className="w-full max-w-5xl overflow-hidden rounded-2xl bg-card shadow-lg">
-          <div className="grid grid-cols-1 md:grid-cols-2">
-            {/* LEFT: Portrait Section - Clean Square with subtle rounding */}
-            <div className="relative aspect-square bg-muted md:aspect-auto">
-              <Image
-                src={AliciaPortrait}
-                alt={`${ownerName} - Founder of Playa Cleaning`} // Fixed hidden hardcoded name string leak
-                fill
-                className="object-cover"
-                priority
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-              {/* Simple Gradient Overlay for text legibility at bottom */}
-              <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent md:hidden" />
+    <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4">
+      <div className="grid w-full max-w-5xl grid-cols-1 overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm md:grid-cols-2">
+        <div className="relative aspect-square bg-slate-100 md:aspect-auto">
+          <Image
+            src={AliciaPortrait}
+            alt="Playa Cleaning"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+
+        <div className="flex flex-col justify-center p-8 md:p-16">
+          <div className="space-y-6">
+            <div className="flex items-center gap-2 text-blue-600">
+              <PartyPopper size={20} />
+              <span className="text-xs font-black tracking-widest uppercase">
+                {status === "paid"
+                  ? "Payment Confirmed"
+                  : "Quote Request Received"}
+              </span>
             </div>
 
-            {/* RIGHT: Content Section */}
-            <div className="flex flex-col justify-center p-8 md:p-12 lg:p-16">
-              <div className="space-y-6">
-                {/* Status Header */}
-                <div className="flex items-center gap-2 text-primary-blue">
-                  <PartyPopper size={20} />
-                  <span className="text-xs font-black tracking-widest uppercase">
-                    Quote Request Received
-                  </span>
-                </div>
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">
+              {status === "paid"
+                ? "You're All Set!"
+                : "Thanks! We've Got You Covered."}
+            </h1>
 
-                {/* Main Heading */}
-                <h1 className="text-4xl leading-[1.1] font-bold tracking-tight text-foreground md:text-5xl">
-                  Thanks! We&apos;ve <br />
-                  <span className="text-primary-blue">Got You Covered.</span>
-                </h1>
+            <p className="text-lg leading-relaxed text-slate-600">
+              {status === "paid"
+                ? "Your payment was successful. We've notified the team and will reach out shortly to finalize your appointment."
+                : `${ownerName} and the team are reviewing your details now. We will reach out shortly with your custom price estimate.`}
+            </p>
 
-                <p className="text-lg leading-relaxed text-muted-foreground">
-                  {ownerName} and the team are reviewing your details now. We
-                  will reach out via text or phone shortly with your custom
-                  price estimate.
-                </p>
-
-                {/* Next Steps List - Clean and Minimal */}
-                <div className="space-y-4 pt-4">
-                  <div className="flex items-center gap-3">
-                    <div className="rounded-full bg-accent-green/10 p-1 text-accent-green">
-                      <CheckCircle2 size={18} />
-                    </div>
-                    <span className="text-sm font-medium">
-                      Detailed room-by-room review
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="rounded-full bg-accent-green/10 p-1 text-accent-green">
-                      <CheckCircle2 size={18} />
-                    </div>
-                    <span className="text-sm font-medium">
-                      Text confirmation in ~15 mins
-                    </span>
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex flex-col gap-3 pt-6 sm:flex-row">
-                  <Link
-                    href="/"
-                    className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary-blue py-4 text-sm font-bold text-white transition-all hover:bg-primary active:scale-95"
-                  >
-                    Return Home
-                    <ArrowRight size={18} />
-                  </Link>
-                  <a
-                    href={`tel:${numericPhone}`}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-background py-4 text-sm font-bold transition-all hover:bg-muted"
-                  >
-                    <Phone size={18} className="text-primary-blue" />
-                    {companyPhone}
-                  </a>
-                </div>
-
-                {/* Social/Trust Link */}
-                <div className="flex items-center justify-between border-t border-border pt-8">
-                  <p className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
-                    Playa Vista & Los Angeles County
-                  </p>
-                </div>
+            <div className="space-y-4 pt-4">
+              <div className="flex items-center gap-3">
+                <CheckCircle2 size={18} className="text-green-600" />{" "}
+                <span className="text-sm font-bold">Priority Scheduling</span>
               </div>
+              <div className="flex items-center gap-3">
+                <CheckCircle2 size={18} className="text-green-600" />{" "}
+                <span className="text-sm font-bold">
+                  Confirmation in ~15 mins
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3 pt-6 sm:flex-row">
+              <Link
+                href="/"
+                className="flex-1 rounded-xl bg-blue-600 py-4 text-center text-sm font-bold text-white transition-all hover:bg-blue-700"
+              >
+                Return Home
+              </Link>
+              <a
+                href={`tel:${numericPhone}`}
+                className="flex-1 rounded-xl bg-slate-100 py-4 text-center text-sm font-bold transition-all hover:bg-slate-200"
+              >
+                {companyPhone}
+              </a>
             </div>
           </div>
         </div>

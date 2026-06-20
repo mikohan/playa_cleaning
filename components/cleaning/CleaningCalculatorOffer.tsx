@@ -122,8 +122,8 @@ export function CleaningCalculator({
                 <span className="text-primary-blue">Right Now</span>
               </h2>
               <p className="mt-6 text-lg text-muted-foreground">
-                Premium care for your home. We focus on health, consistency, and
-                details others skip.
+                Premium Cleaning for your home. We focus on health, consistency,
+                and details others skip.
               </p>
             </div>
           </div>
@@ -135,7 +135,7 @@ export function CleaningCalculator({
           <div className="space-y-10 lg:col-span-7">
             <header>
               <h2 className="mb-2 text-xl font-bold tracking-tight uppercase md:text-3xl">
-                Estimate Your固定 Transformation
+                Estimate Your Cleaning
               </h2>
               <p className="text-sm text-muted-foreground italic md:text-base">
                 Our Price Lock Guarantee ensures no surprises at the door.
@@ -210,10 +210,10 @@ export function CleaningCalculator({
                   >
                     <p className="font-bold text-foreground capitalize">
                       {k === "standard"
-                        ? "Standard Care"
+                        ? "Standard Cleaning"
                         : k === "deep"
-                          ? "Deep Detail"
-                          : "Intensive Canvas"}
+                          ? "Deep Cleaning"
+                          : "Move in/out Cleaning"}
                     </p>
                     <p className="mt-1 text-[10px] leading-tight text-muted-foreground">
                       {k === "standard"
