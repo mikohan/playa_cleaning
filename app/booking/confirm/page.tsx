@@ -74,7 +74,7 @@ function BookingContent() {
         setTimeout(() => {
           if (bookingMode === "pay") {
             const email = (formData.get("email") as string) || ""
-            const stripeUrl = `${process.env.NEXT_PUBLIC_STRIPE_URL}?prefilled_email=${encodeURIComponent(email)}`
+            const stripeUrl = `${process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK}?prefilled_email=${encodeURIComponent(email)}`
             router.push(stripeUrl)
           } else {
             router.push("/thank-you")
