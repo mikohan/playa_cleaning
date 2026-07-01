@@ -11,16 +11,16 @@ const VideoComponent = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="aspect-1080/1350 w-full animate-pulse rounded-4xl bg-slate-200" />
+      <div className="aspect-[9/16] w-full animate-pulse rounded-4xl bg-slate-200" />
     ),
   }
 )
 
 interface HeroVideoProps {
-  title: string // The H1 text
-  subtitle: string // The H2 text
-  highlightIndex?: number // The word index to circle (0-based)
-  showNotation?: boolean // Toggle for RoughNotation
+  title: string
+  subtitle: string
+  highlightIndex?: number
+  showNotation?: boolean
 }
 
 function HeroVideo({
@@ -29,11 +29,8 @@ function HeroVideo({
   highlightIndex = 1,
   showNotation = true,
 }: HeroVideoProps) {
-  // Split the title into words to apply notation to a specific one
-  // Safe check: if title is somehow null or undefined, split doesn't blow up
   const words = (title || "").split(" ")
 
-  // If title is empty, we don't want to render a broken H1
   if (!title) return null
 
   return (
@@ -81,13 +78,15 @@ function HeroVideo({
             </div>
           </div>
 
-          {/* Media Section */}
+          {/* Media Section - 9:16 Ratio */}
           <div className="flex w-full items-center justify-center md:flex-1">
-            <div className="relative aspect-1080/1350 w-full max-w-150 overflow-hidden rounded-4xl shadow-2xl">
+            <div className="relative aspect-[9/16] w-full max-w-sm overflow-hidden rounded-4xl shadow-2xl">
               <VideoComponent
                 source="/videos/ol-deep.mp4"
+                // Ensure your internal VideoComponent uses object-cover
+                // to fill this 9:16 container without distortion
                 width="1080"
-                height="1350"
+                height="1920"
               />
             </div>
           </div>
