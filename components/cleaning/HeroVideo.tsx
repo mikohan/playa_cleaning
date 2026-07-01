@@ -82,7 +82,8 @@ function HeroVideo({
           <div className="flex w-full items-center justify-center md:flex-1">
             <div className="relative aspect-[9/16] w-full max-w-sm overflow-hidden rounded-4xl shadow-2xl">
               <VideoComponent
-                source="/videos/ol-deep.mp4"
+                source_mp4="/videos/land-alicia-deep.mp4"
+                source_webm="/videos/land-alicia-deep.webm"
                 // Ensure your internal VideoComponent uses object-cover
                 // to fill this 9:16 container without distortion
                 width="1080"

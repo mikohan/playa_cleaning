@@ -1,7 +1,8 @@
 import AliciaImage from "@/public/images/cleaning/hero-4.webp"
 
 interface VideoComponentProps {
-  source: string
+  source_webm?: string
+  source_mp4: string
   autoPlay?: boolean
   loop?: boolean
   muted?: boolean
@@ -9,7 +10,8 @@ interface VideoComponentProps {
   height?: string
 }
 export function VideoComponent({
-  source,
+  source_webm,
+  source_mp4,
   autoPlay = true,
   loop = true,
   muted = true,
@@ -32,7 +34,8 @@ export function VideoComponent({
         playsInline
         poster={AliciaImage.src}
       >
-        <source src={source} type="video/mp4" />
+        <source src={source_webm} type="video/webm" />
+        <source src={source_mp4} type="video/mp4" />
         <track kind="subtitles" srcLang="en" label="English" />
         Your browser does not support the video tag.
       </video>
