@@ -87,6 +87,7 @@ function HeroVideo({
                 // to fill this 9:16 container without distortion
                 width="1080"
                 height="1920"
+                autoPlay
               />
             </div>
           </div>
