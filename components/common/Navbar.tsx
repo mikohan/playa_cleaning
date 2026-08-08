@@ -54,7 +54,7 @@ export function Navbar({ services, locations }: NavbarProps) {
   }))
 
   const navItems = [
-    { title: "Home", href: "/" },
+    { title: "Home", href: "/", className: "" },
     {
       title: "Services",
       href: "/services",
@@ -69,6 +69,11 @@ export function Navbar({ services, locations }: NavbarProps) {
     },
     { title: "Pricing", href: "/cleaning-calculator" },
     { title: "About", href: "/about" },
+    {
+      title: process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343",
+      href: process.env.NEXT_PUBLIC_COMPANY_PHONE_LINK || "+14243562343",
+      className: "font-black",
+    },
   ]
 
   return (
@@ -99,7 +104,12 @@ export function Navbar({ services, locations }: NavbarProps) {
                     <>
                       <Link href={item.href} passHref>
                         <div className="cursor-pointer">
-                          <NavigationMenuTrigger className="cursor-pointer bg-transparent font-black tracking-widest uppercase transition-colors hover:text-primary-blue">
+                          <NavigationMenuTrigger
+                            className={cn(
+                              item.className,
+                              "cursor-pointer bg-transparent font-black tracking-widest uppercase transition-colors hover:text-primary-blue"
+                            )}
+                          >
                             {item.title}
                           </NavigationMenuTrigger>
                         </div>
@@ -124,7 +134,10 @@ export function Navbar({ services, locations }: NavbarProps) {
                             <li className="col-span-2 mt-2 border-t border-border pt-2">
                               <Link
                                 href="/locations"
-                                className="flex items-center justify-center text-[10px] font-bold text-primary-blue uppercase hover:underline"
+                                className={cn(
+                                  item.className,
+                                  "flex items-center justify-center text-[10px] font-bold text-primary-blue uppercase hover:underline"
+                                )}
                               >
                                 View All Service Areas{" "}
                                 <MapPin className="ml-1 h-3 w-3" />
@@ -139,8 +152,9 @@ export function Navbar({ services, locations }: NavbarProps) {
                       <Link
                         href={item.href}
                         className={cn(
-                          "px-4 py-2 text-base font-black tracking-widest uppercase transition-colors hover:text-primary-blue",
-                          "nav-animation-underline"
+                          "px-4 py-2 font-bold tracking-widest text-primary-blue-dark uppercase",
+                          "nav-animation-underline",
+                          item.className
                         )}
                       >
                         {item.title}

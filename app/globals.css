@@ -53,6 +53,7 @@
   --font-inter: var(--font-inter);
   --color-top-blur: var(--top-blur);
   --color-primary-blue: var(--primary-blue);
+  --color-primary-blue-dark: var(--primary-blue-dark);
   --color-footer: var(--footer);
   --color-accent-yellow: var(--accent-yellow);
   --color-accent-green: var(--accent-green);
@@ -94,6 +95,7 @@
   --font-sans: var(--font-jakarta);
   --top-blur: oklch(0.9 0.034 259.597);
   --primary-blue: oklch(0.5712 0.1434 254.62);
+  --primary-blue-dark: oklch(0.4585 0.1434 254.62);
   --footer: oklch(0.2077 0.0398 265.75);
   --accent-yellow: oklch(0.7764 0.1631 75.75);
   --accent-green: oklch(0.75 0.2044 130.85);
@@ -136,6 +138,7 @@
   /* custom settings */
   --top-blur: oklch(0.3 0.084 259.597);
   --primary-blue: oklch(0.7137 0.1434 254.62);
+  --primary-blue-dark: oklch(0.6929 0.1434 254.62);
   --footer: oklch(0.2077 0.0398 265.75);
   --accent-yellow: oklch(0.8147 0.1631 75.75);
   --accent-green: oklch(0.8591 0.2044 130.85);
@@ -190,13 +193,13 @@
 }
 
 .nav-animation-underline {
-  @apply relative font-medium transition-colors duration-300 hover:text-secondary-foreground;
+  @apply relative transition-colors duration-300 hover:text-primary-blue;
 
-  /* The underline logic */
+  /* The underline logic with initial color */
   @apply after:absolute after:-bottom-0.5 after:left-0 after:h-0.5 after:w-0 after:bg-secondary-foreground after:transition-all after:duration-300;
 
-  /* Fixed the typo from 'over' to 'hover' */
-  @apply hover:after:w-full;
+  /* Expand width and change underline color on hover */
+  @apply hover:after:w-full hover:after:bg-primary-blue;
 }
 /* Styling the overlay/backdrop */
 dialog::backdrop {
