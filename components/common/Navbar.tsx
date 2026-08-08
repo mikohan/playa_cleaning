@@ -73,6 +73,7 @@ export function Navbar({ services, locations }: NavbarProps) {
       title: process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343",
       href: process.env.NEXT_PUBLIC_COMPANY_PHONE_LINK || "+14243562343",
       className: "font-black",
+      type: "phone",
     },
   ]
 
@@ -150,7 +151,9 @@ export function Navbar({ services, locations }: NavbarProps) {
                   ) : (
                     <NavigationMenuLink asChild>
                       <Link
-                        href={item.href}
+                        href={
+                          item.type === "phone" ? `tel:${item.href}` : item.href
+                        }
                         className={cn(
                           "px-4 py-2 font-bold tracking-widest text-primary-blue-dark uppercase",
                           "nav-animation-underline",
@@ -204,7 +207,9 @@ export function Navbar({ services, locations }: NavbarProps) {
                   {navItems.map((item) => (
                     <div key={item.title} className="flex flex-col gap-4">
                       <Link
-                        href={item.href}
+                        href={
+                          item.type === "phone" ? `tel:${item.href}` : item.href
+                        }
                         className="text-2xl font-black tracking-tight text-foreground uppercase hover:text-primary-blue"
                       >
                         {item.title}
