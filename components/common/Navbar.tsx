@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import Link from "next/link"
 import { useTheme } from "next-themes"
 import { Menu, TreePalm, MapPin } from "lucide-react"
@@ -37,7 +37,8 @@ export function Navbar({ services, locations }: NavbarProps) {
   const { theme, setTheme } = useTheme()
   const handleToggle = () => setTheme(theme === "dark" ? "light" : "dark")
 
-  // Map dynamic services
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false)
+
   const dynamicServiceItems = services.map((service) => ({
     name: service.name,
     href: `/services/${service.slug}`,
@@ -46,7 +47,6 @@ export function Navbar({ services, locations }: NavbarProps) {
       `Professional ${service.name.toLowerCase()} services.`,
   }))
 
-  // Map dynamic locations
   const dynamicLocationItems = locations.map((loc) => ({
     name: loc.city_name,
     href: `/locations/${loc.slug}`,
@@ -55,6 +55,14 @@ export function Navbar({ services, locations }: NavbarProps) {
 
   const navItems = [
     { title: "Home", href: "/", className: "" },
+    { title: "Pricing", href: "/cleaning-calculator" },
+    { title: "About", href: "/about" },
+    {
+      title: process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343",
+      href: process.env.NEXT_PUBLIC_COMPANY_PHONE_LINK || "+14243562343",
+      className: "font-black",
+      type: "phone",
+    },
     {
       title: "Services",
       href: "/services",
@@ -65,15 +73,7 @@ export function Navbar({ services, locations }: NavbarProps) {
       title: "Locations",
       href: "/locations",
       isDropdown: true,
-      subItems: dynamicLocationItems.slice(0, 12), // Limit dropdown size for UX
-    },
-    { title: "Pricing", href: "/cleaning-calculator" },
-    { title: "About", href: "/about" },
-    {
-      title: process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343",
-      href: process.env.NEXT_PUBLIC_COMPANY_PHONE_LINK || "+14243562343",
-      className: "font-black",
-      type: "phone",
+      subItems: dynamicLocationItems.slice(0, 12),
     },
   ]
 
@@ -84,7 +84,6 @@ export function Navbar({ services, locations }: NavbarProps) {
           <div className="absolute inset-0 bg-top-blur/40 blur-3xl" />
         </div>
 
-        {/* Logo Section */}
         <Link
           href="/"
           className="flex items-center space-x-2 transition-opacity hover:opacity-90"
@@ -95,7 +94,6 @@ export function Navbar({ services, locations }: NavbarProps) {
           </span>
         </Link>
 
-        {/* Desktop Navigation */}
         <nav className="hidden items-center lg:flex">
           <NavigationMenu>
             <NavigationMenuList className="gap-2">
@@ -170,7 +168,6 @@ export function Navbar({ services, locations }: NavbarProps) {
           </NavigationMenu>
         </nav>
 
-        {/* Action Buttons */}
         <div className="flex items-center space-x-4">
           <div className="hidden items-center space-x-4 sm:flex">
             <ThemeToggle />
@@ -181,9 +178,8 @@ export function Navbar({ services, locations }: NavbarProps) {
             </Link>
           </div>
 
-          {/* Mobile Menu (Sheet) */}
           <div className="lg:hidden">
-            <Sheet>
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
                 <button className="p-2 outline-none">
                   <Menu className="h-6 w-6" />
@@ -210,6 +206,7 @@ export function Navbar({ services, locations }: NavbarProps) {
                         href={
                           item.type === "phone" ? `tel:${item.href}` : item.href
                         }
+                        onClick={() => setIsMobileMenuOpen(false)}
                         className="text-2xl font-black tracking-tight text-foreground uppercase hover:text-primary-blue"
                       >
                         {item.title}
@@ -220,6 +217,7 @@ export function Navbar({ services, locations }: NavbarProps) {
                             <Link
                               key={sub.name}
                               href={sub.href}
+                              onClick={() => setIsMobileMenuOpen(false)}
                               className="text-sm font-bold tracking-widest text-muted-foreground uppercase hover:text-primary-blue"
                             >
                               — {sub.name}
@@ -238,7 +236,10 @@ export function Navbar({ services, locations }: NavbarProps) {
                   >
                     <ThemeToggle /> Toggle Theme
                   </div>
-                  <Link href="/cleaning-calculator">
+                  <Link
+                    href="/cleaning-calculator"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
                     <ButtonShiny text="Order Cleaning" />
                   </Link>
                 </div>
