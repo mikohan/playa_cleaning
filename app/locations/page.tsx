@@ -49,8 +49,7 @@ async function getAllLocations(): Promise<LocationRecord[]> {
 // ─────────────────────────────────────────────────────────────
 
 export const metadata: Metadata = {
-  title:
-    "Service Areas | Professional Cleaning Across Los Angeles | Playa Cleaning",
+  title: "Service Areas | Professional Cleaning Across Los Angeles",
   description:
     "Playa Cleaning provides premium residential, commercial, and technical upholstery cleaning across Los Angeles. Serving Santa Monica, Venice, Culver City, Marina del Rey, and surrounding neighborhoods.",
   alternates: { canonical: "https://playacleaning.com/locations" },

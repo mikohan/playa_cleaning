@@ -18,8 +18,7 @@ import { getFooterLocations } from "@/lib/get-locations"
 // 1. WORLD-CLASS SEO METADATA STATIC PAYLOAD
 // ─────────────────────────────────────────────────────────────
 export const metadata: Metadata = {
-  title:
-    "Premium Maid Services & Residential Cleaning Los Angeles | Playa Cleaning",
+  title: "Premium Maid Services & Residential Cleaning Los Angeles",
   description:
     "Meticulous, reliable, and pet-safe residential house cleaning services across Los Angeles. Experience luxury-tier maid services tailored to your home from Alicia at Playa Cleaning.",
   keywords: [

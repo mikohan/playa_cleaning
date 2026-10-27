@@ -12,7 +12,7 @@ import { CleaningCalculator } from "@/components/cleaning/CleaningCalculatorOffe
 import { BreadCrumbsUniversal } from "@/components/common/BreadCrumbsUniversal"
 
 export const metadata: Metadata = {
-  title: "Instant Cleaning Quote | Playa Cleaning Los Angeles",
+  title: "Instant Cleaning Quote | Los Angeles",
   description:
     "Get an instant price for your residential deep cleaning in Los Angeles. Select your layout to view our flat-rate pricing for standard upkeep and intensive home prep cleans.",
   keywords: [

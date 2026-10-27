@@ -11,7 +11,7 @@ import { Metadata } from "next"
 import { BreadCrumbsUniversal } from "@/components/common/BreadCrumbsUniversal"
 
 export const metadata: Metadata = {
-  title: "Flat-Rate House Cleaning Pricing Los Angeles | Playa Cleaning",
+  title: "Flat-Rate House Cleaning Pricing Los Angeles",
   description:
     "View our transparent, flat-rate cleaning prices for Los Angeles homes. No hidden fees. See what's included in our Standard, Deep, and Move-Out cleaning packages.",
   keywords: [

@@ -13,7 +13,7 @@ import { LocationTicker } from "@/components/cleaning/LocationTicker"
 
 const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
 export const metadata: Metadata = {
-  title: "Professional Cleaning Services in Los Angeles | Playa Cleaning",
+  title: "Professional Cleaning Services in Los Angeles",
   description:
     "Expert residential, commercial, and technical upholstery cleaning services across Los Angeles. Specializing in routine maid services, deep cleans, and eco-friendly practices. Book your 5-star professional clean today.",
   alternates: {

@@ -13,7 +13,7 @@ import { CallToAction } from "@/components/cleaning/CallToAction"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "About Playa Cleaning | Meet Alicia, Our Founder",
+  title: "About Us | Meet Alicia, Our Founder",
   description:
     "Learn about Playa Cleaning, the professional house and office cleaning company serving Los Angeles. Meet Alicia, our founder, and our commitment to meticulous, reliable care.",
   alternates: {

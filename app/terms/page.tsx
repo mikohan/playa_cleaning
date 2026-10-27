@@ -2,7 +2,7 @@ import { BreadCrumbsUniversal } from "@/components/common/BreadCrumbsUniversal"
 import React from "react"
 
 export const metadata = {
-  title: "Terms of Service | Playa Cleaning",
+  title: "Terms of Service",
   description:
     "Terms and conditions for professional cleaning services provided by Playa Cleaning LLC in Los Angeles.",
   alternates: {

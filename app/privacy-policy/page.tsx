@@ -5,7 +5,7 @@ import { Metadata } from "next"
 import { BreadCrumbsUniversal } from "@/components/common/BreadCrumbsUniversal"
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Playa Cleaning Los Angeles",
+  title: "Privacy Policy | Los Angeles",
   description:
     "Learn how Playa Cleaning (Angara Steamers) collects, uses, and protects your personal data. We are committed to your privacy and the security of your information.",
   keywords: [

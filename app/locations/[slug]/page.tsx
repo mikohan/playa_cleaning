@@ -161,7 +161,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!location) return { title: "Location Not Found" }
 
-  const title = `Professional Cleaning Services in ${location.city_name} | Playa Cleaning`
+  const pageTitle = `Professional Cleaning Services in ${location.city_name}`
+  const title = `${pageTitle} | Playa Cleaning`
   const description =
     location.local_hook ||
     `Top-rated residential and commercial cleaning in ${location.city_name}. 5-star local professionals, instant quotes, and eco-friendly products.`
@@ -171,7 +172,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const lng = location.coordinates?.lng || -118.2437
 
   return {
-    title,
+    title: pageTitle,
     description,
     alternates: { canonical: url },
     keywords: `cleaning service ${location.city_name}, house cleaning ${location.city_name}, maid service ${location.city_name}, upholstery cleaning ${location.city_name}, professional cleaners ${location.city_name}, local maids ${location.city_name}`,
@@ -252,7 +253,7 @@ function JsonLd({
       aggregateRating: {
         "@type": "AggregateRating",
         ratingValue: "4.9",
-        reviewCount: "158",
+        reviewCount: "37",
       },
       areaServed: {
         "@type": "City",
