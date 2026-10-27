@@ -39,3 +39,6 @@ pnpm-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# AI assistant scratch/patch files - never commit these
+.claude_tmp/
