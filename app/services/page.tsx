@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description:
     "Expert residential, commercial, and technical upholstery cleaning services across Los Angeles. Specializing in routine maid services, deep cleans, and eco-friendly practices. Book your 5-star professional clean today.",
   alternates: {
-    canonical: "https://www.playacleaning.com/services",
+    canonical: "https://playacleaning.com/services",
   },
   keywords:
     "cleaning services los angeles, professional cleaners la, house cleaning service, maid service near me, office cleaning company, technical upholstery cleaning, deep cleaning solutions, eco friendly cleaners",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     title: "Top-Rated Cleaning Services in LA | Playa Cleaning",
     description:
       "From Santa Monica and Venice to DTLA, we provide meticulous, top-tier professional cleaning services for homes, living areas, and offices.",
-    url: "https://www.playacleaning.com/services",
+    url: "https://playacleaning.com/services",
     siteName: "Playa Cleaning",
     images: [
       {
@@ -86,9 +86,9 @@ export default async function ServicesListPage() {
     "@graph": [
       {
         "@type": "LocalBusiness",
-        "@id": "https://www.playacleaning.com/#organization",
+        "@id": "https://playacleaning.com/#organization",
         name: "Playa Cleaning",
-        url: "https://www.playacleaning.com",
+        url: "https://playacleaning.com",
         telephone: companyPhone,
         priceRange: "$$",
         image: "https://cms.playacleaning.com/uploads/hero_4_8f4caab2a5.webp",
@@ -100,7 +100,7 @@ export default async function ServicesListPage() {
         },
         hasOfferCatalog: {
           "@type": "OfferCatalog",
-          "@id": "https://www.playacleaning.com/services/#catalog",
+          "@id": "https://playacleaning.com/services/#catalog",
           name: "Our Professional Cleaning Services",
           description:
             "Full catalog of high-fidelity residential, maid, commercial, and technical upholstery cleaning options.",
@@ -113,9 +113,9 @@ export default async function ServicesListPage() {
               description:
                 s.meta_description ||
                 `Premium professional ${s.name} solutions across Los Angeles.`,
-              url: `https://www.playacleaning.com/services/${s.slug}`,
+              url: `https://playacleaning.com/services/${s.slug}`,
               provider: {
-                "@id": "https://www.playacleaning.com/#organization",
+                "@id": "https://playacleaning.com/#organization",
               },
             },
           })),
@@ -123,19 +123,19 @@ export default async function ServicesListPage() {
       },
       {
         "@type": "BreadcrumbList",
-        "@id": "https://www.playacleaning.com/services/#breadcrumb",
+        "@id": "https://playacleaning.com/services/#breadcrumb",
         itemListElement: [
           {
             "@type": "ListItem",
             position: 1,
             name: "Home",
-            item: "https://www.playacleaning.com",
+            item: "https://playacleaning.com",
           },
           {
             "@type": "ListItem",
             position: 2,
             name: "Services",
-            item: "https://www.playacleaning.com/services",
+            item: "https://playacleaning.com/services",
           },
         ],
       },

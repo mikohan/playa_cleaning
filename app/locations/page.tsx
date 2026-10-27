@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     "Service Areas | Professional Cleaning Across Los Angeles | Playa Cleaning",
   description:
     "Playa Cleaning provides premium residential, commercial, and technical upholstery cleaning across Los Angeles. Serving Santa Monica, Venice, Culver City, Marina del Rey, and surrounding neighborhoods.",
-  alternates: { canonical: "https://www.playacleaning.com/locations" },
+  alternates: { canonical: "https://playacleaning.com/locations" },
   keywords:
     "cleaning services los angeles, maid service santa monica, house cleaning venice ca, upholstery cleaning culver city, commercial office cleaning la, playa cleaning service areas, professional cleaners lakers area",
   other: {
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     title: "Our Los Angeles Service Areas | Playa Cleaning",
     description:
       "Professional cleaning services in your neighborhood. Serving the greater Los Angeles area with 5-star house, maid, and premium upholstery care.",
-    url: "https://www.playacleaning.com/locations",
+    url: "https://playacleaning.com/locations",
     siteName: "Playa Cleaning",
     images: [
       {
@@ -97,9 +97,9 @@ function LocationsSchema({ locations }: { locations: LocationRecord[] }) {
     "@graph": [
       {
         "@type": "LocalBusiness",
-        "@id": "https://www.playacleaning.com/#organization",
+        "@id": "https://playacleaning.com/#organization",
         name: "Playa Cleaning",
-        url: "https://www.playacleaning.com",
+        url: "https://playacleaning.com",
         telephone: companyPhone,
         priceRange: "$$",
         image: "https://cms.playacleaning.com/uploads/hero_4_8f4caab2a5.webp",
@@ -111,7 +111,7 @@ function LocationsSchema({ locations }: { locations: LocationRecord[] }) {
         },
         hasOfferCatalog: {
           "@type": "OfferCatalog",
-          "@id": "https://www.playacleaning.com/locations/#catalog",
+          "@id": "https://playacleaning.com/locations/#catalog",
           name: "Playa Cleaning Service Directory",
           description:
             "Comprehensive list of coverage areas and service sectors optimized across Los Angeles.",
@@ -120,8 +120,8 @@ function LocationsSchema({ locations }: { locations: LocationRecord[] }) {
             position: index + 1,
             item: {
               "@type": "WebPage",
-              "@id": `https://www.playacleaning.com/locations/${loc.slug}`,
-              url: `https://www.playacleaning.com/locations/${loc.slug}`,
+              "@id": `https://playacleaning.com/locations/${loc.slug}`,
+              url: `https://playacleaning.com/locations/${loc.slug}`,
               name: `Professional Cleaning Services in ${loc.city_name}`,
               description:
                 loc.local_hook ||

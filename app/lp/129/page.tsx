@@ -17,6 +17,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: `https://playacleaning.com/lp/${PREMIUM_OFFER_CONTENT.slug}`,
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: PREMIUM_OFFER_CONTENT.metadata.title,
+      },
+    ],
   },
 }
 

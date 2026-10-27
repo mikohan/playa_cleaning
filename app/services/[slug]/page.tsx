@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation"
+import { notFound, permanentRedirect } from "next/navigation"
 import { Metadata } from "next"
 import { BreadCrumbs } from "@/components/common/BreadCrumbs"
 import AliciaImage from "@/public/images/cleaning/ol-2.png" // Updated internal file reference handling mentally to track context
@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!service) return { title: "Service Not Found" }
 
-  const url = `https://www.playacleaning.com/services/${slug}`
+  const url = `https://playacleaning.com/services/${slug}`
   const title =
     service.meta_title || `${service.name} | Playa Cleaning Los Angeles`
   const description =
@@ -72,7 +72,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         {
           url: service.photo?.url
             ? `${STRAPI_URL}${service.photo.url}`
-            : "https://www.playacleaning.com/og-image.jpg",
+            : "https://playacleaning.com/og-image.jpg",
           width: 1200,
           height: 630,
           alt: `${service.name} Services in Los Angeles`,
@@ -88,7 +88,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: [
         service.photo?.url
           ? `${STRAPI_URL}${service.photo.url}`
-          : "https://www.playacleaning.com/og-image.jpg",
+          : "https://playacleaning.com/og-image.jpg",
       ],
     },
   }
@@ -107,7 +107,7 @@ export default async function ServicePage({ params }: Props) {
   const service = await getServiceBySlug(slug)
   const services = await getAllServices()
 
-  if (!service) notFound()
+  if (!service) permanentRedirect("/services")
 
   const ownerName = process.env.NEXT_PUBLIC_COMPANY_OWNER || "Alicia"
   const isCarpetService = slug.includes("carpet") || slug.includes("upholstery")
@@ -128,12 +128,12 @@ export default async function ServicePage({ params }: Props) {
     "@graph": [
       {
         "@type": "LocalBusiness",
-        "@id": "https://www.playacleaning.com/#organization",
+        "@id": "https://playacleaning.com/#organization",
         name: "Playa Cleaning",
-        url: "https://www.playacleaning.com",
+        url: "https://playacleaning.com",
         telephone: companyPhone,
         priceRange: "$$",
-        image: "https://www.playacleaning.com/logo.png",
+        image: "https://playacleaning.com/logo.png",
         address: {
           "@type": "PostalAddress",
           addressLocality: "Los Angeles",
@@ -142,7 +142,7 @@ export default async function ServicePage({ params }: Props) {
         },
         hasOfferCatalog: {
           "@type": "OfferCatalog",
-          "@id": `https://www.playacleaning.com/services/${slug}/#catalog`,
+          "@id": `https://playacleaning.com/services/${slug}/#catalog`,
           name: service.name,
           description:
             service.meta_description ||
@@ -154,13 +154,13 @@ export default async function ServicePage({ params }: Props) {
                 "@type": "Service",
                 name: service.name,
                 description: service.meta_description,
-                url: `https://www.playacleaning.com/services/${slug}`,
+                url: `https://playacleaning.com/services/${slug}`,
                 areaServed: {
                   "@type": "City",
                   name: "Los Angeles",
                 },
                 provider: {
-                  "@id": "https://www.playacleaning.com/#organization",
+                  "@id": "https://playacleaning.com/#organization",
                 },
               },
             },
@@ -169,25 +169,25 @@ export default async function ServicePage({ params }: Props) {
       },
       {
         "@type": "BreadcrumbList",
-        "@id": `https://www.playacleaning.com/services/${slug}/#breadcrumb`,
+        "@id": `https://playacleaning.com/services/${slug}/#breadcrumb`,
         itemListElement: [
           {
             "@type": "ListItem",
             position: 1,
             name: "Home",
-            item: "https://www.playacleaning.com",
+            item: "https://playacleaning.com",
           },
           {
             "@type": "ListItem",
             position: 2,
             name: "Services",
-            item: "https://www.playacleaning.com/services",
+            item: "https://playacleaning.com/services",
           },
           {
             "@type": "ListItem",
             position: 3,
             name: service.name,
-            item: `https://www.playacleaning.com/services/${slug}`,
+            item: `https://playacleaning.com/services/${slug}`,
           },
         ],
       },

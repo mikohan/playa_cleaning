@@ -5,6 +5,25 @@ export const metadata = {
   title: "Terms of Service | Playa Cleaning",
   description:
     "Terms and conditions for professional cleaning services provided by Playa Cleaning LLC in Los Angeles.",
+  alternates: {
+    canonical: "https://playacleaning.com/terms",
+  },
+  openGraph: {
+    title: "Terms of Service | Playa Cleaning",
+    description:
+      "Terms and conditions for professional cleaning services provided by Playa Cleaning LLC in Los Angeles.",
+    url: "https://playacleaning.com/terms",
+    siteName: "Playa Cleaning",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Playa Cleaning Terms of Service",
+      },
+    ],
+  },
 }
 const tosIntro = `Playa Cleaning LLC ("the Company," "we," "us") provides professional residential and commercial cleaning services. By booking a service through our website, phone, or email, you ("the Client") agree to be bound by the following terms and conditions.`
 

@@ -33,18 +33,18 @@ export const metadata: Metadata = {
     "Alicia cleaning service",
   ],
   alternates: {
-    canonical: "https://www.playacleaning.com",
+    canonical: "https://playacleaning.com",
   },
   openGraph: {
     title:
       "Premium Maid Services & Residential Cleaning Los Angeles | Playa Cleaning",
     description:
       "Meticulous, eco-friendly, and kid-safe professional residential cleaning services across Greater LA. Experience absolute attention to detail with Alicia.",
-    url: "https://www.playacleaning.com",
+    url: "https://playacleaning.com",
     siteName: "Playa Cleaning",
     images: [
       {
-        url: "https://www.playacleaning.com/og-image.jpg",
+        url: "https://playacleaning.com/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Playa Cleaning Premium Residential Maid Services Los Angeles",
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     title: "Premium Residential Maid Services Los Angeles",
     description:
       "Meticulous, reliable, and pet-safe professional home cleaning across Los Angeles with Alicia.",
-    images: ["https://www.playacleaning.com/og-image.jpg"],
+    images: ["https://playacleaning.com/og-image.jpg"],
   },
   robots: {
     index: true,
@@ -119,10 +119,10 @@ export default async function Page() {
     "@graph": [
       {
         "@type": "HomeAndConstructionBusiness",
-        "@id": "https://www.playacleaning.com/#localbusiness",
+        "@id": "https://playacleaning.com/#localbusiness",
         name: "Playa Cleaning",
-        image: "https://www.playacleaning.com/og-image.jpg",
-        url: "https://www.playacleaning.com",
+        image: "https://playacleaning.com/og-image.jpg",
+        url: "https://playacleaning.com",
         telephone: phoneNumber,
         priceRange: "$$",
         address: {

@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation"
+import { notFound, permanentRedirect } from "next/navigation"
 import { strapiRequest } from "@/lib/strapi"
 import LocationNeighbors from "@/components/cleaning/LocationNighbors"
 import {
@@ -165,7 +165,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description =
     location.local_hook ||
     `Top-rated residential and commercial cleaning in ${location.city_name}. 5-star local professionals, instant quotes, and eco-friendly products.`
-  const url = `https://www.playacleaning.com/locations/${slug}`
+  const url = `https://playacleaning.com/locations/${slug}`
 
   const lat = location.coordinates?.lat || 34.0522
   const lng = location.coordinates?.lng || -118.2437
@@ -218,7 +218,7 @@ function JsonLd({
 }) {
   const lat = location.coordinates?.lat || 34.0522
   const lng = location.coordinates?.lng || -118.2437
-  const pageUrl = `https://www.playacleaning.com/locations/${location.slug}`
+  const pageUrl = `https://playacleaning.com/locations/${location.slug}`
   const businessId = `${pageUrl}#cleaning-service`
 
   const dynamicDescription =
@@ -321,7 +321,7 @@ export default async function LocationPage({
     getServicesData(),
   ])
 
-  if (!location) notFound()
+  if (!location) permanentRedirect("/locations")
 
   // Logic: Deduplicate neighbors from columns
   const neighbors = Array.from(

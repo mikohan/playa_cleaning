@@ -27,7 +27,21 @@ const nextConfig = {
   reactStrictMode: true,
   async redirects() {
     return [
-      // 0. HEDI COMPLIANCE PURGE: Permanently remove risky nested housing offer landing path
+      // 0. WWW TO NON-WWW CANONICAL REDIRECT
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "header",
+            key: "host",
+            value: "www.playacleaning.com", // Replace with your exact domain if needed
+          },
+        ],
+        destination: "https://playacleaning.com/:path*",
+        permanent: true,
+      },
+
+      // 0.5. HEDI COMPLIANCE PURGE: Permanently remove risky nested housing offer landing path
       {
         source: "/services/premium-home-cleaning-offer/culver-city",
         destination: "/services/house-cleaning",
@@ -43,6 +57,16 @@ const nextConfig = {
       {
         source: "/services/houme-cleanig/:path*",
         destination: "/services/house-cleaning", // Or whichever you prefer as primary
+        permanent: true,
+      },
+      {
+        source: "/services/office-cleaning",
+        destination: "/services/commercial-office-cleaning",
+        permanent: true,
+      },
+      {
+        source: "/services/office-cleaning/:path*",
+        destination: "/services/commercial-office-cleaning",
         permanent: true,
       },
 

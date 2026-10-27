@@ -10,6 +10,32 @@ import { getAllServices, getSingleType } from "@/lib/strapi"
 import { AboutPageData } from "../types/aboutTypes"
 import { ServiceTicker } from "@/components/common/ServiceTicker"
 import { CallToAction } from "@/components/cleaning/CallToAction"
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "About Playa Cleaning | Meet Alicia, Our Founder",
+  description:
+    "Learn about Playa Cleaning, the professional house and office cleaning company serving Los Angeles. Meet Alicia, our founder, and our commitment to meticulous, reliable care.",
+  alternates: {
+    canonical: "https://playacleaning.com/about",
+  },
+  openGraph: {
+    title: "About Playa Cleaning | Meet Alicia, Our Founder",
+    description:
+      "Professional house and office cleaning in Los Angeles, led by founder Alicia and a meticulous, reliable team.",
+    url: "https://playacleaning.com/about",
+    siteName: "Playa Cleaning",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Playa Cleaning - About Us",
+      },
+    ],
+  },
+}
 
 const StatCard = ({ label, value }: { label: string; value: string }) => (
   <div className="flex flex-col border-l border-primary-blue/20 pl-6">

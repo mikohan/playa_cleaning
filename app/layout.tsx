@@ -100,8 +100,8 @@ const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Playa Cleaning",
-  url: "https://www.playacleaning.com",
-  logo: "https://www.playacleaning.com/logo.png", // Must be a direct link to your logo image
+  url: "https://playacleaning.com",
+  logo: "https://playacleaning.com/logo.png", // Must be a direct link to your logo image
   sameAs: [
     "https://www.instagram.com/playa_cleaning",
     "https://www.facebook.com/profile.php?id=61555670068109",
