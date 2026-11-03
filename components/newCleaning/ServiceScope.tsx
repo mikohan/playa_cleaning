@@ -47,7 +47,7 @@ export const ServiceScope = ({
                 </div>
 
                 <div className="space-y-4">
-                  <p className="text-[10px] font-black tracking-widest text-muted-foreground/60 uppercase">
+                  <p className="text-[10px] font-black tracking-widest text-muted-foreground uppercase">
                     Included in Price
                   </p>
                   <ul className="space-y-3">
@@ -84,7 +84,7 @@ export const ServiceScope = ({
               <div key={`${key}-bottom`} className="space-y-4">
                 {section.extras && section.extras.length > 0 && (
                   <>
-                    <p className="text-[10px] font-black tracking-widest text-muted-foreground/60 uppercase">
+                    <p className="text-[10px] font-black tracking-widest text-muted-foreground uppercase">
                       Recommended Add-ons
                     </p>
                     <ul className="space-y-3">

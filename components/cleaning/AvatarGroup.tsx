@@ -35,7 +35,7 @@ function AvatarGroup({ className }: { className?: string }) {
 
       {/* The "+99" Placeholder */}
       <Avatar className="h-8 w-8 border-2 border-blue-100 md:h-12 md:w-12">
-        <AvatarFallback className="text-[10px] font-medium md:text-sm">
+        <AvatarFallback className="text-[10px] font-medium text-foreground md:text-sm">
           +99
         </AvatarFallback>
       </Avatar>

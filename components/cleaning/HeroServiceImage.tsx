@@ -28,7 +28,7 @@ export const HeroServiceImage = ({
     <section className="grid grid-cols-1 gap-12 py-12 lg:grid-cols-12 lg:items-start">
       {/* --- Left Side: Content --- */}
       <div className="lg:col-span-7">
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary-blue/10 px-4 py-2 text-primary-blue">
+        <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary-blue/10 px-4 py-2 text-primary-blue-dark">
           <span className="text-xs font-black tracking-widest uppercase">
             Premium Service
           </span>

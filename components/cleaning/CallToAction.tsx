@@ -267,19 +267,20 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
                   </div>
 
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                    <select name="bedrooms" className={selectClass}>
+                    <select name="bedrooms" aria-label="Bedrooms" className={selectClass}>
                       <option value="1">1 Bed</option>
                       <option value="2">2 Bed</option>
                       <option value="3">3 Bed</option>
                       <option value="4+">4+ Bed</option>
                     </select>
-                    <select name="bathrooms" className={selectClass}>
+                    <select name="bathrooms" aria-label="Bathrooms" className={selectClass}>
                       <option value="1">1 Bath</option>
                       <option value="2">2 Bath</option>
                       <option value="3+">3+ Bath</option>
                     </select>
                     <select
                       name="serviceType"
+                      aria-label="Type of cleaning"
                       className={cn(
                         selectClass,
                         "col-span-2 font-bold text-primary-blue sm:col-span-1"

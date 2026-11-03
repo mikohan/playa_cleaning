@@ -137,7 +137,7 @@ export function CleaningCalculator({
               <h2 className="mb-2 text-xl font-bold tracking-tight uppercase md:text-3xl">
                 Estimate Your Cleaning
               </h2>
-              <p className="text-sm text-muted-foreground italic md:text-base">
+              <p className="text-sm text-foreground/75 italic md:text-base">
                 Our Price Lock Guarantee ensures no surprises at the door.
               </p>
             </header>
@@ -157,7 +157,7 @@ export function CleaningCalculator({
                       "h-12 w-16 rounded-xl border-2 text-sm font-bold transition-all",
                       beds === num
                         ? "border-primary bg-primary/5 text-primary"
-                        : "border-border text-muted-foreground hover:border-primary/30"
+                        : "border-border text-foreground/75 hover:border-primary/30"
                     )}
                   >
                     {num}
@@ -181,7 +181,7 @@ export function CleaningCalculator({
                       "h-12 w-16 rounded-xl border-2 text-sm font-bold transition-all",
                       baths === num
                         ? "border-primary bg-primary/5 text-primary"
-                        : "border-border text-muted-foreground hover:border-primary/30"
+                        : "border-border text-foreground/75 hover:border-primary/30"
                     )}
                   >
                     {num}
@@ -215,7 +215,7 @@ export function CleaningCalculator({
                           ? "Deep Cleaning"
                           : "Move in/out Cleaning"}
                     </p>
-                    <p className="mt-1 text-[10px] leading-tight text-muted-foreground">
+                    <p className="mt-1 text-[10px] leading-tight text-foreground/75">
                       {k === "standard"
                         ? "Regular home upkeep."
                         : k === "deep"
@@ -252,6 +252,7 @@ export function CleaningCalculator({
                         onClick={() =>
                           updateCounter(id as "windows" | "blinds", -1)
                         }
+                        aria-label={`Remove one (${id})`}
                         className="rounded-lg border p-1"
                       >
                         <Minus size={14} />
@@ -264,6 +265,7 @@ export function CleaningCalculator({
                         onClick={() =>
                           updateCounter(id as "windows" | "blinds", 1)
                         }
+                        aria-label={`Add one (${id})`}
                         className="rounded-lg border p-1"
                       >
                         <Plus size={14} />
@@ -293,7 +295,7 @@ export function CleaningCalculator({
                           ? "border-primary/30 bg-primary/5"
                           : active
                             ? "border-primary bg-primary/5 text-primary shadow-sm"
-                            : "border-border text-muted-foreground hover:border-primary/20"
+                            : "border-border text-foreground/75 hover:border-primary/20"
                       )}
                     >
                       {included && (

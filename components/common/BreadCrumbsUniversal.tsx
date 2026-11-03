@@ -14,7 +14,7 @@ export function BreadCrumbsUniversal() {
 
   return (
     <nav className="container mx-auto px-6 py-8" aria-label="Breadcrumb">
-      <ol className="flex flex-wrap items-center gap-3 text-[10px] font-bold tracking-[0.15em] text-muted-foreground/60 uppercase [word-spacing:0.2rem]">
+      <ol className="flex flex-wrap items-center gap-3 text-[10px] font-bold tracking-[0.15em] text-muted-foreground uppercase [word-spacing:0.2rem]">
         {/* Always show Home */}
         <li className="flex items-center">
           <Link

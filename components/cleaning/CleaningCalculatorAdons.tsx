@@ -251,7 +251,7 @@ export function CleaningCalculatorAdons() {
                     <p className="font-blauerMedium font-bold text-foreground capitalize">
                       {k === "move" ? "Move In/Out" : k}
                     </p>
-                    <p className="font-blauerRegular mt-1 text-[10px] leading-tight text-muted-foreground">
+                    <p className="font-blauerRegular mt-1 text-[10px] leading-tight text-foreground/75">
                       {k === "maintenance"
                         ? "Regular upkeep for clean homes."
                         : k === "deep"
@@ -352,7 +352,7 @@ export function CleaningCalculatorAdons() {
                           ? "cursor-default border-primary/30 bg-primary/5"
                           : active
                             ? "border-primary bg-primary/5 text-primary shadow-sm"
-                            : "border-border text-muted-foreground hover:border-primary/20"
+                            : "border-border text-foreground/75 hover:border-primary/20"
                       )}
                     >
                       {included && (

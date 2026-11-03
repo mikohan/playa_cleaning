@@ -78,7 +78,7 @@ export default function CalculatorPage() {
         {/* --- HERO SECTION --- */}
         <section className="grid grid-cols-1 gap-16 py-12 lg:grid-cols-12 lg:items-center">
           <div className="lg:col-span-7">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary-blue/10 px-4 py-2 text-primary-blue">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary-blue/10 px-4 py-2 text-primary-blue-dark">
               <Zap size={16} className="fill-primary-blue" />
               <span className="text-[10px] font-black tracking-[0.2em] uppercase">
                 Instant Transparent Pricing
@@ -87,7 +87,7 @@ export default function CalculatorPage() {
 
             <h1 className="mb-8 text-5xl leading-[1.1] font-black tracking-tight text-primary-blue md:text-7xl">
               Calculate Your <br />
-              <span className="text-foreground/20">Custom Clean.</span>
+              <span className="text-foreground/60">Custom Clean.</span>
             </h1>
 
             <p className="max-w-xl text-xl leading-relaxed font-medium text-foreground/80 [word-spacing:0.05rem]">

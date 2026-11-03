@@ -94,7 +94,7 @@
   /* --font-sans: var(--font-blauer-nue); */
   --font-sans: var(--font-jakarta);
   --top-blur: oklch(0.9 0.034 259.597);
-  --primary-blue: oklch(0.5712 0.1434 254.62);
+  --primary-blue: oklch(0.545 0.1434 254.62); /* was 0.5712: 4.48:1 on white, now ~5:1 (WCAG AA) */
   --primary-blue-dark: oklch(0.4585 0.1434 254.62);
   --footer: oklch(0.2077 0.0398 265.75);
   --accent-yellow: oklch(0.7764 0.1631 75.75);

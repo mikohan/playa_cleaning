@@ -186,7 +186,7 @@ export default async function AboutPage() {
                 <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-blue/10 text-primary-blue">
                   <item.icon size={24} />
                 </div>
-                <h4 className="mb-3 text-xl font-bold">{item.title}</h4>
+                <h3 className="mb-3 text-xl font-bold">{item.title}</h3>
                 <p className="text-sm leading-relaxed text-muted-foreground">
                   {item.desc}
                 </p>

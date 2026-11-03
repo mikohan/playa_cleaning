@@ -13,7 +13,7 @@ export const CalculatorCTA = () => {
         <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
           <div className="flex-1 text-center md:text-left">
             {/* Badge: Using your accent-green for high visibility */}
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/20 px-3 py-1 text-xs font-black tracking-widest text-white uppercase dark:bg-accent-green/10 dark:text-accent-green">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-black/25 px-3 py-1 text-xs font-black tracking-widest text-white uppercase dark:bg-accent-green/10 dark:text-accent-green">
               <Calculator size={14} />
               Instant Quote
             </div>
@@ -22,7 +22,7 @@ export const CalculatorCTA = () => {
               Wondering about the cost?
             </h2>
 
-            <p className="mt-4 font-jakarta text-lg text-white/80 dark:text-muted-foreground">
+            <p className="mt-4 font-jakarta text-lg text-white dark:text-muted-foreground">
               Get a room-by-room price estimate in less than 60 seconds with our
               transparent cleaning calculator.
             </p>

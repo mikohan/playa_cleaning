@@ -78,7 +78,7 @@ export const Footer = ({ services }: FooterProps) => {
             >
               <TreePalm className="h-8 w-8 text-primary-blue" />
               <span className="text-3xl font-bold">
-                Playa<span className="text-primary-blue">Cleaning</span>
+                Playa<span className="text-blue-400">Cleaning</span>
               </span>
             </Link>
 
@@ -86,7 +86,7 @@ export const Footer = ({ services }: FooterProps) => {
               <p className="font-blauerMedium text-center text-2xl font-semibold md:text-left">
                 <a
                   href={`tel:${numericPhone}`}
-                  className="transition-colors hover:text-primary-blue"
+                  className="transition-colors hover:text-blue-400"
                 >
                   {companyPhone}
                 </a>
@@ -94,7 +94,7 @@ export const Footer = ({ services }: FooterProps) => {
               <p className="text-center text-sm font-medium text-background/80 md:text-left">
                 <a
                   href={`mailto:${companyEmail}`}
-                  className="underline underline-offset-4 transition-colors hover:text-primary-blue"
+                  className="underline underline-offset-4 transition-colors hover:text-blue-400"
                 >
                   {companyEmail}
                 </a>
@@ -122,15 +122,15 @@ export const Footer = ({ services }: FooterProps) => {
 
           {/* Column 2: Clean Dynamic Services Directory */}
           <div className="flex flex-col items-center md:items-start">
-            <h4 className="mb-6 text-sm font-black tracking-widest text-primary-blue uppercase">
+            <h2 className="mb-6 text-sm font-black tracking-widest text-blue-400 uppercase">
               Our Cleaning Programs
-            </h4>
+            </h2>
             <nav className="grid grid-cols-1 gap-y-3 text-center md:text-left">
               {visibleServices.map((service) => (
                 <Link
                   key={service.slug}
                   href={`/services/${service.slug}`}
-                  className="text-sm font-medium text-background/80 transition-colors hover:text-primary-blue"
+                  className="text-sm font-medium text-background/80 transition-colors hover:text-blue-400"
                 >
                   {service.name}
                 </Link>
@@ -138,7 +138,7 @@ export const Footer = ({ services }: FooterProps) => {
               {services?.length > 8 && (
                 <Link
                   href="/services"
-                  className="pt-2 text-xs font-bold tracking-widest text-primary-blue uppercase hover:underline"
+                  className="pt-2 text-xs font-bold tracking-widest text-blue-400 uppercase hover:underline"
                 >
                   All Options →
                 </Link>
@@ -148,37 +148,37 @@ export const Footer = ({ services }: FooterProps) => {
 
           {/* Column 3: Corporate Info & Address */}
           <div className="flex flex-col items-center md:items-start">
-            <h4 className="mb-6 text-sm font-black tracking-widest text-primary-blue uppercase">
+            <h2 className="mb-6 text-sm font-black tracking-widest text-blue-400 uppercase">
               Company
-            </h4>
+            </h2>
             <nav className="flex flex-col gap-y-3 text-center text-sm font-medium text-background/80 md:text-left">
               <Link
                 href="/privacy-policy"
-                className="transition-colors hover:text-primary-blue"
+                className="transition-colors hover:text-blue-400"
               >
                 Privacy Policy
               </Link>
               <Link
                 href="/terms"
-                className="transition-colors hover:text-primary-blue"
+                className="transition-colors hover:text-blue-400"
               >
                 Terms of Service
               </Link>
               <Link
                 href="/pricing"
-                className="transition-colors hover:text-primary-blue"
+                className="transition-colors hover:text-blue-400"
               >
                 Pricing Structure
               </Link>
               <Link
                 href="/about"
-                className="transition-colors hover:text-primary-blue"
+                className="transition-colors hover:text-blue-400"
               >
                 About Us
               </Link>
               <Link
                 href="/projects"
-                className="transition-colors hover:text-primary-blue"
+                className="transition-colors hover:text-blue-400"
               >
                 Recent Jobs
               </Link>
@@ -216,7 +216,7 @@ export const Footer = ({ services }: FooterProps) => {
         <div className="mt-4 flex w-full flex-col items-center justify-between gap-4 border-t border-background/5 pt-6 text-[13px] text-background/80 md:flex-row">
           <p>© {currentYear} Playa Cleaning LLC. All rights reserved.</p>
           <div className="flex gap-4">
-            <span className="font-bold text-primary-blue">
+            <span className="font-bold text-blue-400">
               Licensed & Bonded
             </span>
             <span>•</span>

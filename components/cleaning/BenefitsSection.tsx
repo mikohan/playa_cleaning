@@ -80,7 +80,7 @@ export function BenefitsSection() {
                 <h3 className="font-blauerMedium text-xl font-bold text-foreground">
                   {benefit.title}
                 </h3>
-                <p className="text-sm font-bold tracking-widest text-primary-blue/80 uppercase">
+                <p className="text-sm font-bold tracking-widest text-primary-blue uppercase">
                   {benefit.subtitle}
                 </p>
                 <p className="font-blauerRegular leading-relaxed text-muted-foreground">
@@ -95,7 +95,7 @@ export function BenefitsSection() {
             <h3 className="font-blauerMedium mb-4 text-2xl font-bold">
               Ready for a cleaner home?
             </h3>
-            <p className="mb-8 opacity-90">
+            <p className="mb-8">
               Schedule your first detailed clean and feel the difference
               immediately.
             </p>

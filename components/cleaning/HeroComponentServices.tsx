@@ -40,7 +40,7 @@ export function HeroComponentServices() {
 
           {/* Content Block */}
           <div className="flex flex-col items-center gap-2 space-y-6 md:w-7/12">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary-blue/20 bg-primary-blue/5 px-4 py-1.5 text-[10px] font-black tracking-widest text-primary-blue uppercase">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary-blue/20 bg-primary-blue/5 px-4 py-1.5 text-[10px] font-black tracking-widest text-primary-blue-dark uppercase">
               <Sparkles size={14} className="fill-current" />
               Los Angeles Premier Care
             </div>

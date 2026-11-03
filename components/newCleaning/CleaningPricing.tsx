@@ -33,7 +33,7 @@ export function CleaningPricing() {
       {/* 1. REGULAR CLEANING - RECURRING FREQUENCY TABLE */}
       <section className="container mx-auto max-w-6xl px-6">
         <div className="relative mb-12 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full bg-primary-blue/10 px-4 py-1.5 text-[10px] font-black tracking-[0.2em] text-primary-blue uppercase">
+          <div className="inline-flex items-center gap-2 rounded-full bg-primary-blue/10 px-4 py-1.5 text-[10px] font-black tracking-[0.2em] text-primary-blue-dark uppercase">
             <CalendarDays size={14} /> Subscription Maintenance
           </div>
           <h2 className="mt-6 text-3xl font-bold tracking-tighter [word-spacing:0.15em] md:text-5xl">
@@ -60,15 +60,15 @@ export function CleaningPricing() {
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-left">
               <thead>
-                <tr className="bg-muted/30 text-[10px] font-black tracking-widest text-muted-foreground uppercase">
+                <tr className="bg-muted/30 text-[10px] font-black tracking-widest text-foreground/75 uppercase">
                   <th className="px-8 py-8">Home Size</th>
                   <th className="px-6 py-8">Weekly (Save 20%)</th>
-                  <th className="relative bg-primary-blue/5 px-6 py-8 text-primary-blue">
+                  <th className="relative bg-primary-blue/5 px-6 py-8 text-primary-blue-dark">
                     <div className="absolute top-0 right-0 left-0 h-1 bg-primary-blue" />
                     <span className="flex items-center gap-1.5">
                       Bi-Weekly <Star size={10} className="fill-primary-blue" />
                     </span>
-                    <div className="mt-1 text-[8px] opacity-70">
+                    <div className="mt-1 text-[8px]">
                       Recommended Default
                     </div>
                   </th>
@@ -84,13 +84,13 @@ export function CleaningPricing() {
                     <td className="px-8 py-6 font-bold text-foreground">
                       {row.label}
                     </td>
-                    <td className="px-6 py-6 font-medium text-muted-foreground">
+                    <td className="px-6 py-6 font-medium text-foreground/75">
                       ${row.weekly}
                     </td>
-                    <td className="bg-primary-blue/5 px-6 py-6 text-lg font-black text-primary-blue">
+                    <td className="bg-primary-blue/5 px-6 py-6 text-lg font-black text-primary-blue-dark">
                       ${row.biweekly}
                     </td>
-                    <td className="px-6 py-6 pr-8 text-right font-medium text-muted-foreground">
+                    <td className="px-6 py-6 pr-8 text-right font-medium text-foreground/75">
                       ${row.monthly}
                     </td>
                   </tr>
@@ -195,7 +195,7 @@ export function CleaningPricing() {
                         {addon.desc}
                       </p>
                     </div>
-                    <span className="rounded-xl bg-primary-blue/5 px-4 py-2 text-xs font-black text-primary-blue">
+                    <span className="rounded-xl bg-primary-blue/5 px-4 py-2 text-xs font-black text-primary-blue-dark">
                       {addon.displayPrice}
                     </span>
                   </div>

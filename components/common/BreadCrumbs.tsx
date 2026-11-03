@@ -8,7 +8,7 @@ export function BreadCrumbs({ serviceName }: { serviceName?: string }) {
 
   return (
     <nav className="container mx-auto pt-8" aria-label="Breadcrumb">
-      <ol className="flex items-center space-x-3 text-[10px] font-bold tracking-[0.15em] text-muted-foreground/60 uppercase [word-spacing:0.2rem]">
+      <ol className="flex items-center space-x-3 text-[10px] font-bold tracking-[0.15em] text-muted-foreground uppercase [word-spacing:0.2rem]">
         <li className="flex items-center">
           <Link
             href="/"

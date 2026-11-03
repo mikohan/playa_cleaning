@@ -35,7 +35,7 @@ export const LocationGrid = ({
         </div>
 
         {/* Status Badge */}
-        <div className="flex items-center gap-2 rounded-full border border-primary-blue/20 bg-primary-blue/5 px-5 py-2 text-sm font-bold text-primary-blue">
+        <div className="flex items-center gap-2 rounded-full border border-primary-blue/20 bg-primary-blue/5 px-5 py-2 text-sm font-bold text-primary-blue-dark">
           <span className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-blue opacity-75"></span>
             <span className="relative inline-flex h-2 w-2 rounded-full bg-primary-blue"></span>
@@ -64,7 +64,7 @@ export const LocationGrid = ({
             </p>
 
             <div className="mt-auto flex items-center justify-between border-t border-border pt-6">
-              <span className="font-mono text-xs font-medium text-muted-foreground/60">
+              <span className="font-mono text-xs font-medium text-muted-foreground">
                 {loc.zip_codes?.split(",")[0] || "LA Area"} & more
               </span>
               <span className="flex items-center gap-1 text-sm font-bold text-primary-blue transition-all group-hover:gap-3">

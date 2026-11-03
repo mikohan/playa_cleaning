@@ -308,13 +308,13 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
 
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
-                <select name="bedrooms" className={selectClassName}>
+                <select name="bedrooms" aria-label="Bedrooms" className={selectClassName}>
                   <option value="1">1 Bedroom</option>
                   <option value="2">2 Bedrooms</option>
                   <option value="3">3 Bedrooms</option>
                   <option value="4+">4+ Bedrooms</option>
                 </select>
-                <select name="bathrooms" className={selectClassName}>
+                <select name="bathrooms" aria-label="Bathrooms" className={selectClassName}>
                   <option value="1">1 Bath</option>
                   <option value="2">2 Baths</option>
                   <option value="3+">3+ Baths</option>
@@ -323,6 +323,7 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
 
               <select
                 name="serviceType"
+                      aria-label="Type of cleaning"
                 className={`${selectClassName} font-bold text-primary-blue`}
               >
                 <option value="deep">Deep Cleaning (Recommended)</option>

@@ -9,6 +9,7 @@ import {
   getProjects,
   getRelatedProjects,
   projectPath,
+  serviceShortName,
   splitMedia,
 } from "@/lib/projects"
 import { projectJsonLd, projectMetadata } from "@/lib/project-seo"
@@ -119,6 +120,10 @@ export default async function ProjectPage({ params }: Props) {
             videos={videos}
             title={project.header}
             posterUrl={cover ? cardImageUrl(cover) : undefined}
+            serviceName={
+              project.service ? serviceShortName(project.service.name) : undefined
+            }
+            cityName={city}
           />
         </article>
 
