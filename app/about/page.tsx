@@ -4,7 +4,8 @@ import { ShieldCheck, MapPin, Sparkles, Heart, ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 // Assets
-import AliciaPoster from "@/public/images/cleaning/hero-3.png"
+import AliciaPoster from "@/public/images/cleaning/hero-3.webp"
+import { LazyVideo } from "@/components/common/LazyVideo"
 import { BreadCrumbsUniversal } from "@/components/common/BreadCrumbsUniversal"
 import { getAllServices, getSingleType } from "@/lib/strapi"
 import { AboutPageData } from "../types/aboutTypes"
@@ -98,16 +99,12 @@ export default async function AboutPage() {
             {/* Right Video - Vertical 9:16 Aspect */}
             <div className="perspective-1000 relative max-w-150">
               <div className="relative aspect-9/16 overflow-hidden rounded-2xl border-8 border-card shadow-2xl transition-transform duration-700 hover:rotate-y-6">
-                <video
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
+                <LazyVideo
+                  sources={[{ src: videoUrl, type: "video/mp4" }]}
                   poster={AliciaPoster.src}
+                  strategy="inView"
                   className="h-full w-full object-cover"
-                >
-                  <source src={videoUrl} type="video/mp4" />
-                </video>
+                />
                 <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
                 <div className="absolute bottom-8 left-6 text-white">
                   <p className="text-xl font-bold">Alicia</p>

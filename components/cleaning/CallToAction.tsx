@@ -4,6 +4,7 @@ import Image from "next/image"
 import { Phone, CheckCircle2, PartyPopper } from "lucide-react"
 import { toast } from "react-toastify"
 import { Turnstile } from "@marsidev/react-turnstile"
+import { useNearViewport } from "@/hooks/useNearViewport"
 
 // --- IMPORTS FROM YOUR FILES ---
 import { sendEmail, FormState } from "@/lib/resend"
@@ -21,6 +22,10 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
   const [isPending, startTransition] = useTransition()
   const hasFiredRef = useRef<boolean>(false)
   const [turnstileToken, setTurnstileToken] = useState<string>("")
+  // Load the Cloudflare check only when the form gets close to the screen
+  const formWrapRef = useRef<HTMLFormElement>(null)
+  const formNear = useNearViewport(formWrapRef, "600px")
+  const [formTouched, setFormTouched] = useState(false)
 
   const [state, action] = useActionState<FormState, FormData>(
     async (prevState: FormState, formData: FormData) => {
@@ -121,6 +126,10 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
     formData.append("estimated_value", String(dynamicValue))
     formData.append("form_type", activeFormIdentity)
     formData.append("turnstileToken", token) // Explicit mapping to match Server Pipeline parameters
+    // Read browser-only values at submit time (keeps server and client render identical)
+    formData.set("fbc", Cookies.get("_fbc") || "")
+    formData.set("fbp", Cookies.get("_fbp") || "")
+    formData.set("pageUrl", window.location.href)
 
     // Fire the Transition thread cleanly to execute your resend server-side execution loop
     startTransition(async () => {
@@ -170,7 +179,6 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
                 alt="Olesya Vostrikova - Playa Cleaning"
                 fill
                 className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                priority
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
               <div className="absolute inset-0 bg-linear-to-t from-primary-blue/30 via-transparent to-transparent"></div>
@@ -210,33 +218,17 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
                 </div>
               ) : (
                 <form
+                  ref={formWrapRef}
+                  onFocusCapture={() => setFormTouched(true)}
                   onSubmit={handleFormSubmit}
                   className="relative z-20 max-w-xl space-y-4 rounded-[2rem] border border-border bg-card p-2 shadow-sm sm:p-4"
                 >
-                  <input
-                    type="hidden"
-                    name="pageUrl"
-                    value={
-                      typeof window !== "undefined" ? window.location.href : ""
-                    }
-                  />
                   <input
                     type="hidden"
                     name="customNotes"
                     value="Playa Cleaning $129 Offer"
                   />
 
-                  {/* COOKIE TRACKING VARIABLES */}
-                  <input
-                    type="hidden"
-                    name="fbc"
-                    value={Cookies.get("_fbc") || ""}
-                  />
-                  <input
-                    type="hidden"
-                    name="fbp"
-                    value={Cookies.get("_fbp") || ""}
-                  />
 
                   {/* CLOUDFLARE TURNSTILE MANAGED MODE CONTAINER */}
                   {/* Keep layout safe without breaking background script telemetry */}
@@ -244,10 +236,14 @@ export const CallToAction = ({ option, defaultOption }: CallToActionProps) => {
                     className="absolute h-0 w-0 overflow-hidden opacity-0"
                     aria-hidden="true"
                   >
-                    <Turnstile
-                      siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
-                      onSuccess={(token) => setTurnstileToken(token)}
-                    />
+                    {(formNear || formTouched) && (
+                      <Turnstile
+                        siteKey={
+                          process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""
+                        }
+                        onSuccess={(token) => setTurnstileToken(token)}
+                      />
+                    )}
                   </div>
 
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">

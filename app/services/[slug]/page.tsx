@@ -19,6 +19,8 @@ import { Testimonials } from "@/components/cleaning/Testimonials"
 import { ServiceScope } from "@/components/newCleaning/ServiceScope"
 import LocationFAQ from "@/components/cleaning/LocationFAQ"
 import { WhyMeVideo } from "@/components/cleaning/WhyMeVideo"
+import { getProjectsByService } from "@/lib/projects"
+import { RecentJobs } from "@/components/projects/RecentJobs"
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -106,6 +108,7 @@ export default async function ServicePage({ params }: Props) {
   const { slug } = await params
   const service = await getServiceBySlug(slug)
   const services = await getAllServices()
+  const recentJobs = await getProjectsByService(slug, 4)
 
   if (!service) permanentRedirect("/services")
 
@@ -236,6 +239,14 @@ export default async function ServicePage({ params }: Props) {
         )}
 
         <Testimonials />
+
+        <RecentJobs
+          projects={recentJobs}
+          title={`Recent ${service.name.replace(/\s+service$/i, "")} Jobs`}
+          intro={`Photos from real ${service.name.replace(/\s+service$/i, "").toLowerCase()} visits around Playa Vista.`}
+          allJobsText="See all recent jobs"
+        />
+
         {isCarpetService ? <CarpetCallToAction /> : <CallToAction />}
 
         {/* --- Rich Text Section (SEO Context Injection) --- */}

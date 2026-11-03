@@ -1,6 +1,4 @@
-"use client"
 import React from "react"
-import { motion } from "framer-motion"
 import { Sparkles, ArrowUpRight } from "lucide-react"
 import Link from "next/link"
 
@@ -36,16 +34,9 @@ export const ServiceTicker = ({
               "linear-gradient(to right, transparent, black 15%, black 85%, transparent)",
           }}
         >
-          <motion.div
-            className="flex h-24 flex-none items-center gap-12 pr-12"
-            animate={{
-              x: "-50%",
-            }}
-            transition={{
-              duration: 35,
-              repeat: Infinity,
-              ease: "linear",
-            }}
+          <div
+            className="flex h-24 flex-none items-center gap-12 pr-12 animate-marquee-x"
+            style={{ "--marquee-duration": "35s" } as React.CSSProperties}
           >
             {/* Double the array for a seamless infinite loop */}
             {[...services, ...services].map((service, index) => (
@@ -76,7 +67,7 @@ export const ServiceTicker = ({
                 </div>
               </Link>
             ))}
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>

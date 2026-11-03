@@ -1,6 +1,4 @@
-"use client"
 import React from "react"
-import { motion } from "framer-motion"
 import { ShieldCheck, Leaf, MapPin, Clock, Sparkles, Heart } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -21,16 +19,9 @@ export const LogoTicker = ({ className }: Props) => {
     <div className={cn(className, "flex items-center overflow-hidden")}>
       <div className="container mx-auto">
         <div className="flex overflow-hidden mask-[linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
-          <motion.div
-            className="flex flex-none items-center gap-12 pr-12"
-            animate={{
-              x: "-50%",
-            }}
-            transition={{
-              duration: 25, // Adjusted speed for text readability
-              repeat: Infinity,
-              ease: "linear",
-            }}
+          <div
+            className="flex flex-none items-center gap-12 pr-12 animate-marquee-x"
+            style={{ "--marquee-duration": "25s" } as React.CSSProperties}
           >
             {/* Double the array for seamless infinite looping */}
             {[...ADVANTAGES, ...ADVANTAGES].map((advantage, index) => {
@@ -49,7 +40,7 @@ export const LogoTicker = ({ className }: Props) => {
                 </div>
               )
             })}
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>

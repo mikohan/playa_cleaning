@@ -50,7 +50,7 @@ export const BookingCalculatorCarpet = () => {
       // 🟢 SAFE CLIENT-SIDE DATA LAYER INJECTION (Escapes Component Unmount Lifecycles)
       if (typeof window !== "undefined") {
         const targetWindow = window as Window & {
-          dataLayer?: Array<Record<string, string | number>>
+          dataLayer?: Array<Record<string, string | number | undefined>>
         }
 
         // Clean tracking strings: strip double-quotes/newlines to keep object parameters pristine

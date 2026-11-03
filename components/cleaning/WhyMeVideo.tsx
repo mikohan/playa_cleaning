@@ -11,7 +11,8 @@ import {
 import { cn } from "@/lib/utils"
 
 // Path to your assets
-import AliciaPoster from "@/public/images/cleaning/hero-3.png"
+import AliciaPoster from "@/public/images/cleaning/hero-3.webp"
+import { LazyVideo } from "../common/LazyVideo"
 import { WaveDivider } from "../common/WaveDivider"
 
 const BentoCard = ({
@@ -65,17 +66,12 @@ export const WhyMeVideo = ({ video }: Props) => {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-4 md:grid-rows-3 lg:gap-6">
           {/* Vertical Video Section - Rows 1, 2, and 3 */}
           <div className="relative aspect-[9/16] overflow-hidden rounded-3xl bg-slate-900 md:col-span-2 md:row-span-3 md:aspect-auto">
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
+            <LazyVideo
+              sources={[{ src: video_url, type: "video/mp4" }]}
               poster={AliciaPoster.src}
+              strategy="inView"
               className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-            >
-              <source src={video_url} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
+            />
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 

@@ -176,6 +176,12 @@ export const Footer = ({ services }: FooterProps) => {
               >
                 About Us
               </Link>
+              <Link
+                href="/projects"
+                className="transition-colors hover:text-primary-blue"
+              >
+                Recent Jobs
+              </Link>
 
               {/* Verified Physical Office / Mailing Location */}
               <div className="mt-4 flex flex-col items-center gap-2 border-t border-background/10 pt-4 text-xs text-background/70 md:items-start">

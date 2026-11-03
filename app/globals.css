@@ -232,3 +232,65 @@ dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Endless strips (tickers, testimonials) and button shine.
+   Pure CSS transform animations: they run on the GPU compositor,
+   so they cost no JavaScript and no layout work per frame.
+   ───────────────────────────────────────────────────────────── */
+@keyframes marquee-x {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+@keyframes marquee-y {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, -50%, 0);
+  }
+}
+.animate-marquee-x {
+  animation: marquee-x var(--marquee-duration, 30s) linear infinite;
+  will-change: transform;
+}
+.animate-marquee-y {
+  animation: marquee-y var(--marquee-duration, 30s) linear infinite;
+  will-change: transform;
+}
+
+@keyframes shiny-sweep {
+  0% {
+    transform: translate3d(100%, 0, 0);
+  }
+  60%,
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+.shiny-sweep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    -75deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 65%
+  );
+  animation: shiny-sweep 3s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-x,
+  .animate-marquee-y,
+  .shiny-sweep::after {
+    animation: none;
+  }
+}

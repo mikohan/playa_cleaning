@@ -19,6 +19,8 @@ import { CallToAction } from "@/components/cleaning/CallToAction"
 import { Metadata } from "next"
 import GoogleMap from "@/components/common/GoogleMap"
 import { BreadCrumbsUniversal } from "@/components/common/BreadCrumbsUniversal"
+import { getProjectsByLocation } from "@/lib/projects"
+import { RecentJobs } from "@/components/projects/RecentJobs"
 
 const STRAPI_URL = process.env.STRAPI_URL || "https://cms.playacleaning.com"
 const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
@@ -317,9 +319,10 @@ export default async function LocationPage({
   const { slug } = await params
 
   // Fetch location and services in parallel
-  const [location, services] = await Promise.all([
+  const [location, services, recentJobs] = await Promise.all([
     getLocationData(slug),
     getServicesData(),
+    getProjectsByLocation(slug, 4),
   ])
 
   if (!location) permanentRedirect("/locations")
@@ -393,6 +396,13 @@ export default async function LocationPage({
         <section>
           <Testimonials />
         </section>
+
+        <RecentJobs
+          projects={recentJobs}
+          title={`Recent Cleaning Jobs in ${location.city_name}`}
+          intro={`Photos from homes we cleaned in ${location.city_name}.`}
+          allJobsText="See jobs in other cities"
+        />
 
         <CallToAction />
 

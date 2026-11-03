@@ -157,6 +157,10 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
     formData.append("estimated_value", String(dynamicValue))
     formData.append("form_type", activeFormIdentity)
     formData.append("turnstileToken", token) // Backend parameter payload mapping
+    // Read browser-only values at submit time (keeps server and client render identical)
+    formData.set("fbc", Cookies.get("_fbc") || "")
+    formData.set("fbp", Cookies.get("_fbp") || "")
+    formData.set("pageUrl", window.location.href)
 
     // Clear event processing callstack frame loop before handling api action
     await new Promise((resolve) => setTimeout(resolve, 150))
@@ -276,13 +280,6 @@ export const CleaningModal = ({ text }: CleaningModalProps) => {
           </div>
 
           <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
-            <input type="hidden" name="fbc" value={Cookies.get("_fbc") || ""} />
-            <input type="hidden" name="fbp" value={Cookies.get("_fbp") || ""} />
-            <input
-              type="hidden"
-              name="pageUrl"
-              value={typeof window !== "undefined" ? window.location.href : ""}
-            />
             <input
               type="hidden"
               name="customNotes"

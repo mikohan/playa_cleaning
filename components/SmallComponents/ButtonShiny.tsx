@@ -1,10 +1,8 @@
-"use client"
-import { motion, HTMLMotionProps, TargetAndTransition } from "framer-motion"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const shinyButtonVariants = cva(
-  "radial-gradient relative overflow-hidden transition-shadow focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+  "radial-gradient shiny-sweep relative overflow-hidden transition-[box-shadow,transform] active:scale-95 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
   {
     variants: {
       size: {
@@ -22,7 +20,8 @@ const shinyButtonVariants = cva(
 )
 
 interface Props
-  extends HTMLMotionProps<"div">, VariantProps<typeof shinyButtonVariants> {
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof shinyButtonVariants> {
   text?: string
   // Pass any CSS color (hex, rgb, or tailwind variable)
   bgColor?: string
@@ -37,39 +36,18 @@ export const ButtonShiny = ({
   ...props
 }: Props) => {
   return (
-    <motion.div
-      // Merge CVA with custom classes
+    <div
       className={cn(
         shinyButtonVariants({ size }),
         "font-blauerMedium",
         className
       )}
-      // Use inline styles to inject the dynamic color
-      style={
-        {
-          backgroundColor: bgColor,
-          ...style,
-        } as React.CSSProperties
-      }
-      initial={{ "--x": "100%" } as TargetAndTransition}
-      animate={{ "--x": "-100%" } as TargetAndTransition}
-      whileTap={{ scale: 0.95 }}
-      transition={{
-        repeat: Infinity,
-        repeatType: "loop",
-        repeatDelay: 1,
-        type: "spring",
-        stiffness: 20,
-        damping: 15,
-        mass: 2,
-      }}
+      style={{ backgroundColor: bgColor, ...style }}
       {...props}
     >
-      <span className="linear-mask relative z-10 block h-full w-full cursor-pointer font-light tracking-wide text-white">
+      <span className="relative z-10 block h-full w-full cursor-pointer font-light tracking-wide text-white">
         {text ? text : "Book now"}
       </span>
-      {/* Overlay for the shimmer effect */}
-      <span className="linear-overlay pointer-events-none absolute inset-0 block rounded-[inherit] p-1"></span>
-    </motion.div>
+    </div>
   )
 }

@@ -56,6 +56,7 @@ export function Navbar({ services, locations }: NavbarProps) {
   const navItems = [
     { title: "Home", href: "/", className: "" },
     { title: "Pricing", href: "/cleaning-calculator" },
+    { title: "Recent Jobs", href: "/projects" },
     { title: "About", href: "/about" },
     {
       title: process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343",

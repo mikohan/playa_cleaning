@@ -1,9 +1,8 @@
-"use client"
+import type React from "react"
 import { ITestimonial, testimonials } from "@/app/data/data"
 import { Tag } from "../SmallComponents/Tag"
 import Image from "next/image"
 import { GoogleStars } from "./GoogleStars"
-import { motion } from "framer-motion"
 import { WaveDivider } from "../common/WaveDivider"
 
 const TestimonialsColumn = (props: {
@@ -12,17 +11,13 @@ const TestimonialsColumn = (props: {
   duration?: number
 }) => (
   <div className={props.className}>
-    <motion.div
-      animate={{
-        y: "-50%",
-      }}
-      transition={{
-        duration: props.duration || 25,
-        repeat: Infinity,
-        ease: "linear",
-        repeatType: "loop",
-      }}
-      className="flex flex-col gap-8 pb-8"
+    <div
+      className="animate-marquee-y flex flex-col gap-8 pb-8"
+      style={
+        {
+          "--marquee-duration": `${props.duration || 25}s`,
+        } as React.CSSProperties
+      }
     >
       {/* 1. Spread twice to ensure the loop is visually infinite */}
       {[...props.testimonials, ...props.testimonials].map(
@@ -50,7 +45,7 @@ const TestimonialsColumn = (props: {
           </div>
         )
       )}
-    </motion.div>
+    </div>
   </div>
 )
 

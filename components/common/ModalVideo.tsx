@@ -70,10 +70,13 @@ export const ModalVideo = () => {
           <div className="h-full w-auto space-y-5">
             {/* Name Field */}
             <div>
-              <VideoComponent
-                source_mp4="/videos/ol-kitchen.mp4"
-                source_webm="/videos/ol-kitchen.webm"
-              />
+              {isOpen && (
+                <VideoComponent
+                  source_mp4="/videos/ol-kitchen-720.mp4"
+                  source_webm="/videos/ol-kitchen-720.webm"
+                  strategy="now"
+                />
+              )}
             </div>
             {/* Action Buttons */}
 

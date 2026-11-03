@@ -13,6 +13,8 @@ import { ServiceTicker } from "@/components/common/ServiceTicker"
 import { getAllServices } from "@/lib/strapi"
 import { WhyMeVideo } from "@/components/cleaning/WhyMeVideo"
 import { getFooterLocations } from "@/lib/get-locations"
+import { getHomepageProjects } from "@/lib/projects"
+import { RecentJobs } from "@/components/projects/RecentJobs"
 
 // ─────────────────────────────────────────────────────────────
 // 1. WORLD-CLASS SEO METADATA STATIC PAYLOAD
@@ -79,6 +81,7 @@ export default async function Page() {
   // Fetch dynamic content streams from Strapi
   const services = await getAllServices()
   const locations = await getFooterLocations()
+  const recentJobs = await getHomepageProjects(4)
 
   // Dynamic values parsed from Environment or targeted fallback structures
   const phoneNumber = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
@@ -194,6 +197,12 @@ export default async function Page() {
       <WhyMe />
 
       <Testimonials />
+
+      <RecentJobs
+        projects={recentJobs}
+        title="Recent Jobs Around Playa Vista"
+        intro="Real homes we cleaned this season, with photos from each visit."
+      />
 
       <CallToAction />
 

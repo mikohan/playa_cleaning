@@ -66,7 +66,6 @@ export const WhyMe = () => {
               alt="Alicia - Founder of Playa Cleaning"
               fill
               className="object-cover transition-transform duration-500 hover:scale-105"
-              priority
               sizes="(max-width: 768px) 90vw, (max-width: 1200px) 50vw, 33vw" // Fixed from 100vw
             />
             {/* Overlay Label */}

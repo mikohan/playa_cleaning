@@ -1,6 +1,7 @@
 "use client"
 
-import React from "react"
+import React, { useRef } from "react"
+import { useNearViewport } from "@/hooks/useNearViewport"
 import {
   APIProvider,
   Map,
@@ -23,6 +24,9 @@ export default function GoogleMap({
 }: GoogleMapProps) {
   // Use your environment variable for the API Key
   const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string
+  // Google Maps is ~300 KB of script: load it only when the map is near the screen
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const near = useNearViewport(wrapRef, "300px")
 
   if (!API_KEY) {
     return (
@@ -39,8 +43,10 @@ export default function GoogleMap({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-3xl border border-border shadow-2xl ${className}`}
+      ref={wrapRef}
+      className={`relative overflow-hidden rounded-3xl border border-border bg-muted shadow-2xl ${className}`}
     >
+      {near && (
       <APIProvider apiKey={API_KEY}>
         <Map
           defaultCenter={{ lat, lng }}
@@ -59,6 +65,7 @@ export default function GoogleMap({
           </AdvancedMarker>
         </Map>
       </APIProvider>
+      )}
     </div>
   )
 }

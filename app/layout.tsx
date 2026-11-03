@@ -1,5 +1,5 @@
 import { Plus_Jakarta_Sans, Inter } from "next/font/google"
-import { GoogleTagManager } from "@next/third-parties/google"
+import { DelayedGTM } from "@/components/common/DelayedGTM"
 import type { Metadata } from "next"
 
 import "./globals.css"
@@ -128,7 +128,7 @@ export default async function RootLayout({
       )}
     >
       <body>
-        <GoogleTagManager gtmId={gtmId} />
+        <DelayedGTM gtmId={gtmId} />
         <ThemeProvider>
           <main>
             {/* Pass both to Navbar for the "Services" and "Locations" dropdowns */}

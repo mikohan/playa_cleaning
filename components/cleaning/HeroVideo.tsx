@@ -1,20 +1,11 @@
 "use client"
-import dynamic from "next/dynamic"
 import { GoogleStars } from "./GoogleStars"
 import { AvatarGroup } from "./AvatarGroup"
 import { CleaningModal } from "../common/CleaningModal"
 import { ModalVideo } from "../common/ModalVideo"
 import { RoughNotation, RoughNotationGroup } from "react-rough-notation"
 
-const VideoComponent = dynamic(
-  () => import("./VideoComponent").then((mod) => mod.VideoComponent),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="aspect-[9/16] w-full animate-pulse rounded-4xl bg-slate-200" />
-    ),
-  }
-)
+import { VideoComponent } from "./VideoComponent"
 
 interface HeroVideoProps {
   title: string
@@ -89,6 +80,7 @@ function HeroVideo({
                 width="1080"
                 height="1920"
                 autoPlay
+                strategy="afterLoad"
               />
             </div>
           </div>

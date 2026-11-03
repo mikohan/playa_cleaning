@@ -1,6 +1,4 @@
-"use client"
 import React from "react"
-import { motion } from "framer-motion"
 import { MapPin, ArrowUpRight } from "lucide-react"
 import Link from "next/link"
 import { LOS_ANGELES_AREAS } from "@/app/data/west-side-areas"
@@ -11,16 +9,9 @@ export const LocationTicker = () => {
       <div className="container mx-auto">
         {/* Mask provides the soft fade-out effect on the edges */}
         <div className="flex overflow-hidden mask-[linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
-          <motion.div
-            className="flex flex-none items-center gap-12 pr-12"
-            animate={{
-              x: "-50%",
-            }}
-            transition={{
-              duration: 45, // Adjusted for the larger list of areas
-              repeat: Infinity,
-              ease: "linear",
-            }}
+          <div
+            className="flex flex-none items-center gap-12 pr-12 animate-marquee-x"
+            style={{ "--marquee-duration": "45s" } as React.CSSProperties}
           >
             {/* Double the imported data for a seamless loop */}
             {[...LOS_ANGELES_AREAS, ...LOS_ANGELES_AREAS].map((area, index) => (
@@ -49,7 +40,7 @@ export const LocationTicker = () => {
                 </div>
               </Link>
             ))}
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>

@@ -76,7 +76,6 @@ export const CarpetCallToAction = () => {
                 alt="Playa Cleaning Upholstery Service"
                 fill
                 className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                priority
               />
               <div className="absolute inset-0 bg-linear-to-t from-primary-blue/30 via-transparent to-transparent"></div>
               <div className="absolute top-8 left-8 rounded-2xl bg-white/90 px-4 py-2 shadow-xl backdrop-blur dark:bg-black/90">
