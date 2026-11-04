@@ -114,6 +114,14 @@ export default async function ServicePage({ params }: Props) {
 
   const ownerName = process.env.NEXT_PUBLIC_COMPANY_OWNER || "Alicia"
   const isCarpetService = slug.includes("carpet") || slug.includes("upholstery")
+  // Pre-select the matching service in the quote form
+  const ctaService = slug.includes("construction")
+    ? "post"
+    : slug.includes("deep")
+      ? "deep"
+      : slug.includes("move")
+        ? "move"
+        : "standard"
 
   let heroImage = isCarpetService ? HeroMeColor.src : AliciaImage.src
   if (service.photo?.url) {
@@ -205,7 +213,7 @@ export default async function ServicePage({ params }: Props) {
   const video_url = service.video?.url
     ? `${STRAPI_URL}${service.video.url}`
     : null
-  const buttonText = service.button_text || "Get Instant Quote"
+  const buttonText = service.button_text || "Get My Estimate"
 
   return (
     <>
@@ -222,6 +230,7 @@ export default async function ServicePage({ params }: Props) {
               professionalName={professionalName}
               service={service}
               buttonText={buttonText}
+              quoteService={ctaService}
             />
           </div>
         </section>
@@ -247,7 +256,11 @@ export default async function ServicePage({ params }: Props) {
           allJobsText="See all recent jobs"
         />
 
-        {isCarpetService ? <CarpetCallToAction /> : <CallToAction />}
+        {isCarpetService ? (
+          <CarpetCallToAction />
+        ) : (
+          <CallToAction defaultService={ctaService} />
+        )}
 
         {/* --- Rich Text Section (SEO Context Injection) --- */}
         <section className="relative py-20">

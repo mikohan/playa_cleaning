@@ -69,6 +69,7 @@ export async function POST(req: Request) {
     eventName: "Lead",
     eventId: booking.tracking?.eventId || `lead_${bookingId}`,
     value: quote.total,
+    testEventCode: process.env.META_TEST_EVENT_CODE?.trim() || undefined,
     user: {
       phone: booking.phone,
       email: booking.email,

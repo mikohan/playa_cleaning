@@ -3,6 +3,7 @@ import Image, { StaticImageData } from "next/image"
 import { Star, CheckCircle2 } from "lucide-react"
 import { ServiceData } from "@/app/types/serviceTypes" // Adjust path to your interfaces
 import { CleaningModal } from "../common/CleaningModal"
+import type { CtaService } from "./CallToAction"
 import { ModalVideo } from "../common/ModalVideo"
 
 interface ServiceHeroProps {
@@ -10,6 +11,8 @@ interface ServiceHeroProps {
   heroImage: StaticImageData | string
   professionalName: string
   buttonText?: string
+  /** Pre-selects the service in the quote popup */
+  quoteService?: CtaService
 }
 
 export const HeroServiceImage = ({
@@ -17,6 +20,7 @@ export const HeroServiceImage = ({
   heroImage,
   professionalName,
   buttonText,
+  quoteService,
 }: ServiceHeroProps) => {
   const features = [
     "Eco-friendly Products",
@@ -62,7 +66,7 @@ export const HeroServiceImage = ({
         </div>
 
         <div className="mt-16 flex w-full flex-col items-center gap-4 sm:flex-row">
-          <CleaningModal text={buttonText} />
+          <CleaningModal text={buttonText} defaultService={quoteService} />
           <ModalVideo />
         </div>
       </div>

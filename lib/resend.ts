@@ -3,12 +3,13 @@
 import { Resend, CreateEmailOptions } from "resend"
 import { headers } from "next/headers"
 import { sendMetaCapiEvent } from "./meta-capi"
+import { calculateQuote, quoteSchema } from "./booking"
 
 // ==========================================
 // TESTING & ENVIRONMENT CONFIGURATION
 // ==========================================
-// const TEST_EVENT_CODE = "TEST72686" // uncomment (and delete the next line) to send events to Meta Test Events
-const TEST_EVENT_CODE: string | undefined = undefined
+// Meta Test Events: set META_TEST_EVENT_CODE in .env (e.g. TEST50069) while testing, leave empty in normal use
+const TEST_EVENT_CODE: string | undefined = process.env.META_TEST_EVENT_CODE?.trim() || undefined
 const ENABLE_EMAIL_SENDING = true
 const DISABLE_TURNSTILE_SERVER = true // Set to true to bypass Cloudflare verification on server actions
 
@@ -23,6 +24,11 @@ export type FormState = {
   error?: string
   message?: string
   eventId?: string
+  /** Quote form: price calculated on the server from app/data/pricing.ts */
+  price?: number
+  quoteLabel?: string
+  /** Quote form: service priced by hand (post-construction) */
+  custom?: boolean
 }
 
 interface PipelinePayload {
@@ -198,6 +204,23 @@ export const sendEmail = async (
   const bathrooms = (formData.get("bathrooms") as string) || "1"
   const serviceType = (formData.get("serviceType") as string) || "Deep"
   const pageUrl = (formData.get("pageUrl") as string) || "Unknown Source"
+  const zip = ((formData.get("zip") as string) || "").trim() || "Not given"
+  const homeSize = (formData.get("homeSize") as string) || "Not given"
+
+  // Price is recalculated here, the browser value is never trusted
+  const isCustom = serviceType === "post"
+  const parsedQuote = isCustom
+    ? null
+    : quoteSchema.safeParse({ beds: bedrooms, baths: bathrooms, type: serviceType })
+  const quote = parsedQuote?.success ? calculateQuote(parsedQuote.data) : null
+  const serviceName = isCustom
+    ? "Post-Construction (custom quote)"
+    : quote?.serviceLabel || serviceType
+  const priceLine = quote
+    ? `$${quote.total} (shown to the customer)`
+    : isCustom
+      ? "Custom quote: ask for photos"
+      : "Not calculated"
 
   const fbc = (formData.get("fbc") as string) || undefined
   const fbp = (formData.get("fbp") as string) || undefined
@@ -211,19 +234,33 @@ NEW LEAD RECEIVED:
 --------------------------
 Name: ${username}
 Phone: ${phone}
-DETAILS: Bedrooms: ${bedrooms} / Bathrooms: ${bathrooms} / Service: ${serviceType}
+Service: ${serviceName}
+Bedrooms: ${bedrooms} / Bathrooms: ${bathrooms}
+Home size: ${homeSize}
+ZIP: ${zip}
+Price: ${priceLine}
 SOURCE: Sent From: ${pageUrl} / Time: ${orderTime}
   `.trim()
 
-  return executeLeadPipeline({
+  const roomsPart = bedrooms === "Not given" ? "" : ` ${bedrooms}BR/${bathrooms}BA`
+  const subjectPrice = quote ? ` $${quote.total}` : isCustom ? " CUSTOM QUOTE" : ""
+  const result = await executeLeadPipeline({
     eventIdPrefix: "lead",
     clientEventId,
     turnstileToken,
-    subject: `NEW LEAD: ${bedrooms}BR/${bathrooms}BA - ${username}`,
+    subject: `NEW LEAD: ${serviceName}${roomsPart}${subjectPrice} - ${username}`,
     textMessage: textBody,
     userData: { phone, fbc, fbp },
-    customData: { value: 165 },
+    customData: { value: quote?.total ?? 165 },
   })
+
+  if (!result.success) return result
+  return {
+    ...result,
+    price: quote?.total,
+    quoteLabel: quote ? `${quote.serviceLabel} · ${quote.roomsLabel}` : undefined,
+    custom: isCustom,
+  }
 }
 
 export const sendSteamEmail = async (

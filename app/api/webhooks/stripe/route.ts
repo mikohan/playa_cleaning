@@ -90,6 +90,7 @@ export async function POST(req: Request) {
     eventName: "Purchase",
     eventId: `purchase_${parsed.bookingId}`,
     value: paidAmount,
+    testEventCode: process.env.META_TEST_EVENT_CODE?.trim() || undefined,
     user: {
       phone: parsed.booking.phone,
       email: parsed.booking.email,
