@@ -112,7 +112,7 @@ export function FAQSection() {
           <p className="text-primary/60">
             Still have questions?{" "}
             <a
-              href="tel:2135987763"
+              href={`tel:${process.env.NEXT_PUBLIC_COMPANY_PHONE_LINK || "+14243562343"}`}
               className="font-medium underline decoration-primary/50 underline-offset-4 transition-all hover:decoration-primary/70"
             >
               Give me a call.

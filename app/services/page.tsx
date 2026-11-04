@@ -11,7 +11,7 @@ import { LocationTicker } from "@/components/cleaning/LocationTicker"
 // 1. MAXIMUM SEO METADATA INFUSION - SANITIZED FOR POLICY SAFETY
 // ─────────────────────────────────────────────────────────────
 
-const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
+const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343"
 export const metadata: Metadata = {
   title: "Professional Cleaning Services in Los Angeles",
   description:

@@ -151,7 +151,7 @@ export default function TermsOfService() {
             <ul className="mt-4 space-y-1">
               <li>
                 <strong>Phone:</strong>{" "}
-                {process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"}
+                {process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343"}
               </li>
               <li>
                 <strong>Email:</strong>{" "}

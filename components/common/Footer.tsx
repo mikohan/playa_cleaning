@@ -55,7 +55,7 @@ export const Footer = ({ services }: FooterProps) => {
 
   // Dynamic branding parameters
   const ownerName = process.env.NEXT_PUBLIC_COMPANY_OWNER || "Alicia"
-  const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
+  const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343"
   const companyEmail =
     process.env.NEXT_PUBLIC_COMPANY_EMAIL || "order@playacleaning.com"
   const numericPhone = companyPhone.replace(/[^0-9+]/g, "")

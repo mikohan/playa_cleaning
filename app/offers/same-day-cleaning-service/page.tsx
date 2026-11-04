@@ -48,8 +48,8 @@ export const metadata: Metadata = {
 }
 
 const SameDayCleaningPage = () => {
-  const phoneFormatted = "(213) 598-7763"
-  const phoneRaw = "2135987763"
+  const phoneFormatted = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343"
+  const phoneRaw = process.env.NEXT_PUBLIC_COMPANY_PHONE_LINK || "+14243562343"
 
   return (
     <div className="text-foreground transition-colors duration-300">

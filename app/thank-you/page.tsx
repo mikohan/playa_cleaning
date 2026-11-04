@@ -27,7 +27,7 @@ function ThankYouContent() {
   }, [status, sessionId])
 
   const ownerName = process.env.NEXT_PUBLIC_COMPANY_OWNER || "Alicia"
-  const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
+  const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343"
   const numericPhone = companyPhone.replace(/[^0-9+]/g, "")
 
   return (

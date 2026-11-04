@@ -136,8 +136,7 @@ export const CarpetCallToAction = () => {
                       name="phone"
                       type="tel"
                       placeholder={
-                        process.env.NEXT_PUBLIC_COMPANY_PHONE ||
-                        "(213) 598-7763"
+                        process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343"
                       }
                       onInput={handlePhoneInput}
                       className={inputClass}
@@ -170,13 +169,13 @@ export const CarpetCallToAction = () => {
 
               <div className="flex flex-wrap items-center gap-6 pt-4">
                 <a
-                  href="tel:2135987763"
+                  href={`tel:${process.env.NEXT_PUBLIC_COMPANY_PHONE_LINK || "+14243562343"}`}
                   className="flex items-center gap-2 text-lg font-bold text-foreground transition-colors hover:text-primary-blue"
                 >
                   <div className="rounded-full bg-muted p-3">
                     <Phone size={20} className="text-primary-blue" />
                   </div>
-                  {process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"}
+                  {process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343"}
                 </a>
               </div>
             </div>

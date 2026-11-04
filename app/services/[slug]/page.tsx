@@ -27,7 +27,7 @@ interface Props {
 }
 
 const STRAPI_URL = process.env.STRAPI_URL || "https://cms.playacleaning.com"
-const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
+const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343"
 
 // ─────────────────────────────────────────────────────────────
 // Dynamic Metadata Infusion

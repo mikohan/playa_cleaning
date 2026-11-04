@@ -67,7 +67,7 @@ export const metadata: Metadata = {
 }
 
 export default function CalculatorPage() {
-  const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
+  const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343"
   // Clean phone string for the tel: anchor tag
   const numericPhone = companyPhone.replace(/[^0-9+]/g, "")
 

@@ -55,26 +55,26 @@ export function Navbar({ services, locations }: NavbarProps) {
 
   const navItems = [
     { title: "Home", href: "/", className: "" },
-    { title: "Pricing", href: "/cleaning-calculator" },
-    { title: "Recent Jobs", href: "/projects" },
-    { title: "About", href: "/about" },
-    {
-      title: process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343",
-      href: process.env.NEXT_PUBLIC_COMPANY_PHONE_LINK || "+14243562343",
-      className: "font-black",
-      type: "phone",
-    },
     {
       title: "Services",
       href: "/services",
       isDropdown: true,
       subItems: dynamicServiceItems,
     },
+    { title: "Pricing", href: "/cleaning-calculator" },
+    { title: "About", href: "/about" },
+    { title: "Recent Jobs", href: "/projects" },
     {
       title: "Locations",
       href: "/locations",
       isDropdown: true,
       subItems: dynamicLocationItems.slice(0, 12),
+    },
+    {
+      title: process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343",
+      href: process.env.NEXT_PUBLIC_COMPANY_PHONE_LINK || "+14243562343",
+      className: "font-black",
+      type: "phone",
     },
   ]
 

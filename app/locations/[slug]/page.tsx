@@ -23,7 +23,7 @@ import { getProjectsByLocation } from "@/lib/projects"
 import { RecentJobs } from "@/components/projects/RecentJobs"
 
 const STRAPI_URL = process.env.STRAPI_URL || "https://cms.playacleaning.com"
-const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(213) 598-7763"
+const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343"
 
 // ─────────────────────────────────────────────────────────────
 // Type Declarations for Structured Schema Data

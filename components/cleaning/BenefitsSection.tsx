@@ -100,7 +100,7 @@ export function BenefitsSection() {
               immediately.
             </p>
             <a
-              href="tel:2135987763"
+              href={`tel:${process.env.NEXT_PUBLIC_COMPANY_PHONE_LINK || "+14243562343"}`}
               className="hover:bg-opacity-90 w-fit rounded-xl bg-white px-6 py-3 font-bold text-primary-blue transition-all"
             >
               Book Now
