@@ -3,12 +3,13 @@
 import { useEffect } from "react"
 
 /**
- * Google Tag Manager, started after the page has finished loading.
+ * Google Tag Manager, started on the visitor's first scroll/tap/key press,
+ * or after 15 s on the page, whichever comes first.
  *
  * GTM (and the tags inside it: GA4, Meta Pixel, etc.) costs a phone ~3 s of
- * main-thread work. Loading it after `load` + idle keeps that work off the
- * critical path. It also starts on the first scroll/tap/key press, so it is
- * always running before a visitor can fill in a form.
+ * main-thread work. Starting it on first interaction keeps that work out of
+ * page load completely. A visitor has to tap the form to fill it in, so GTM
+ * is always running before any form can be submitted.
  *
  * Events pushed to window.dataLayer before GTM starts are queued and
  * processed by GTM as soon as it loads, so no conversions are lost.
@@ -19,7 +20,6 @@ export function DelayedGTM({ gtmId }: { gtmId: string }) {
     const w = window as Window & {
       dataLayer?: Record<string, unknown>[]
       __gtmStarted?: boolean
-      requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number
     }
 
     const interactions = ["scroll", "pointerdown", "keydown", "touchstart"]
@@ -36,20 +36,16 @@ export function DelayedGTM({ gtmId }: { gtmId: string }) {
       document.head.appendChild(s)
     }
 
-    const afterLoad = () => {
-      if (w.requestIdleCallback) w.requestIdleCallback(start, { timeout: 3000 })
-      else setTimeout(start, 2000)
-    }
+    // Backup for visitors who read without touching the page
+    const timer = window.setTimeout(start, 15000)
 
     interactions.forEach((e) =>
       window.addEventListener(e, start, { once: true, passive: true })
     )
-    if (document.readyState === "complete") afterLoad()
-    else window.addEventListener("load", afterLoad, { once: true })
 
     return () => {
+      window.clearTimeout(timer)
       interactions.forEach((e) => window.removeEventListener(e, start))
-      window.removeEventListener("load", afterLoad)
     }
   }, [gtmId])
 

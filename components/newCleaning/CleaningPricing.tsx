@@ -99,7 +99,7 @@ export function CleaningPricing() {
             </table>
           </div>
           <div className="bg-footer p-6 text-center">
-            <p className="text-[10px] font-black tracking-[0.2em] text-white/40 uppercase">
+            <p className="text-[10px] font-black tracking-[0.2em] text-white/70 uppercase">
               * Rates are based on standard square footage. Supplies included.
             </p>
           </div>
