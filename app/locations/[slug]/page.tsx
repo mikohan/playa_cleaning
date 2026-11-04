@@ -385,7 +385,7 @@ export default async function LocationPage({
           />
         </section>
 
-        <section className="relative">
+        <section className="relative overflow-x-clip">
           <div className="absolute -top-18 left-80 -z-10 h-100 w-100 border bg-top-blur/60 blur-[150px]"></div>
           <LocationFAQ
             cityName={location.city_name}
