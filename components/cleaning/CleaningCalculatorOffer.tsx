@@ -19,9 +19,15 @@ import { WaveDivider } from "../common/WaveDivider"
 // --- CONSTANTS ---
 import { INCLUSIONS, PRICING_ADDONS } from "@/app/data/pricing"
 import { PRICING_MATRICES } from "@/app/data/pricing"
+import {
+  TOGGLE_ADDONS,
+  ToggleAddon,
+  ServiceType,
+  calculateQuote,
+  quoteToParams,
+} from "@/lib/booking"
 
 const STANDARD_MATRIX = PRICING_MATRICES.STANDARD
-const DEEP_MATRIX = PRICING_MATRICES.DEEP
 const PRICING = PRICING_ADDONS
 
 type CleaningCalculatorProps = { showHeader?: boolean }
@@ -44,57 +50,24 @@ export function CleaningCalculator({
     [type]
   )
 
-  const totalPrice = useMemo(() => {
-    // 1. Select the correct matrix (Heavy detailing uses Deep as base)
-    const activeMatrix = type === "standard" ? STANDARD_MATRIX : DEEP_MATRIX
-
-    // 2. Pull the exact base price
-    const bedGroup = activeMatrix[beds]
-    let basePrice = 0
-
-    if (bedGroup && bedGroup[baths]) {
-      basePrice = bedGroup[baths]
-    } else {
-      // Fallback logic
-      const defaultBase = type === "standard" ? 165 : 280
-      basePrice = defaultBase + parseInt(beds) * 25 + parseInt(baths) * 30
-    }
-
-    // 3. Apply heavy-duty/turnover premium if applicable
-    let subtotal = basePrice
-    if (type === "heavy" || type === "move") {
-      subtotal = basePrice * PRICING.moveMultiplier
-    }
-
-    // 4. Add toggles
-    const togglesTotal = selectedToggles.reduce((sum, id) => {
-      const addonId = id as AddonKey
-      return isIncluded(addonId) ? sum : sum + PRICING.addons[addonId].price
-    }, 0)
-
-    // 5. Add unit counters
-    const freeWindows = isIncluded("windows") ? 5 : 0
-    const windowPrice =
-      Math.max(0, counters.windows - freeWindows) * PRICING.addons.windows.price
-    const blindsPrice = counters.blinds * PRICING.addons.blinds.price
-
-    return Math.round(subtotal + togglesTotal + windowPrice + blindsPrice)
-  }, [beds, baths, type, selectedToggles, counters, isIncluded])
+  // Price comes from the shared function the server also uses
+  const quoteInput = useMemo(
+    () => ({
+      beds,
+      baths,
+      type: type as ServiceType,
+      addons: selectedToggles.filter((id): id is ToggleAddon =>
+        (TOGGLE_ADDONS as readonly string[]).includes(id)
+      ),
+      windows: counters.windows,
+      blinds: counters.blinds,
+    }),
+    [beds, baths, type, selectedToggles, counters]
+  )
+  const totalPrice = useMemo(() => calculateQuote(quoteInput).total, [quoteInput])
 
   const handleRedirect = () => {
-    const params = new URLSearchParams({
-      price: totalPrice.toString(),
-      type: String(type),
-      rooms: `${beds}BR/${baths}BA`,
-      addons: [
-        ...selectedToggles,
-        counters.windows > 0 ? `${counters.windows} Windows` : "",
-        counters.blinds > 0 ? `${counters.blinds} Blinds` : "",
-      ]
-        .filter(Boolean)
-        .join(", "),
-    })
-    router.push(`/booking/confirm?${params.toString()}`)
+    router.push(`/booking/confirm?${quoteToParams(quoteInput).toString()}`)
   }
 
   const toggleAddon = (id: string) => {

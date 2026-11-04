@@ -1,8 +1,8 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Booking Confirmed ",
-  description: "The best cleaning service in USA",
+  title: "Book Your Cleaning",
+  description: "Choose the days that work for you and how you want to pay.",
   // This tells crawlers not to index the page or follow any links on it
   robots: {
     index: false,

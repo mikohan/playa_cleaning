@@ -7,7 +7,8 @@ import { sendMetaCapiEvent } from "./meta-capi"
 // ==========================================
 // TESTING & ENVIRONMENT CONFIGURATION
 // ==========================================
-const TEST_EVENT_CODE = "TEST72686"
+// const TEST_EVENT_CODE = "TEST72686" // uncomment (and delete the next line) to send events to Meta Test Events
+const TEST_EVENT_CODE: string | undefined = undefined
 const ENABLE_EMAIL_SENDING = true
 const DISABLE_TURNSTILE_SERVER = true // Set to true to bypass Cloudflare verification on server actions
 
