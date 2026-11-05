@@ -9,7 +9,6 @@ import {
   ClipboardList,
   ArrowRight,
 } from "lucide-react"
-import { toast } from "react-toastify"
 
 import { sendEmail, FormState } from "@/lib/resend"
 import { BED_OPTIONS, BATH_OPTIONS, type ServiceType } from "@/lib/booking"
@@ -72,6 +71,8 @@ export const QuoteForm = ({
   const [baths, setBaths] = useState<string | null>(null)
   const [homeSize, setHomeSize] = useState<string>("Not sure")
   const [sent, setSent] = useState(false)
+  // Shown inside the form: page-level toasts sit under the popup and nobody sees them
+  const [error, setError] = useState("")
   const doneRef = useRef<HTMLDivElement>(null)
 
   // Bring the confirmation into view after submit (the form is taller)
@@ -83,10 +84,7 @@ export const QuoteForm = ({
     async (prevState: FormState, formData: FormData) => {
       const res = await sendEmail(prevState, formData)
       if (res?.success) setSent(true)
-      else
-        toast.error(res?.message || `Could not send. Please call or text ${PHONE_DISPLAY}.`, {
-          position: "top-center",
-        })
+      else setError(`Could not send your request. Please call or text ${PHONE_DISPLAY}.`)
       hasFiredRef.current = false
       return res
     },
@@ -96,13 +94,14 @@ export const QuoteForm = ({
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (hasFiredRef.current) return
+    setError("")
 
     if (!service) {
-      toast.error("Please pick a type of cleaning.", { position: "top-center" })
+      setError("Please pick a type of cleaning.")
       return
     }
     if (service !== "post" && (!beds || !baths)) {
-      toast.error("Please pick bedrooms and bathrooms.", { position: "top-center" })
+      setError("Please pick bedrooms and bathrooms.")
       return
     }
 
@@ -112,11 +111,11 @@ export const QuoteForm = ({
     const zip = ((formData.get("zip") as string) || "").trim()
 
     if (!/^\(\d{3}\) \d{3}-\d{4}$/.test(phone)) {
-      toast.error("Please enter a valid phone: (XXX) XXX-XXXX", { position: "top-center" })
+      setError("Please enter your mobile number: (XXX) XXX-XXXX")
       return
     }
     if (!/^\d{5}$/.test(zip)) {
-      toast.error("Please enter a 5-digit ZIP code.", { position: "top-center" })
+      setError("Please enter a 5-digit ZIP code.")
       return
     }
 
@@ -327,6 +326,11 @@ export const QuoteForm = ({
       </fieldset>
 
       <div className="space-y-3">
+        {error && (
+          <p role="alert" className="rounded-xl bg-red-50 px-4 py-3 text-center text-sm font-semibold text-red-700 ring-1 ring-red-200 dark:bg-red-950/40 dark:text-red-300 dark:ring-red-900">
+            {error}
+          </p>
+        )}
         <button
           type="submit"
           disabled={isPending}
