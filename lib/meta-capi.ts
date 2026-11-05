@@ -103,10 +103,24 @@ export async function sendMetaCapiEvent({
       }
     )
 
-    const result = await response.json()
-    return { success: true, log: result }
+    const result = await response.json().catch(() => ({}))
+    // Meta answers 200 with events_received when it accepted the event; anything else is a rejection
+    const ok = response.ok && Number(result?.events_received) >= 1
+    if (!ok) {
+      console.error(
+        `[Meta CAPI] ${eventName} ${eventId} REJECTED (HTTP ${response.status}):`,
+        JSON.stringify(result?.error || result)
+      )
+    } else {
+      console.log(
+        `[Meta CAPI] ${eventName} ${eventId} accepted` +
+          (testEventCode ? ` (test code ${testEventCode})` : "") +
+          (result?.fbtrace_id ? ` fbtrace ${result.fbtrace_id}` : "")
+      )
+    }
+    return { success: ok, log: result }
   } catch (error) {
-    console.error("Meta CAPI delivery network error:", error)
+    console.error(`[Meta CAPI] ${eventName} ${eventId} network error:`, error)
     return { success: false }
   }
 }
