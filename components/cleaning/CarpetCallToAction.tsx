@@ -99,7 +99,7 @@ export const CarpetCallToAction = () => {
                 </h2>
                 <p className="max-w-md font-medium text-muted-foreground">
                   Professional hot water extraction for sofas, rugs, and
-                  mattresses. Get your instant quote below.
+                  mattresses. Send a request below and we&apos;ll text you a quote.
                 </p>
               </div>
 
@@ -110,7 +110,7 @@ export const CarpetCallToAction = () => {
                   </div>
                   <h3 className="text-2xl font-bold">Request Received!</h3>
                   <p className="mt-2 text-muted-foreground">
-                    We&apos;ll text you a price for your items shortly.
+                    We&apos;ll text you a quote for your items.
                   </p>
                   <button
                     onClick={() => window.location.reload()}

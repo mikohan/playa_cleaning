@@ -213,7 +213,7 @@ export default async function ServicePage({ params }: Props) {
   const video_url = service.video?.url
     ? `${STRAPI_URL}${service.video.url}`
     : null
-  const buttonText = service.button_text || "Get My Estimate"
+  const buttonText = service.button_text || "Get My Free Quote"
 
   return (
     <>

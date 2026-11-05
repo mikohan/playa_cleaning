@@ -33,7 +33,7 @@ export const CleaningModal = ({ text, defaultService }: CleaningModalProps) => {
     }
   }, [isOpen])
 
-  const buttonText = text || "Get My Estimate"
+  const buttonText = text || "Get My Free Quote"
 
   return (
     <>
@@ -49,7 +49,7 @@ export const CleaningModal = ({ text, defaultService }: CleaningModalProps) => {
         onClick={(e: React.MouseEvent<HTMLDialogElement>) =>
           e.target === modalRef.current && handleClose()
         }
-        aria-label="Get your cleaning price"
+        aria-label="Get your free cleaning quote"
         className="bg-transparent outline-none backdrop:bg-slate-900/60 backdrop:backdrop-blur-sm"
       >
         <div
@@ -67,11 +67,11 @@ export const CleaningModal = ({ text, defaultService }: CleaningModalProps) => {
 
           <div className="mb-6 pr-8">
             <h2 className="font-blauerMedium text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-              See Your <span className="text-primary-blue">Cleaning Price</span>
+              Get Your Free <span className="text-primary-blue">Cleaning Quote</span>
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Tap your home details, add your phone, and your exact price shows up right
-              away. No payment needed.
+              Tell us about your home and leave your number. Alicia will text you to go
+              over the details and give you a quote.
             </p>
           </div>
 
