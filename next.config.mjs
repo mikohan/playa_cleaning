@@ -48,6 +48,13 @@ const nextConfig = {
         permanent: true,
       },
 
+      // 0.6. Old offers page (price calculator) -> the main calculator, the only page with prices
+      {
+        source: "/offers",
+        destination: "/cleaning-calculator",
+        permanent: true,
+      },
+
       // 1. FIX SERVICE SLUG MISMATCHES (Old/Short -> New Strapi Slugs)
       {
         source: "/services/maid-service/(.+)",
