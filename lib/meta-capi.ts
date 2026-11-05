@@ -16,7 +16,20 @@ interface CapiEventParams {
   eventId: string
   value: number
   user: CapiUserParams
+  /** Full URL of the page where the event happened (Meta requires it for website events) */
+  eventSourceUrl?: string
   testEventCode?: string // Used temporarily for testing logs
+}
+
+const WEBSITE = (process.env.NEXT_PUBLIC_COMPANY_WEBSITE || "https://playacleaning.com").replace(/\/$/, "")
+
+/** Keep only http(s) URLs on our own site; anything else falls back to the homepage */
+function sourceUrl(url?: string): string {
+  try {
+    const u = new URL(url || "")
+    if (u.protocol === "https:" || u.protocol === "http:") return u.toString()
+  } catch {}
+  return WEBSITE + "/"
 }
 
 /**
@@ -31,6 +44,7 @@ export async function sendMetaCapiEvent({
   eventId,
   value,
   user,
+  eventSourceUrl,
   testEventCode,
 }: CapiEventParams) {
   const pixelId = process.env.META_PIXEL_ID
@@ -57,6 +71,7 @@ export async function sendMetaCapiEvent({
         event_time: Math.floor(Date.now() / 1000),
         event_id: eventId, // Matches browser event_id down to the character
         action_source: "website",
+        event_source_url: sourceUrl(eventSourceUrl),
         user_data: {
           ph: cleanPhone ? [sha256Hash(cleanPhone)] : [],
           ...(hasValidEmail ? { em: [sha256Hash(user.email!)] } : {}),
@@ -66,6 +81,8 @@ export async function sendMetaCapiEvent({
           ...(user.clientUserAgent
             ? { client_user_agent: user.clientUserAgent }
             : {}),
+          ...(user.fbc ? { fbc: user.fbc } : {}),
+          ...(user.fbp ? { fbp: user.fbp } : {}),
         },
         custom_data: {
           value: value,

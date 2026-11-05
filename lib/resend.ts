@@ -37,6 +37,8 @@ interface PipelinePayload {
   turnstileToken?: string
   subject: string
   textMessage: string
+  /** Page the form was sent from (Meta event_source_url) */
+  pageUrl?: string
   userData: {
     phone: string
     username?: string
@@ -147,6 +149,7 @@ async function executeLeadPipeline(
       eventName: "Lead",
       eventId: sharedEventId,
       value: payload.customData.value,
+      eventSourceUrl: payload.pageUrl || reqHeaders.get("referer") || undefined,
       testEventCode: TEST_EVENT_CODE || undefined,
       user: {
         phone: payload.userData.phone,
@@ -250,6 +253,7 @@ SOURCE: Sent From: ${pageUrl} / Time: ${orderTime}
     turnstileToken,
     subject: `NEW LEAD: ${serviceName}${roomsPart}${subjectPrice} - ${username}`,
     textMessage: textBody,
+    pageUrl: pageUrl === "Unknown Source" ? undefined : pageUrl,
     userData: { phone, fbc, fbp },
     customData: { value: quote?.total ?? 165 },
   })
