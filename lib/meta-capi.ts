@@ -117,6 +117,10 @@ export async function sendMetaCapiEvent({
           (testEventCode ? ` (test code ${testEventCode})` : "") +
           (result?.fbtrace_id ? ` fbtrace ${result.fbtrace_id}` : "")
       )
+      // Meta accepts but warns here, e.g. a test code that matches no open Test Events session
+      if (Array.isArray(result?.messages) && result.messages.length) {
+        console.warn(`[Meta CAPI] ${eventName} ${eventId} warnings:`, result.messages.join(" | "))
+      }
     }
     return { success: ok, log: result }
   } catch (error) {
