@@ -22,13 +22,27 @@ interface CapiEventParams {
 }
 
 /**
- * Test Events code for this event: the visitor's ?meta_test= code if it looks valid,
- * otherwise META_TEST_EVENT_CODE from .env (leave it empty in normal use).
+ * Test Events code for this event.
+ * 1. META_TEST_EVENT_CODE from .env.local / .env.production, when set (marks EVERY server event
+ *    as a test event, so real leads stop counting for ads: leave it empty when done testing).
+ * 2. Otherwise the visitor's ?meta_test= cookie code.
+ * A value that is not a Meta test code (TEST + 2-12 letters/digits) is ignored and logged.
  */
+const TEST_CODE_RE = /^TEST[A-Z0-9]{2,12}$/
+
+function cleanTestCode(raw: string | null | undefined, source: string): string | undefined {
+  const code = (raw || "").trim().toUpperCase()
+  if (!code) return undefined
+  if (TEST_CODE_RE.test(code)) return code
+  console.warn(`[Meta CAPI] ignored invalid test code from ${source}: "${raw}"`)
+  return undefined
+}
+
 export function resolveTestEventCode(visitorCode?: string | null): string | undefined {
-  const code = (visitorCode || "").trim().toUpperCase()
-  if (/^TEST[A-Z0-9]{2,12}$/.test(code)) return code
-  return process.env.META_TEST_EVENT_CODE?.trim() || undefined
+  return (
+    cleanTestCode(process.env.META_TEST_EVENT_CODE, "META_TEST_EVENT_CODE") ||
+    cleanTestCode(visitorCode, "visitor cookie")
+  )
 }
 
 const WEBSITE = (process.env.NEXT_PUBLIC_COMPANY_WEBSITE || "https://playacleaning.com").replace(/\/$/, "")
