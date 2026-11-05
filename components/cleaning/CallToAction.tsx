@@ -75,6 +75,14 @@ export const QuoteForm = ({
   const [error, setError] = useState("")
   const doneRef = useRef<HTMLDivElement>(null)
 
+  // Meta Test Events: a ?meta_test=TEST12345 link marks this visitor's leads as test events
+  useEffect(() => {
+    try {
+      const code = new URLSearchParams(window.location.search).get("meta_test")
+      if (code) sessionStorage.setItem("meta_test_code", code)
+    } catch {}
+  }, [])
+
   // Bring the confirmation into view after submit (the form is taller)
   useEffect(() => {
     if (sent) doneRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
@@ -156,6 +164,10 @@ export const QuoteForm = ({
     formData.set("fbc", Cookies.get("_fbc") || "")
     formData.set("fbp", Cookies.get("_fbp") || "")
     formData.set("pageUrl", window.location.href)
+    try {
+      const testCode = sessionStorage.getItem("meta_test_code")
+      if (testCode) formData.set("metaTestCode", testCode)
+    } catch {}
 
     startTransition(async () => {
       await action(formData)

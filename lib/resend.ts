@@ -7,8 +7,12 @@ import { sendMetaCapiEvent } from "./meta-capi"
 // ==========================================
 // TESTING & ENVIRONMENT CONFIGURATION
 // ==========================================
-// Meta Test Events: set META_TEST_EVENT_CODE in .env (e.g. TEST50069) while testing, leave empty in normal use
+// Meta Test Events. Two ways to send server events into a Test Events session:
+// 1. open the site with ?meta_test=TEST12345 (the code shown in Events Manager); only that
+//    visitor's requests carry it, everyone else stays normal production traffic
+// 2. or set META_TEST_EVENT_CODE in .env to tag every event (leave empty in normal use)
 const TEST_EVENT_CODE: string | undefined = process.env.META_TEST_EVENT_CODE?.trim() || undefined
+const TEST_CODE_RE = /^TEST[A-Z0-9]{2,12}$/
 const ENABLE_EMAIL_SENDING = true
 
 // Unified Configuration Properties
@@ -31,6 +35,8 @@ interface PipelinePayload {
   textMessage: string
   /** Page the form was sent from (Meta event_source_url) */
   pageUrl?: string
+  /** Test Events code from the visitor's ?meta_test= link */
+  testEventCode?: string
   userData: {
     phone: string
     username?: string
@@ -97,7 +103,7 @@ async function executeLeadPipeline(
       eventId: sharedEventId,
       value: payload.customData.value,
       eventSourceUrl: payload.pageUrl || reqHeaders.get("referer") || undefined,
-      testEventCode: TEST_EVENT_CODE || undefined,
+      testEventCode: payload.testEventCode || TEST_EVENT_CODE || undefined,
       user: {
         phone: payload.userData.phone,
         first_name: payload.userData.username,
@@ -153,6 +159,7 @@ export const sendEmail = async (
   const bathrooms = (formData.get("bathrooms") as string) || "1"
   const serviceType = (formData.get("serviceType") as string) || "Deep"
   const pageUrl = (formData.get("pageUrl") as string) || "Unknown Source"
+  const metaTest = ((formData.get("metaTestCode") as string) || "").trim().toUpperCase()
   const zip = ((formData.get("zip") as string) || "").trim() || "Not given"
   const homeSize = (formData.get("homeSize") as string) || "Not given"
 
@@ -190,6 +197,7 @@ SOURCE: Sent From: ${pageUrl} / Time: ${orderTime}
     subject: `NEW LEAD: ${serviceName}${roomsPart} - ${username}`,
     textMessage: textBody,
     pageUrl: pageUrl === "Unknown Source" ? undefined : pageUrl,
+    testEventCode: TEST_CODE_RE.test(metaTest) ? metaTest : undefined,
     userData: { phone, fbc, fbp },
     customData: { value: 165 },
   })
