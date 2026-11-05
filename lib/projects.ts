@@ -173,13 +173,42 @@ export function isVideo(m?: StrapiMedia | null): boolean {
   return !!m?.mime?.startsWith("video/")
 }
 
-export function splitMedia(media: StrapiMedia[] | null | undefined) {
-  const list = media || []
-  return { images: list.filter(isImage), videos: list.filter(isVideo) }
+/** File name without extension, lowercased: "video_cover.jpg" -> "video_cover". */
+function stem(m: StrapiMedia): string {
+  return (m.name || "").replace(/\.[^.]+$/, "").toLowerCase()
 }
 
+/**
+ * A video cover is an image uploaded next to its video and named "<video name>_cover",
+ * e.g. "video.mp4" + "video_cover.jpg". It is shown as the video's poster, never as a job photo.
+ */
+export function isVideoCover(m?: StrapiMedia | null): boolean {
+  return !!m && isImage(m) && /[_-]cover$/.test(stem(m))
+}
+
+export function splitMedia(media: StrapiMedia[] | null | undefined) {
+  const list = media || []
+  return {
+    images: list.filter((m) => isImage(m) && !isVideoCover(m)),
+    videos: list.filter(isVideo),
+    covers: list.filter(isVideoCover),
+  }
+}
+
+/** Poster image for a video: its "<name>_cover" image, or the only cover when there is one video. */
+export function videoCover(
+  video: StrapiMedia,
+  covers: StrapiMedia[],
+  videoCount: number
+): StrapiMedia | undefined {
+  const own = covers.find((c) => stem(c).replace(/[_-]cover$/, "") === stem(video))
+  return own || (videoCount === 1 && covers.length === 1 ? covers[0] : undefined)
+}
+
+/** Card / OG image: the first job photo, else a video cover. */
 export function coverImage(project: Project): StrapiMedia | undefined {
-  return (project.media_gallery || []).find(isImage)
+  const list = project.media_gallery || []
+  return list.find((m) => isImage(m) && !isVideoCover(m)) || list.find(isVideoCover)
 }
 
 /** Best size for a card/OG image: medium → large → original. */

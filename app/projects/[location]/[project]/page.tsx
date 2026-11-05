@@ -57,7 +57,7 @@ export default async function ProjectPage({ params }: Props) {
   }
 
   const related = await getRelatedProjects(project, 3)
-  const { images, videos } = splitMedia(project.media_gallery)
+  const { images, videos, covers } = splitMedia(project.media_gallery)
   const cover = coverImage(project)
   const city = project.location?.city_name
   const coords = project.location?.coordinates
@@ -118,6 +118,7 @@ export default async function ProjectPage({ params }: Props) {
           <ProjectGallery
             images={images}
             videos={videos}
+            covers={covers}
             title={project.header}
             posterUrl={cover ? cardImageUrl(cover) : undefined}
             serviceName={

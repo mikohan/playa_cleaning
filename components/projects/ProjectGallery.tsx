@@ -1,10 +1,13 @@
 import Image from "next/image"
 import { StrapiMedia } from "@/app/types/projectTypes"
-import { mediaUrl } from "@/lib/projects"
+import { mediaUrl, videoCover } from "@/lib/projects"
+import { ProjectVideoPlayer } from "@/components/projects/ProjectVideoPlayer"
 
 interface ProjectGalleryProps {
   images: StrapiMedia[]
   videos: StrapiMedia[]
+  /** "<video name>_cover" images, shown as video posters */
+  covers?: StrapiMedia[]
   title: string
   posterUrl?: string
   /** e.g. "deep cleaning" — used when a photo has no alt text/caption in Strapi */
@@ -22,6 +25,7 @@ function fallbackText(i: number, total: number, service?: string, city?: string)
 export function ProjectGallery({
   images,
   videos,
+  covers = [],
   title,
   posterUrl,
   serviceName,
@@ -70,30 +74,32 @@ export function ProjectGallery({
         <section aria-label={`Videos: ${title}`}>
           <h2 className="mb-6 text-2xl font-bold text-foreground">Job videos</h2>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {videos.map((vid, i) => (
+            {videos.map((vid, i) => {
+              const cover = videoCover(vid, covers, videos.length)
+              const poster = cover
+                ? mediaUrl(cover.formats?.large?.url || cover.url)
+                : posterUrl
+              const label =
+                vid.caption ||
+                vid.alternativeText ||
+                `${fallbackText(i, videos.length, serviceName, cityName).replace("photo", "video")}`
+              return (
               <figure
                 key={vid.id || vid.url}
                 className="overflow-hidden rounded-2xl border border-border/60 bg-muted/30"
               >
                 <div className="aspect-9/16 w-full bg-black">
-                  <video
-                    className="h-full w-full object-cover"
-                    controls
-                    muted
-                    playsInline
-                    preload="metadata"
-                    poster={posterUrl}
-                  >
-                    <source src={mediaUrl(vid.url)} type={vid.mime} />
-                  </video>
+                  <ProjectVideoPlayer
+                    src={mediaUrl(vid.url)}
+                    type={vid.mime}
+                    poster={poster}
+                    label={label}
+                  />
                 </div>
-                <figcaption className="p-4 text-sm text-muted-foreground">
-                  {vid.caption ||
-                    vid.alternativeText ||
-                    `${fallbackText(i, videos.length, serviceName, cityName).replace("photo", "video")}`}
-                </figcaption>
+                <figcaption className="p-4 text-sm text-muted-foreground">{label}</figcaption>
               </figure>
-            ))}
+              )
+            })}
           </div>
         </section>
       )}
