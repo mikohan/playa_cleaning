@@ -146,11 +146,50 @@ export default function PrivacyPolicy() {
                 </h2>
                 <p className="leading-relaxed text-slate-600">
                   We implement a variety of security measures to maintain the
-                  safety of your personal information. We never sell, trade, or
-                  otherwise transfer your personally identifiable information to
-                  outside parties except for the purpose of delivering the
-                  service requested.
+                  safety of your personal information. We never sell or rent
+                  your personal information. We share it only with the service
+                  providers that help us run the business: payment processing,
+                  email delivery, and the analytics and advertising tools
+                  described in section 4.
                 </p>
+              </div>
+            </div>
+          </section>
+
+          <section className="rounded-3xl border border-slate-100 bg-white p-8 shadow-sm">
+            <div className="flex items-start gap-4">
+              <div className="mt-1 rounded-lg bg-slate-100 p-2 text-slate-600">
+                <Eye className="h-5 w-5" />
+              </div>
+              <div>
+                <h2 className="mb-4 text-xl font-bold text-slate-900">
+                  4. Cookies, Analytics and Advertising
+                </h2>
+                <div className="space-y-4 leading-relaxed text-slate-600">
+                  <p>
+                    Our website uses cookies and similar tools from Google
+                    Analytics, Google Tag Manager, Meta Pixel and Yandex
+                    Metrica. They count visits, show us which pages help
+                    visitors, and measure how well our ads work.
+                  </p>
+                  <p>
+                    When you send a quote request or booking, we also tell Meta
+                    that a request happened, together with your contact details
+                    in hashed (scrambled) form, so Meta can match it to our ads.
+                    These providers handle this data under their own policies:{" "}
+                    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Google</a>,{" "}
+                    <a href="https://www.facebook.com/privacy/policy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Meta</a>{" "}
+                    and{" "}
+                    <a href="https://yandex.com/legal/confidential/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Yandex</a>.
+                  </p>
+                  <p>
+                    You can block or delete cookies in your browser settings,
+                    opt out of Google Analytics with the{" "}
+                    <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Google Analytics opt-out add-on</a>,
+                    and manage ad preferences in your Facebook or Instagram
+                    settings.
+                  </p>
+                </div>
               </div>
             </div>
           </section>
@@ -162,7 +201,7 @@ export default function PrivacyPolicy() {
               </div>
               <div>
                 <h2 className="mb-4 text-xl font-bold text-slate-900">
-                  4. YouTube API Services
+                  5. YouTube API Services
                 </h2>
                 <div className="space-y-4 leading-relaxed text-slate-600">
                   <p>
@@ -201,7 +240,7 @@ export default function PrivacyPolicy() {
 
           <section className="rounded-3xl border border-slate-100 bg-white p-8 shadow-sm">
             <h2 className="font-blauerMedium mb-4 text-xl font-bold text-slate-900">
-              5. Contact Us
+              6. Contact Us
             </h2>
             <p className="leading-relaxed text-slate-600">
               If you have questions regarding this privacy policy or our
