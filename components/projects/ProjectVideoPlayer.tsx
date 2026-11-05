@@ -75,10 +75,10 @@ export function ProjectVideoPlayer({ src, type, poster, label }: ProjectVideoPla
           type="button"
           onClick={toggle}
           aria-label={`Play video: ${label}`}
-          className="absolute top-1/2 left-1/2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-primary-blue/70 ring-8 ring-white/25 backdrop-blur-sm transition-transform duration-300 hover:scale-110 md:h-28 md:w-28"
+          className="absolute top-1/2 left-1/2 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-primary-blue/40 ring-4 ring-white/30 backdrop-blur-sm transition-transform duration-300 hover:scale-110 md:h-28 md:w-28"
         >
-          <svg viewBox="0 0 24 24" className="ml-1.5 h-11 w-11 fill-white md:h-12 md:w-12" aria-hidden="true">
-            <path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" />
+          <svg viewBox="0 0 24 24" className="h-11 w-11 fill-white md:h-12 md:w-12" aria-hidden="true">
+            <path d="M7 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L8.5 4.64A1 1 0 0 0 7 5.5Z" />
           </svg>
         </button>
       )}
