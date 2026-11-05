@@ -40,6 +40,8 @@ const HOME_SIZES = [
   "Not sure",
 ]
 
+const META_TEST_COOKIE = "meta_test_code"
+
 const PHONE_DISPLAY = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343"
 const PHONE_LINK = process.env.NEXT_PUBLIC_COMPANY_PHONE_LINK || "+14243562343"
 
@@ -75,12 +77,13 @@ export const QuoteForm = ({
   const [error, setError] = useState("")
   const doneRef = useRef<HTMLDivElement>(null)
 
-  // Meta Test Events: a ?meta_test=TEST12345 link marks this visitor's leads as test events
+  // Meta Test Events: opening any page with ?meta_test=TEST12345 marks this browser's leads
+  // as test events for 3 hours (all tabs, like Meta's own test session). ?meta_test=off ends it.
   useEffect(() => {
-    try {
-      const code = new URLSearchParams(window.location.search).get("meta_test")
-      if (code) sessionStorage.setItem("meta_test_code", code)
-    } catch {}
+    const code = new URLSearchParams(window.location.search).get("meta_test")
+    if (!code) return
+    if (code.toLowerCase() === "off") Cookies.remove(META_TEST_COOKIE)
+    else Cookies.set(META_TEST_COOKIE, code, { expires: 1 / 8, sameSite: "Lax" })
   }, [])
 
   // Bring the confirmation into view after submit (the form is taller)
@@ -164,10 +167,8 @@ export const QuoteForm = ({
     formData.set("fbc", Cookies.get("_fbc") || "")
     formData.set("fbp", Cookies.get("_fbp") || "")
     formData.set("pageUrl", window.location.href)
-    try {
-      const testCode = sessionStorage.getItem("meta_test_code")
-      if (testCode) formData.set("metaTestCode", testCode)
-    } catch {}
+    const testCode = Cookies.get(META_TEST_COOKIE)
+    if (testCode) formData.set("metaTestCode", testCode)
 
     startTransition(async () => {
       await action(formData)

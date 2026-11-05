@@ -8,8 +8,8 @@ import { sendMetaCapiEvent } from "./meta-capi"
 // TESTING & ENVIRONMENT CONFIGURATION
 // ==========================================
 // Meta Test Events. Two ways to send server events into a Test Events session:
-// 1. open the site with ?meta_test=TEST12345 (the code shown in Events Manager); only that
-//    visitor's requests carry it, everyone else stays normal production traffic
+// 1. open the site with ?meta_test=TEST12345 (the code shown in Events Manager): that browser's
+//    leads carry it for 3 hours (?meta_test=off ends it); everyone else stays production traffic
 // 2. or set META_TEST_EVENT_CODE in .env to tag every event (leave empty in normal use)
 const TEST_EVENT_CODE: string | undefined = process.env.META_TEST_EVENT_CODE?.trim() || undefined
 const TEST_CODE_RE = /^TEST[A-Z0-9]{2,12}$/
