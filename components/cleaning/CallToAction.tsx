@@ -13,8 +13,6 @@ import {
   Camera,
 } from "lucide-react"
 import { toast } from "react-toastify"
-import { Turnstile } from "@marsidev/react-turnstile"
-import { useNearViewport } from "@/hooks/useNearViewport"
 
 import { sendEmail, FormState } from "@/lib/resend"
 import {
@@ -99,11 +97,6 @@ export const QuoteForm = ({
   const isModal = variant === "modal"
   const [isPending, startTransition] = useTransition()
   const hasFiredRef = useRef<boolean>(false)
-  const [turnstileToken, setTurnstileToken] = useState<string>("")
-  // Load the Cloudflare check only when the form gets close to the screen
-  const formWrapRef = useRef<HTMLFormElement>(null)
-  const formNear = useNearViewport(formWrapRef, "600px")
-  const [formTouched, setFormTouched] = useState(false)
 
   const [service, setService] = useState<CtaService | null>(defaultService ?? null)
   const [beds, setBeds] = useState<string | null>(null)
@@ -156,13 +149,6 @@ export const QuoteForm = ({
     }
 
     const formData = new FormData(e.currentTarget)
-    const token = turnstileToken || (formData.get("cf-turnstile-response") as string)
-    if (!token) {
-      toast.error("Security check is loading. Please try again in a moment.", {
-        position: "top-center",
-      })
-      return
-    }
 
     const phone = formData.get("phone") as string
     const username = formData.get("username") as string
@@ -228,7 +214,6 @@ export const QuoteForm = ({
     formData.append("service_type", formattedServiceString)
     formData.append("estimated_value", String(dynamicValue))
     formData.append("form_type", formType)
-    formData.append("turnstileToken", token)
     formData.set("fbc", Cookies.get("_fbc") || "")
     formData.set("fbp", Cookies.get("_fbp") || "")
     formData.set("pageUrl", window.location.href)
@@ -345,8 +330,6 @@ export const QuoteForm = ({
 
   return (
     <form
-      ref={formWrapRef}
-      onFocusCapture={() => setFormTouched(true)}
       onSubmit={handleFormSubmit}
       className={cn(
         "relative z-20 max-w-xl",
@@ -355,16 +338,6 @@ export const QuoteForm = ({
           : "space-y-7 rounded-[2rem] border border-border bg-card p-4 shadow-sm sm:p-8"
       )}
     >
-      {/* Cloudflare Turnstile, invisible */}
-      <div className="absolute h-0 w-0 overflow-hidden opacity-0" aria-hidden="true">
-        {(formNear || formTouched) && (
-          <Turnstile
-            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
-            onSuccess={(token) => setTurnstileToken(token)}
-          />
-        )}
-      </div>
-
       {/* Step 1: service */}
       <fieldset className="space-y-3">
         <legend className="mb-3">{stepLabel(1, "Pick a service")}</legend>
@@ -494,7 +467,7 @@ export const QuoteForm = ({
           disabled={isPending}
           className="flex w-full items-center justify-center gap-2 overflow-hidden rounded-2xl bg-primary-blue py-5 text-xl font-black text-white shadow-2xl shadow-primary-blue/20 transition-all hover:bg-primary-blue/90 active:scale-[0.98] disabled:opacity-50"
         >
-          {isPending ? "Sending..." : isCustom ? "Request my quote" : "Show my price"}
+          {isPending ? "Sending..." : "Submit"}
           {!isPending && <ArrowRight size={22} />}
         </button>
         <p className="text-center text-xs text-muted-foreground">
