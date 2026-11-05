@@ -9,7 +9,7 @@ import {
   sendCustomerEmail,
   sendManagerEmail,
 } from "@/lib/booking-server"
-import { sendMetaCapiEvent } from "@/lib/meta-capi"
+import { sendMetaCapiEvent, resolveTestEventCode } from "@/lib/meta-capi"
 
 // Stripe needs the raw body to check the signature
 export const runtime = "nodejs"
@@ -91,7 +91,7 @@ export async function POST(req: Request) {
     eventId: `purchase_${parsed.bookingId}`,
     value: paidAmount,
     eventSourceUrl: parsed.booking.tracking?.pageUrl,
-    testEventCode: process.env.META_TEST_EVENT_CODE?.trim() || undefined,
+    testEventCode: resolveTestEventCode(parsed.booking.tracking?.testCode),
     user: {
       phone: parsed.booking.phone,
       email: parsed.booking.email,

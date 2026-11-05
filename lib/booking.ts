@@ -14,6 +14,9 @@ import {
 // Options
 // ─────────────────────────────────────────────────────────────
 
+/** Cookie set by ?meta_test=TEST12345 (components/common/MetaTestLink.tsx) */
+export const META_TEST_COOKIE = "meta_test_code"
+
 export const DEPOSIT_AMOUNT = 50 // USD, refundable up to one day before
 
 export const BED_OPTIONS = Object.keys(PRICING_MATRICES.STANDARD) // 1..5+
@@ -190,6 +193,7 @@ export const bookingSchema = z.object({
       fbc: z.string().max(300).optional(),
       fbp: z.string().max(300).optional(),
       pageUrl: z.string().max(500).optional(),
+      testCode: z.string().max(40).optional(),
     })
     .optional()
     .default({}),

@@ -1,5 +1,6 @@
 import { Plus_Jakarta_Sans, Inter } from "next/font/google"
 import { GoogleTagManager } from "@next/third-parties/google"
+import { MetaTestLink } from "@/components/common/MetaTestLink"
 import type { Metadata } from "next"
 
 import "./globals.css"
@@ -129,6 +130,7 @@ export default async function RootLayout({
     >
       <body>
         <GoogleTagManager gtmId={gtmId} />
+        <MetaTestLink />
         <ThemeProvider>
           <main>
             {/* Pass both to Navbar for the "Services" and "Locations" dropdowns */}

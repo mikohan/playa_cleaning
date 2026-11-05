@@ -21,6 +21,16 @@ interface CapiEventParams {
   testEventCode?: string // Used temporarily for testing logs
 }
 
+/**
+ * Test Events code for this event: the visitor's ?meta_test= code if it looks valid,
+ * otherwise META_TEST_EVENT_CODE from .env (leave it empty in normal use).
+ */
+export function resolveTestEventCode(visitorCode?: string | null): string | undefined {
+  const code = (visitorCode || "").trim().toUpperCase()
+  if (/^TEST[A-Z0-9]{2,12}$/.test(code)) return code
+  return process.env.META_TEST_EVENT_CODE?.trim() || undefined
+}
+
 const WEBSITE = (process.env.NEXT_PUBLIC_COMPANY_WEBSITE || "https://playacleaning.com").replace(/\/$/, "")
 
 /** Keep only http(s) URLs on our own site; anything else falls back to the homepage */

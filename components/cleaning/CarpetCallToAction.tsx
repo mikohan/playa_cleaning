@@ -5,7 +5,9 @@ import { Phone, CheckCircle2, PartyPopper, Droplets, Info } from "lucide-react"
 import { toast, ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
-import { sendSteamEmail, FormState } from "@/lib/resendStamers"
+import { sendSteamEmail, FormState } from "@/lib/resend"
+import Cookies from "js-cookie"
+import { META_TEST_COOKIE } from "@/lib/booking"
 import SteamCleaningImg from "@/public/images/cleaning/capret-2.png"
 import { WaveDivider } from "../common/WaveDivider"
 import { cn } from "@/lib/utils"
@@ -24,7 +26,11 @@ export const CarpetCallToAction = () => {
         }
       }
 
-      // 2. Proceed to Server Action
+      // 2. Tracking data for Meta, then the server action
+      formData.set("fbc", Cookies.get("_fbc") || "")
+      formData.set("fbp", Cookies.get("_fbp") || "")
+      formData.set("pageUrl", window.location.href)
+      formData.set("metaTestCode", Cookies.get(META_TEST_COOKIE) || "")
       return await sendSteamEmail(prevState, formData)
     },
     { success: false }

@@ -1,6 +1,8 @@
 "use client"
 import React, { useState } from "react"
-import { sendSteamEmail } from "@/lib/resendStamers"
+import { sendSteamEmail } from "@/lib/resend"
+import Cookies from "js-cookie"
+import { META_TEST_COOKIE } from "@/lib/booking"
 import { Loader2, CheckCircle2, AlertCircle, Info } from "lucide-react"
 
 export const BookingCalculatorCarpet = () => {
@@ -42,6 +44,10 @@ export const BookingCalculatorCarpet = () => {
     formData.append("username", "Web Estimate")
     formData.append("phone", phone)
     formData.append("itemsToClean", items)
+    formData.append("fbc", Cookies.get("_fbc") || "")
+    formData.append("fbp", Cookies.get("_fbp") || "")
+    formData.append("pageUrl", window.location.href)
+    formData.append("metaTestCode", Cookies.get(META_TEST_COOKIE) || "")
 
     const result = await sendSteamEmail({ success: false }, formData)
 

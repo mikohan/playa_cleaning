@@ -15,7 +15,7 @@ import {
   sendCustomerEmail,
   sendManagerEmail,
 } from "@/lib/booking-server"
-import { sendMetaCapiEvent } from "@/lib/meta-capi"
+import { sendMetaCapiEvent, resolveTestEventCode } from "@/lib/meta-capi"
 
 const WEBSITE = (process.env.NEXT_PUBLIC_COMPANY_WEBSITE || "https://playacleaning.com").replace(/\/$/, "")
 
@@ -70,7 +70,7 @@ export async function POST(req: Request) {
     eventId: booking.tracking?.eventId || `lead_${bookingId}`,
     value: quote.total,
     eventSourceUrl: booking.tracking?.pageUrl || h.get("referer") || `${WEBSITE}/booking/confirm`,
-    testEventCode: process.env.META_TEST_EVENT_CODE?.trim() || undefined,
+    testEventCode: resolveTestEventCode(booking.tracking?.testCode),
     user: {
       phone: booking.phone,
       email: booking.email,

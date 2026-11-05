@@ -1,6 +1,8 @@
 "use client"
 import React, { useState } from "react"
-import { sendBookingEmail } from "@/lib/send-booking"
+import { sendBookingEmail } from "@/lib/resend"
+import Cookies from "js-cookie"
+import { META_TEST_COOKIE } from "@/lib/booking"
 import { Loader2, CheckCircle2, AlertCircle } from "lucide-react"
 import { PRICING_MATRICES } from "@/app/data/pricing"
 
@@ -76,6 +78,10 @@ export const BookingCalculator = () => {
       baths: String(baths),
       phone,
       price: totalPrice,
+      fbc: Cookies.get("_fbc") || undefined,
+      fbp: Cookies.get("_fbp") || undefined,
+      pageUrl: window.location.href,
+      metaTestCode: Cookies.get(META_TEST_COOKIE) || undefined,
     })
 
     // STUCTURAL FIX: Only run tracking configurations if server transaction satisfies success conditions

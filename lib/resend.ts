@@ -2,17 +2,12 @@
 
 import { Resend, CreateEmailOptions } from "resend"
 import { headers } from "next/headers"
-import { sendMetaCapiEvent } from "./meta-capi"
+import { sendMetaCapiEvent, resolveTestEventCode } from "./meta-capi"
 
 // ==========================================
 // TESTING & ENVIRONMENT CONFIGURATION
 // ==========================================
-// Meta Test Events. Two ways to send server events into a Test Events session:
-// 1. open the site with ?meta_test=TEST12345 (the code shown in Events Manager): that browser's
-//    leads carry it for 3 hours (?meta_test=off ends it); everyone else stays production traffic
-// 2. or set META_TEST_EVENT_CODE in .env to tag every event (leave empty in normal use)
-const TEST_EVENT_CODE: string | undefined = process.env.META_TEST_EVENT_CODE?.trim() || undefined
-const TEST_CODE_RE = /^TEST[A-Z0-9]{2,12}$/
+// Meta Test Events: see resolveTestEventCode in ./meta-capi and components/common/MetaTestLink.tsx
 const ENABLE_EMAIL_SENDING = true
 
 // Unified Configuration Properties
@@ -35,7 +30,7 @@ interface PipelinePayload {
   textMessage: string
   /** Page the form was sent from (Meta event_source_url) */
   pageUrl?: string
-  /** Test Events code from the visitor's ?meta_test= link */
+  /** Visitor's ?meta_test= code (checked in resolveTestEventCode) */
   testEventCode?: string
   userData: {
     phone: string
@@ -103,7 +98,7 @@ async function executeLeadPipeline(
       eventId: sharedEventId,
       value: payload.customData.value,
       eventSourceUrl: payload.pageUrl || reqHeaders.get("referer") || undefined,
-      testEventCode: payload.testEventCode || TEST_EVENT_CODE || undefined,
+      testEventCode: resolveTestEventCode(payload.testEventCode),
       user: {
         phone: payload.userData.phone,
         first_name: payload.userData.username,
@@ -159,7 +154,7 @@ export const sendEmail = async (
   const bathrooms = (formData.get("bathrooms") as string) || "1"
   const serviceType = (formData.get("serviceType") as string) || "Deep"
   const pageUrl = (formData.get("pageUrl") as string) || "Unknown Source"
-  const metaTest = ((formData.get("metaTestCode") as string) || "").trim().toUpperCase()
+  const metaTest = (formData.get("metaTestCode") as string) || undefined
   const zip = ((formData.get("zip") as string) || "").trim() || "Not given"
   const homeSize = (formData.get("homeSize") as string) || "Not given"
 
@@ -197,7 +192,7 @@ SOURCE: Sent From: ${pageUrl} / Time: ${orderTime}
     subject: `NEW LEAD: ${serviceName}${roomsPart} - ${username}`,
     textMessage: textBody,
     pageUrl: pageUrl === "Unknown Source" ? undefined : pageUrl,
-    testEventCode: TEST_CODE_RE.test(metaTest) ? metaTest : undefined,
+    testEventCode: metaTest,
     userData: { phone, fbc, fbp },
     customData: { value: 165 },
   })
@@ -216,6 +211,8 @@ export const sendSteamEmail = async (
 
   const fbc = (formData.get("fbc") as string) || undefined
   const fbp = (formData.get("fbp") as string) || undefined
+  const pageUrl = (formData.get("pageUrl") as string) || undefined
+  const metaTest = (formData.get("metaTestCode") as string) || undefined
 
   const orderTime = new Date().toLocaleString("en-US", {
     timeZone: "America/Los_Angeles",
@@ -236,6 +233,8 @@ ITEMS:        ${itemsToClean}
     clientEventId,
     subject: `🔥 STEAM LEAD: ${username}`,
     textMessage: leadTable,
+    pageUrl,
+    testEventCode: metaTest,
     userData: { phone, email, fbc, fbp },
     customData: { value: 150 },
   })
@@ -249,6 +248,8 @@ export async function sendBookingEmail(formData: {
   price: number
   fbc?: string
   fbp?: string
+  pageUrl?: string
+  metaTestCode?: string
 }) {
   const calculatorTextBody = `
 NEW BOOKING INQUIRY (CALCULATOR)
@@ -263,6 +264,8 @@ Quoted Target: $${formData.price}
     eventIdPrefix: "calc_lead",
     subject: `New Booking Request: ${formData.beds} Bed / ${formData.baths} Bath`,
     textMessage: calculatorTextBody,
+    pageUrl: formData.pageUrl,
+    testEventCode: formData.metaTestCode,
     userData: {
       phone: formData.phone,
       fbc: formData.fbc,

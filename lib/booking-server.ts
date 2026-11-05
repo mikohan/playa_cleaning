@@ -138,6 +138,7 @@ export function bookingToMetadata(bookingId: string, b: BookingInput): Record<st
     fbc: cut(b.tracking?.fbc),
     fbp: cut(b.tracking?.fbp),
     event_id: cut(b.tracking?.eventId, 100),
+    test_code: cut(b.tracking?.testCode, 40),
   }
 }
 
@@ -168,6 +169,7 @@ export function bookingFromMetadata(m: Stripe.Metadata | null): {
       fbc: m.fbc || undefined,
       fbp: m.fbp || undefined,
       eventId: m.event_id || undefined,
+      testCode: m.test_code || undefined,
     },
   })
   if (!parsed.success) {

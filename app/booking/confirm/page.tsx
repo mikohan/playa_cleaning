@@ -25,6 +25,7 @@ import {
 import { cn } from "@/lib/utils"
 import {
   DEPOSIT_AMOUNT,
+  META_TEST_COOKIE,
   PAYMENT_OPTIONS,
   PaymentOption,
   TIME_WINDOWS,
@@ -218,6 +219,7 @@ function BookingContent() {
             fbc: Cookies.get("_fbc") || undefined,
             fbp: Cookies.get("_fbp") || undefined,
             pageUrl: window.location.href,
+            testCode: Cookies.get(META_TEST_COOKIE) || undefined,
           },
         }),
       })

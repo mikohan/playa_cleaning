@@ -11,7 +11,7 @@ import {
 } from "lucide-react"
 
 import { sendEmail, FormState } from "@/lib/resend"
-import { BED_OPTIONS, BATH_OPTIONS, type ServiceType } from "@/lib/booking"
+import { BED_OPTIONS, BATH_OPTIONS, META_TEST_COOKIE, type ServiceType } from "@/lib/booking"
 import AliciaPortrait from "@/public/images/cleaning/hero-4.png"
 import { WaveDivider } from "../common/WaveDivider"
 import { cn } from "@/lib/utils"
@@ -39,8 +39,6 @@ const HOME_SIZES = [
   "3,500+",
   "Not sure",
 ]
-
-const META_TEST_COOKIE = "meta_test_code"
 
 const PHONE_DISPLAY = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343"
 const PHONE_LINK = process.env.NEXT_PUBLIC_COMPANY_PHONE_LINK || "+14243562343"
@@ -76,15 +74,6 @@ export const QuoteForm = ({
   // Shown inside the form: page-level toasts sit under the popup and nobody sees them
   const [error, setError] = useState("")
   const doneRef = useRef<HTMLDivElement>(null)
-
-  // Meta Test Events: opening any page with ?meta_test=TEST12345 marks this browser's leads
-  // as test events for 3 hours (all tabs, like Meta's own test session). ?meta_test=off ends it.
-  useEffect(() => {
-    const code = new URLSearchParams(window.location.search).get("meta_test")
-    if (!code) return
-    if (code.toLowerCase() === "off") Cookies.remove(META_TEST_COOKIE)
-    else Cookies.set(META_TEST_COOKIE, code, { expires: 1 / 8, sameSite: "Lax" })
-  }, [])
 
   // Bring the confirmation into view after submit (the form is taller)
   useEffect(() => {
