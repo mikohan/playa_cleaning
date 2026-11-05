@@ -156,8 +156,52 @@ export default function PrivacyPolicy() {
           </section>
 
           <section className="rounded-3xl border border-slate-100 bg-white p-8 shadow-sm">
+            <div className="flex items-start gap-4">
+              <div className="mt-1 rounded-lg bg-slate-100 p-2 text-slate-600">
+                <FileText className="h-5 w-5" />
+              </div>
+              <div>
+                <h2 className="mb-4 text-xl font-bold text-slate-900">
+                  4. YouTube API Services
+                </h2>
+                <div className="space-y-4 leading-relaxed text-slate-600">
+                  <p>
+                    We use YouTube API Services to upload videos of our own
+                    cleaning work to our own YouTube channel. Watching our
+                    videos on YouTube is covered by the{" "}
+                    <a href="https://www.youtube.com/t/terms" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                      YouTube Terms of Service
+                    </a>{" "}
+                    and the{" "}
+                    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                      Google Privacy Policy
+                    </a>
+                    .
+                  </p>
+                  <p>
+                    Our upload tool connects only to YouTube channels owned by
+                    our company. It reads and stores only what it needs to
+                    publish: an access token for our own channel, kept on our
+                    private server, and the IDs and titles of the videos we
+                    upload. It collects no information about website visitors
+                    or other YouTube users.
+                  </p>
+                  <p>
+                    The channel owner can revoke this access at any time in{" "}
+                    <a href="https://security.google.com/settings/security/permissions" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                      Google security settings
+                    </a>
+                    . We delete stored tokens within 7 days after access is
+                    revoked, or sooner on request to hello@playacleaning.com.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="rounded-3xl border border-slate-100 bg-white p-8 shadow-sm">
             <h2 className="font-blauerMedium mb-4 text-xl font-bold text-slate-900">
-              4. Contact Us
+              5. Contact Us
             </h2>
             <p className="leading-relaxed text-slate-600">
               If you have questions regarding this privacy policy or our
