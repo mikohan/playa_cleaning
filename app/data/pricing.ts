@@ -35,11 +35,11 @@ type BathCount = string
 
 export const PRICING_MATRICES: PricingData = {
   STANDARD: {
-    "1": { "1": 165, "2": 190, "3": 215 },
-    "2": { "1": 185, "2": 185, "3": 210, "4": 235 },
-    "3": { "1": 210, "2": 230, "3": 255, "4": 280 },
-    "4": { "2": 270, "3": 295, "4": 320, "5+": 345 },
-    "5+": { "3": 360, "4": 385, "5+": 410 },
+    "1": { "1": 205, "2": 240, "3": 270 },
+    "2": { "1": 230, "2": 230, "3": 265, "4": 295 },
+    "3": { "1": 265, "2": 290, "3": 320, "4": 350 },
+    "4": { "2": 340, "3": 370, "4": 400, "5+": 430 },
+    "5+": { "3": 450, "4": 480, "5+": 515 },
   },
   DEEP: {
     "1": { "1": 280, "2": 310, "3": 340 },
@@ -55,6 +55,21 @@ export const FREQUENCY_DISCOUNTS = {
   BIWEEKLY: 0.15,
   MONTHLY: 0,
 } as const
+
+// --- HOME TYPE ---
+// Houses and townhouses take more work than an apartment with the same rooms.
+// The price for the rooms is multiplied by this factor and rounded to $5.
+
+export const HOME_TYPES = {
+  apartment: { label: "Apartment / Condo", multiplier: 1 },
+  townhouse: { label: "Townhouse", multiplier: 1.1 },
+  house: { label: "House", multiplier: 1.2 },
+} as const
+
+export type HomeType = keyof typeof HOME_TYPES
+
+/** Rounds to the nearest $5 */
+export const roundTo5 = (n: number) => Math.round(n / 5) * 5
 
 // --- ADDONS ---
 
@@ -231,8 +246,8 @@ export function getRegularPricingRow(beds: BedCount, baths: BathCount) {
 
   return {
     label: `${beds} Bed ${baths} Bath`,
-    weekly: Math.round(base * (1 - FREQUENCY_DISCOUNTS.WEEKLY)),
-    biweekly: Math.round(base * (1 - FREQUENCY_DISCOUNTS.BIWEEKLY)),
+    weekly: roundTo5(base * (1 - FREQUENCY_DISCOUNTS.WEEKLY)),
+    biweekly: roundTo5(base * (1 - FREQUENCY_DISCOUNTS.BIWEEKLY)),
     monthly: base,
   }
 }

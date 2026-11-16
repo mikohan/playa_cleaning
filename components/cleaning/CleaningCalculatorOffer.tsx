@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils"
 import { WaveDivider } from "../common/WaveDivider"
 
 // --- CONSTANTS ---
-import { INCLUSIONS, PRICING_ADDONS } from "@/app/data/pricing"
+import { HOME_TYPES, HomeType, INCLUSIONS, PRICING_ADDONS } from "@/app/data/pricing"
 import { PRICING_MATRICES } from "@/app/data/pricing"
 import {
   TOGGLE_ADDONS,
@@ -38,6 +38,7 @@ export function CleaningCalculator({
 }: CleaningCalculatorProps) {
   const router = useRouter()
 
+  const [home, setHome] = useState<HomeType>("apartment")
   const [beds, setBeds] = useState<string>("2")
   const [baths, setBaths] = useState<string>("2")
   // Safe default target: standard, deep, heavy (instead of move)
@@ -56,13 +57,14 @@ export function CleaningCalculator({
       beds,
       baths,
       type: type as ServiceType,
+      home,
       addons: selectedToggles.filter((id): id is ToggleAddon =>
         (TOGGLE_ADDONS as readonly string[]).includes(id)
       ),
       windows: counters.windows,
       blinds: counters.blinds,
     }),
-    [beds, baths, type, selectedToggles, counters]
+    [home, beds, baths, type, selectedToggles, counters]
   )
   const totalPrice = useMemo(() => calculateQuote(quoteInput).total, [quoteInput])
 
@@ -115,10 +117,34 @@ export function CleaningCalculator({
               </p>
             </header>
 
-            {/* 01. Bedrooms */}
+            {/* 01. Home type */}
             <div className="space-y-4">
               <label className="text-xs font-bold tracking-[0.2em] text-primary uppercase">
-                01. Bedrooms
+                01. Home Type
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {(Object.keys(HOME_TYPES) as HomeType[]).map((k) => (
+                  <button
+                    key={k}
+                    type="button"
+                    onClick={() => setHome(k)}
+                    className={cn(
+                      "h-12 rounded-xl border-2 px-5 text-sm font-bold transition-all",
+                      home === k
+                        ? "border-primary bg-primary/5 text-primary"
+                        : "border-border text-foreground/75 hover:border-primary/30"
+                    )}
+                  >
+                    {HOME_TYPES[k].label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* 02. Bedrooms */}
+            <div className="space-y-4">
+              <label className="text-xs font-bold tracking-[0.2em] text-primary uppercase">
+                02. Bedrooms
               </label>
               <div className="flex flex-wrap gap-2">
                 {Object.keys(STANDARD_MATRIX).map((num) => (
@@ -139,10 +165,10 @@ export function CleaningCalculator({
               </div>
             </div>
 
-            {/* 02. Bathrooms */}
+            {/* 03. Bathrooms */}
             <div className="space-y-4">
               <label className="text-xs font-bold tracking-[0.2em] text-primary uppercase">
-                02. Bathrooms
+                03. Bathrooms
               </label>
               <div className="flex flex-wrap gap-2">
                 {["1", "2", "3", "4", "5+"].map((num) => (
@@ -163,10 +189,10 @@ export function CleaningCalculator({
               </div>
             </div>
 
-            {/* 03. Service Depth */}
+            {/* 04. Service Depth */}
             <div className="space-y-4">
               <label className="text-xs font-bold tracking-[0.2em] text-primary uppercase">
-                03. Service Detail Level
+                04. Service Detail Level
               </label>
               <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
                 {Object.keys(INCLUSIONS).map((k) => (
@@ -200,10 +226,10 @@ export function CleaningCalculator({
               </div>
             </div>
 
-            {/* 04. Add-ons */}
+            {/* 05. Add-ons */}
             <div className="space-y-6">
               <label className="text-xs font-bold tracking-[0.2em] text-primary uppercase">
-                04. Custom Add-ons
+                05. Custom Add-ons
               </label>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 {["windows", "blinds"].map((id) => (

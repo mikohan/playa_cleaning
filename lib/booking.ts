@@ -5,9 +5,12 @@
  */
 import { z } from "zod"
 import {
+  HOME_TYPES,
+  HomeType,
   INCLUSIONS,
   PRICING_ADDONS,
   PRICING_MATRICES,
+  roundTo5,
 } from "@/app/data/pricing"
 
 // ─────────────────────────────────────────────────────────────
@@ -22,6 +25,7 @@ export const DEPOSIT_AMOUNT = 50 // USD, refundable up to one day before
 export const BED_OPTIONS = Object.keys(PRICING_MATRICES.STANDARD) // 1..5+
 export const BATH_OPTIONS = ["1", "2", "3", "4", "5+"]
 export const SERVICE_TYPES = ["standard", "deep", "move"] as const
+export const HOME_TYPE_OPTIONS = Object.keys(HOME_TYPES) as HomeType[]
 export const TOGGLE_ADDONS = ["fridge", "oven", "moveAppliances", "pets"] as const
 export const TIME_WINDOWS = ["morning", "midday", "afternoon", "flexible"] as const
 export const PAYMENT_OPTIONS = ["later", "deposit", "full"] as const
@@ -58,6 +62,7 @@ export const quoteSchema = z.object({
   beds: z.enum(BED_OPTIONS as [string, ...string[]]),
   baths: z.enum(BATH_OPTIONS as [string, ...string[]]),
   type: z.enum(SERVICE_TYPES),
+  home: z.enum(HOME_TYPE_OPTIONS as [HomeType, ...HomeType[]]).default("apartment"),
   addons: z.array(z.enum(TOGGLE_ADDONS)).max(TOGGLE_ADDONS.length).default([]),
   windows: z.coerce.number().int().min(0).max(60).default(0),
   blinds: z.coerce.number().int().min(0).max(60).default(0),
@@ -86,7 +91,7 @@ export function isIncluded(type: ServiceType, addon: string): boolean {
 
 /** Same math the calculator shows. Single source of truth for the price. */
 export function calculateQuote(input: QuoteInput): Quote {
-  const { beds, baths, type } = input
+  const { beds, baths, type, home } = input
   const matrix =
     type === "standard" ? PRICING_MATRICES.STANDARD : PRICING_MATRICES.DEEP
 
@@ -97,10 +102,12 @@ export function calculateQuote(input: QuoteInput): Quote {
     base = defaultBase + parseInt(beds) * 25 + parseInt(baths) * 30
   }
   if (type === "move") base = base * PRICING_ADDONS.moveMultiplier
-  base = Math.round(base)
+  const homeType = HOME_TYPES[home]
+  base = homeType.multiplier === 1 ? Math.round(base) : roundTo5(base * homeType.multiplier)
+  const roomsLabel = `${homeType.label}, ${beds} bed / ${baths} bath`
 
   const lines: QuoteLine[] = [
-    { label: `${SERVICE_LABELS[type]}, ${beds} bed / ${baths} bath`, amount: base },
+    { label: `${SERVICE_LABELS[type]}, ${roomsLabel}`, amount: base },
   ]
 
   for (const id of TOGGLE_ADDONS) {
@@ -134,7 +141,7 @@ export function calculateQuote(input: QuoteInput): Quote {
   return {
     input,
     serviceLabel: SERVICE_LABELS[type],
-    roomsLabel: `${beds} bed / ${baths} bath`,
+    roomsLabel,
     lines,
     total,
   }
@@ -149,7 +156,7 @@ export function paymentSplit(total: number, option: PaymentOption) {
 
 /** Quote <-> URL params (calculator → booking page). No price in the URL. */
 export function quoteToParams(q: QuoteInput): URLSearchParams {
-  const p = new URLSearchParams({ beds: q.beds, baths: q.baths, type: q.type })
+  const p = new URLSearchParams({ beds: q.beds, baths: q.baths, type: q.type, home: q.home })
   if (q.addons.length) p.set("addons", q.addons.join(","))
   if (q.windows) p.set("windows", String(q.windows))
   if (q.blinds) p.set("blinds", String(q.blinds))
@@ -161,6 +168,7 @@ export function quoteFromParams(p: URLSearchParams): QuoteInput | null {
     beds: p.get("beds") ?? undefined,
     baths: p.get("baths") ?? undefined,
     type: p.get("type") ?? undefined,
+    home: p.get("home") ?? undefined,
     addons: (p.get("addons") || "").split(",").filter(Boolean),
     windows: p.get("windows") ?? 0,
     blinds: p.get("blinds") ?? 0,

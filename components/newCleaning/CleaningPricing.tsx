@@ -16,7 +16,7 @@ const regularRows = [
   getRegularPricingRow("2", "1"),
   getRegularPricingRow("2", "2"),
   getRegularPricingRow("3", "2"),
-  getRegularPricingRow("4", "3"),
+  getRegularPricingRow("3", "3"),
 ]
 
 // Extract specific rows for the Deep Cleaning table from the DEEP matrix
@@ -100,7 +100,7 @@ export function CleaningPricing() {
           </div>
           <div className="bg-footer p-6 text-center">
             <p className="text-[10px] font-black tracking-[0.2em] text-white/70 uppercase">
-              * Rates are based on standard square footage. Supplies included.
+              * Apartment prices. Houses cost more: get your price in the calculator. Supplies included.
             </p>
           </div>
         </div>
