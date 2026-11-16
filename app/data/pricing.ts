@@ -57,12 +57,11 @@ export const FREQUENCY_DISCOUNTS = {
 } as const
 
 // --- HOME TYPE ---
-// Houses and townhouses take more work than an apartment with the same rooms.
+// Houses take more work than an apartment with the same rooms.
 // The price for the rooms is multiplied by this factor and rounded to $5.
 
 export const HOME_TYPES = {
   apartment: { label: "Apartment / Condo", multiplier: 1 },
-  townhouse: { label: "Townhouse", multiplier: 1.1 },
   house: { label: "House", multiplier: 1.2 },
 } as const
 
