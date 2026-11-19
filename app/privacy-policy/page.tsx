@@ -256,7 +256,7 @@ export default function PrivacyPolicy() {
 
         {/* Footer */}
         <footer className="mt-12 pb-12 text-center text-sm text-slate-400">
-          &copy; {new Date().getFullYear()} Playa Cleaning LLC. All rights
+          &copy; {new Date().getFullYear()} Angara Lab LLC, DBA Playa Cleaning. All rights
           reserved.
         </footer>
       </div>

@@ -693,7 +693,7 @@ export const servicePages = [
         {
           title: "Restroom Hygiene",
           detail:
-            "Intensive sanitization of high-traffic common areas using hospital-grade products.",
+            "Intensive sanitization of high-traffic common areas using professional disinfectants.",
         },
         {
           title: "Supply Management",
@@ -758,7 +758,7 @@ export const servicePages = [
         {
           title: "Infection Control",
           detail:
-            "Hospital-grade disinfectants and cross-contamination prevention protocols.",
+            "Professional disinfectants and cross-contamination prevention protocols.",
         },
         {
           title: "HIPAA Respect",
@@ -955,7 +955,7 @@ export const servicePages = [
     intent: "Add-on",
     content: {
       h1: "Bathroom Sanitization & Detailing",
-      subheading: "Hospital-grade hygiene for your personal spa.",
+      subheading: "Deep hygiene for your personal spa.",
       introText:
         "We eliminate soap scum, mold, and bacteria to restore your bathroom to a pristine, hygienic state. Pure sanitization.",
       mainFeatures: [
@@ -971,7 +971,7 @@ export const servicePages = [
       steps: [
         "Surface Soak: We pre-treat mold and soap scum zones.",
         "Manual Scrub: Detailed agitation of grout and fixtures.",
-        "Total Sanitization: Hospital-grade disinfection for a fresh finish.",
+        "Total Sanitization: Thorough disinfection for a fresh finish.",
       ],
     },
     seo: {

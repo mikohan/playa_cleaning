@@ -22,7 +22,7 @@ const teamPhotos = [
   {
     src: "/images/cleaning/ol-3.png",
     alt: "Organized cleaning supplies and professional staff ready for service",
-    quote: "Hospital-grade standards, home-style comfort.",
+    quote: "Professional standards, home-style comfort.",
     size: "md:col-span-1 md:row-span-2",
   },
   {

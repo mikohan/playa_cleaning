@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Playa Cleaning | Same Day House Cleaning",
     description:
-      "Last-minute house cleaning you can trust. Licensed & Insured cleaners ready for your residential reset.",
+      "Last-minute house cleaning you can trust. Insured and bonded cleaners ready for your residential reset.",
     images: ["https://playacleaning.com/og-image.jpg"],
   },
 }
@@ -102,7 +102,7 @@ const SameDayCleaningPage = () => {
                 <div className="flex items-center gap-1 text-primary-blue">
                   <ShieldCheck size={16} />
                   <span className="text-muted-foreground">
-                    Licensed & Insured
+                    Insured & Bonded
                   </span>
                 </div>
                 <div className="flex items-center gap-1 text-primary-blue">

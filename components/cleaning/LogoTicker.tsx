@@ -3,12 +3,12 @@ import { ShieldCheck, Leaf, MapPin, Clock, Sparkles, Heart } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const ADVANTAGES = [
-  { icon: ShieldCheck, text: "Licensed & Insured" },
+  { icon: ShieldCheck, text: "Insured & Bonded" },
   { icon: Leaf, text: "Eco-Friendly Solutions" },
   { icon: MapPin, text: "Serving All of Los Angeles" },
   { icon: Clock, text: "Reliable Scheduling" },
   { icon: Heart, text: "Pet & Kid Safe" },
-  { icon: Sparkles, text: "Hospital-Grade Clean" },
+  { icon: Sparkles, text: "HEPA Vacuums" },
 ]
 interface Props {
   className?: string

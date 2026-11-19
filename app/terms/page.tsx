@@ -4,14 +4,14 @@ import React from "react"
 export const metadata = {
   title: "Terms of Service",
   description:
-    "Terms and conditions for professional cleaning services provided by Playa Cleaning LLC in Los Angeles.",
+    "Terms and conditions for professional cleaning services provided by Playa Cleaning (Angara Lab LLC) in Los Angeles.",
   alternates: {
     canonical: "https://playacleaning.com/terms",
   },
   openGraph: {
     title: "Terms of Service | Playa Cleaning",
     description:
-      "Terms and conditions for professional cleaning services provided by Playa Cleaning LLC in Los Angeles.",
+      "Terms and conditions for professional cleaning services provided by Playa Cleaning (Angara Lab LLC) in Los Angeles.",
     url: "https://playacleaning.com/terms",
     siteName: "Playa Cleaning",
     type: "website",
@@ -25,7 +25,7 @@ export const metadata = {
     ],
   },
 }
-const tosIntro = `Playa Cleaning LLC ("the Company," "we," "us") provides professional residential and commercial cleaning services. By booking a service through our website, phone, or email, you ("the Client") agree to be bound by the following terms and conditions.`
+const tosIntro = `Angara Lab LLC, doing business as Playa Cleaning ("the Company," "we," "us") provides professional residential and commercial cleaning services. By booking a service through our website, phone, or email, you ("the Client") agree to be bound by the following terms and conditions.`
 
 export default function TermsOfService() {
   return (
@@ -137,7 +137,7 @@ export default function TermsOfService() {
               7. Liability & Insurance
             </h2>
             <p>
-              Playa Cleaning LLC is licensed, bonded, and insured. While we take
+              Playa Cleaning (Angara Lab LLC) is bonded and insured. While we take
               the utmost care with your property, we are not liable for damage
               caused by &quot;wear and tear,&quot; poorly installed fixtures, or
               fragile items that were not secured. Claims for damage must be

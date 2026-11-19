@@ -84,7 +84,7 @@ export const servicePages = [
       title:
         "House Cleaning Services Los Angeles | Trusted LA Maid Service | Playa Cleaning",
       description:
-        "Reliable weekly or bi-weekly house cleaning in Los Angeles. Licensed, bonded, and professional maid services tailored to your schedule.",
+        "Reliable weekly or bi-weekly house cleaning in Los Angeles. Insured, bonded, and professional maid services tailored to your schedule.",
       og_data: {
         "og:title": "Best House Cleaning & Maid Services in Los Angeles",
         "og:description":

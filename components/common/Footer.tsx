@@ -214,10 +214,10 @@ export const Footer = ({ services }: FooterProps) => {
 
         {/* Bottom Safety Bar */}
         <div className="mt-4 flex w-full flex-col items-center justify-between gap-4 border-t border-background/5 pt-6 text-[13px] text-background/80 md:flex-row">
-          <p>© {currentYear} Playa Cleaning LLC. All rights reserved.</p>
+          <p>© {currentYear} Angara Lab LLC, DBA Playa Cleaning. All rights reserved.</p>
           <div className="flex gap-4">
             <span className="font-bold text-blue-400">
-              Licensed & Bonded
+              Insured & Bonded
             </span>
             <span>•</span>
             <span>Los Angeles County</span>
