@@ -4,34 +4,37 @@ import { LocationTicker } from "@/components/cleaning/LocationTicker"
 import { Metadata } from "next"
 import { CleaningModal } from "@/components/common/CleaningModal"
 import Image from "next/image"
+import { GOOGLE_RATING } from "@/lib/business-schema"
+import { PRICING_ADDONS, PRICING_MATRICES, PricingMatrix } from "@/app/data/pricing"
+
+// Lowest one-time price in a matrix: the same numbers the calculator uses
+const minPrice = (m: PricingMatrix) =>
+  Math.min(...Object.values(m).flatMap((row) => Object.values(row)))
 
 export const metadata: Metadata = {
-  title: "Same Day Cleaning Service Los Angeles | 24 Hour Maid Service",
+  title: "Same Day Cleaning Service Los Angeles | Last-Minute Maid Service",
   description:
-    "Need a professional clean today? Playa Cleaning offers premier same day house cleaning & 24-hour maid services across Los Angeles. Licensed, insured, and 5-star rated.",
+    "Need a clean today? Playa Cleaning offers same day and last-minute house cleaning across the LA Westside, 8 am to 9 pm, 7 days a week. Rated 4.9 on Google.",
   keywords: [
     "same day cleaning service near me",
     "emergency house cleaning Los Angeles",
-    "24 hour maid service LA",
     "last minute cleaning service",
     "same day deep cleaning",
     "professional cleaners Los Angeles",
     "residential reset cleaning",
   ],
   alternates: {
-    canonical: "https://playacleaning.com/same-day-cleaning-los-angeles",
+    canonical: "https://playacleaning.com/offers/same-day-cleaning-service",
   },
   openGraph: {
     title: "Same Day Cleaning Service in Los Angeles | Book Now",
     description:
-      "Professional, meticulous home cleaning on short notice. Serving the Westside, South Bay, and Greater LA 24/7.",
-    url: "https://playacleaning.com/same-day-cleaning-los-angeles",
+      "Professional, meticulous home cleaning on short notice. Serving the Westside and South Bay, 8 am to 9 pm, 7 days a week.",
+    url: "https://playacleaning.com/offers/same-day-cleaning-service",
     siteName: "Playa Cleaning",
     images: [
       {
-        url: "/images/og-same-day.jpg", // Update with your actual OG image path
-        width: 1200,
-        height: 630,
+        url: "https://playacleaning.com/og-image.jpg",
         alt: "Professional Same Day Cleaning Service in Los Angeles",
       },
     ],
@@ -40,10 +43,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Playa Cleaning | 24/7 Same Day Service",
+    title: "Playa Cleaning | Same Day House Cleaning",
     description:
       "Last-minute house cleaning you can trust. Licensed & Insured cleaners ready for your residential reset.",
-    images: ["/images/og-same-day.jpg"],
+    images: ["https://playacleaning.com/og-image.jpg"],
   },
 }
 
@@ -78,7 +81,7 @@ const SameDayCleaningPage = () => {
               </h1>
 
               <p className="max-w-lg text-xl leading-relaxed text-muted-foreground">
-                Professional Same Day House Cleaning Service & 24 Hour Maid
+                Professional Same Day House Cleaning and Last-Minute Maid
                 Service for Residential Resets in Los Angeles.
               </p>
 
@@ -105,7 +108,7 @@ const SameDayCleaningPage = () => {
                 <div className="flex items-center gap-1 text-primary-blue">
                   <Star size={16} />
                   <span className="text-muted-foreground">
-                    4.9/5 TrustScore
+                    {GOOGLE_RATING.ratingValue} on Google
                   </span>
                 </div>
               </div>
@@ -134,7 +137,7 @@ const SameDayCleaningPage = () => {
                       Availability
                     </p>
                     <p className="font-sans text-sm font-semibold text-foreground">
-                      24 Hour Cleaning Service Support
+                      8 am to 9 pm, 7 days a week
                     </p>
                   </div>
                 </div>
@@ -152,27 +155,27 @@ const SameDayCleaningPage = () => {
               Transparent Same Day House Cleaning Service
             </h2>
             <p className="mt-4 text-muted-foreground">
-              Calculated by square footage. The most reliable same day cleaning
-              service near me.
+              Priced by bedrooms and bathrooms, the same as our calculator.
+              Same day cleaning on the LA Westside.
             </p>
           </div>
           <div className="grid gap-8 md:grid-cols-3">
             {[
               {
                 title: "Standard Same Day",
-                price: "$199+",
-                desc: "A fast, systematic refresh of all living areas by our elite same day maid service.",
+                price: `From $${minPrice(PRICING_MATRICES.STANDARD)}`,
+                desc: "A fast, systematic refresh of all living areas by our same day maid service.",
               },
               {
                 title: "Same Day Deep Cleaning Service",
-                price: "$299+",
+                price: `From $${minPrice(PRICING_MATRICES.DEEP)}`,
                 desc: "Detailed restoration of kitchen, bath, and baseboards for those who need a total reset.",
                 popular: true,
               },
               {
-                title: "24 Hour House Cleaning Service",
-                price: "$349+",
-                desc: "Clinical sanitization for property turnovers and emergency resets available around the clock.",
+                title: "Same Day Move In/Out Cleaning",
+                price: `From $${Math.round(minPrice(PRICING_MATRICES.DEEP) * PRICING_ADDONS.moveMultiplier)}`,
+                desc: "Empty-home detail clean for move-outs and property turnovers, booked on short notice.",
               },
             ].map((item, idx) => (
               <div
@@ -278,8 +281,8 @@ const SameDayCleaningPage = () => {
                 Ready for the Reset?
               </h2>
               <p className="mx-auto max-w-xl text-xl text-white/80">
-                Book the highest-rated same day maid service near me. Calculate
-                your price and secure your slot in 60 seconds.
+                Book a same day maid service rated {GOOGLE_RATING.ratingValue} on Google.
+                Calculate your price and request your slot in 60 seconds.
               </p>
               <div className="flex flex-col justify-center gap-6 pt-4 sm:flex-row">
                 <button className="rounded-xl bg-background px-12 py-5 text-lg font-bold text-primary-blue transition-all hover:scale-105 hover:shadow-2xl">

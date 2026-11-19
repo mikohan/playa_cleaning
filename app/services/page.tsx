@@ -6,12 +6,12 @@ import { CalculatorCTA } from "@/components/newCleaning/CalculatorCTA"
 import { strapiRequest } from "@/lib/strapi"
 import { StrapiResponse, ServiceData } from "@/app/types/serviceTypes"
 import { LocationTicker } from "@/components/cleaning/LocationTicker"
+import { BUSINESS_ID, businessRef } from "@/lib/business-schema"
 
 // ─────────────────────────────────────────────────────────────
 // 1. MAXIMUM SEO METADATA INFUSION - SANITIZED FOR POLICY SAFETY
 // ─────────────────────────────────────────────────────────────
 
-const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343"
 export const metadata: Metadata = {
   title: "Professional Cleaning Services in Los Angeles",
   description:
@@ -85,19 +85,8 @@ export default async function ServicesListPage() {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "LocalBusiness",
-        "@id": "https://playacleaning.com/#organization",
-        name: "Playa Cleaning",
-        url: "https://playacleaning.com",
-        telephone: companyPhone,
-        priceRange: "$$",
-        image: "https://cms.playacleaning.com/uploads/hero_4_8f4caab2a5.webp",
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: "Los Angeles",
-          addressRegion: "CA",
-          addressCountry: "US",
-        },
+        ...businessRef,
+        "@type": "HomeAndConstructionBusiness",
         hasOfferCatalog: {
           "@type": "OfferCatalog",
           "@id": "https://playacleaning.com/services/#catalog",
@@ -115,7 +104,7 @@ export default async function ServicesListPage() {
                 `Premium professional ${s.name} solutions across Los Angeles.`,
               url: `https://playacleaning.com/services/${s.slug}`,
               provider: {
-                "@id": "https://playacleaning.com/#organization",
+                "@id": BUSINESS_ID,
               },
             },
           })),

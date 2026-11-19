@@ -9,46 +9,19 @@ import {
   serviceShortName,
   splitMedia,
 } from "@/lib/projects"
+import {
+  BUSINESS_ID,
+  BUSINESS_NAME,
+  businessNode,
+} from "@/lib/business-schema"
 
-const BUSINESS_NAME = "Playa Cleaning"
-const PHONE = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343"
-const ORG_ID = `${SITE_URL}/#organization`
+const ORG_ID = BUSINESS_ID
 const DEFAULT_OG = `${SITE_URL}/og-image.jpg`
-const SAME_AS = [
-  "https://www.instagram.com/playa_cleaning/",
-  "https://www.youtube.com/@PlayaCleaningUS",
-  "https://www.facebook.com/playacleaning",
-]
 
 export const PROJECTS_LIST_TITLE =
   "Recent House Cleaning Jobs in Playa Vista & West LA"
 export const PROJECTS_LIST_DESCRIPTION =
   "Photos and notes from real Playa Cleaning jobs: deep cleanings, regular cleanings and move-out cleanings in Playa Vista, Marina del Rey, Culver City, Santa Monica and nearby."
-
-// ─────────────────────────────────────────────────────────────
-// Shared nodes
-// ─────────────────────────────────────────────────────────────
-
-function businessNode() {
-  return {
-    "@type": "LocalBusiness",
-    "@id": ORG_ID,
-    name: BUSINESS_NAME,
-    url: SITE_URL,
-    telephone: PHONE,
-    image: `${SITE_URL}/logo.png`,
-    logo: `${SITE_URL}/logo.png`,
-    priceRange: "$$",
-    sameAs: SAME_AS,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Playa Vista",
-      addressRegion: "CA",
-      postalCode: "90094",
-      addressCountry: "US",
-    },
-  }
-}
 
 export function projectTitle(p: Project) {
   return p.meta_title || p.header

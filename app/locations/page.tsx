@@ -7,11 +7,11 @@ import { TeamBentoGrid } from "@/components/newCleaning/TeamBentoGrid"
 import { ServiceTicker } from "@/components/common/ServiceTicker"
 import { getAllServices } from "@/lib/strapi"
 import { CallToAction } from "@/components/cleaning/CallToAction"
+import { businessRef } from "@/lib/business-schema"
 
 const STRAPI_URL =
   process.env.NEXT_PUBLIC_STRAPI_URL || "https://cms.playacleaning.com"
 
-const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343"
 // ─────────────────────────────────────────────────────────────
 // Data Fetching
 // ─────────────────────────────────────────────────────────────
@@ -95,19 +95,8 @@ function LocationsSchema({ locations }: { locations: LocationRecord[] }) {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "LocalBusiness",
-        "@id": "https://playacleaning.com/#organization",
-        name: "Playa Cleaning",
-        url: "https://playacleaning.com",
-        telephone: companyPhone,
-        priceRange: "$$",
-        image: "https://cms.playacleaning.com/uploads/hero_4_8f4caab2a5.webp",
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: "Los Angeles",
-          addressRegion: "CA",
-          addressCountry: "US",
-        },
+        ...businessRef,
+        "@type": "HomeAndConstructionBusiness",
         hasOfferCatalog: {
           "@type": "OfferCatalog",
           "@id": "https://playacleaning.com/locations/#catalog",

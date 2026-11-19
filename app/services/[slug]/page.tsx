@@ -21,13 +21,13 @@ import LocationFAQ from "@/components/cleaning/LocationFAQ"
 import { WhyMeVideo } from "@/components/cleaning/WhyMeVideo"
 import { getProjectsByService } from "@/lib/projects"
 import { RecentJobs } from "@/components/projects/RecentJobs"
+import { BUSINESS_ID, businessRef } from "@/lib/business-schema"
 
 interface Props {
   params: Promise<{ slug: string }>
 }
 
 const STRAPI_URL = process.env.STRAPI_URL || "https://cms.playacleaning.com"
-const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343"
 
 // ─────────────────────────────────────────────────────────────
 // Dynamic Metadata Infusion
@@ -138,19 +138,8 @@ export default async function ServicePage({ params }: Props) {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "LocalBusiness",
-        "@id": "https://playacleaning.com/#organization",
-        name: "Playa Cleaning",
-        url: "https://playacleaning.com",
-        telephone: companyPhone,
-        priceRange: "$$",
-        image: "https://playacleaning.com/logo.png",
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: "Los Angeles",
-          addressRegion: "CA",
-          addressCountry: "US",
-        },
+        ...businessRef,
+        "@type": "HomeAndConstructionBusiness",
         hasOfferCatalog: {
           "@type": "OfferCatalog",
           "@id": `https://playacleaning.com/services/${slug}/#catalog`,
@@ -171,7 +160,7 @@ export default async function ServicePage({ params }: Props) {
                   name: "Los Angeles",
                 },
                 provider: {
-                  "@id": "https://playacleaning.com/#organization",
+                  "@id": BUSINESS_ID,
                 },
               },
             },

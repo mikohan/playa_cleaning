@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Star from "@/public/images/star.svg"
 import { cn } from "@/lib/utils"
+import { GOOGLE_RATING } from "@/lib/google-rating"
 
 interface GoogleProps {
   rating: string
@@ -17,7 +18,7 @@ function GoogleStars({
   size,
   inline = true,
 }: GoogleProps) {
-  const rat = rating ?? "4.99"
+  const rat = rating ?? GOOGLE_RATING.ratingValue
   const cnt = starsCount ?? 5
   const inln = inline ? "flex gap-2" : "block"
   const starSize = size ?? 20

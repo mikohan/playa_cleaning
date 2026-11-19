@@ -7,6 +7,7 @@ import "./globals.css"
 import "lenis/dist/lenis.css"
 
 import { cn } from "@/lib/utils"
+import { businessNode } from "@/lib/business-schema"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Navbar } from "@/components/common/Navbar"
 import { Footer } from "@/components/common/Footer"
@@ -97,16 +98,10 @@ async function getGlobalData() {
   }
 }
 
-const organizationJsonLd = {
+// The business node is printed on every page; pages refer to it by @id
+const businessJsonLd = {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "Playa Cleaning",
-  url: "https://playacleaning.com",
-  logo: "https://playacleaning.com/logo.png", // Must be a direct link to your logo image
-  sameAs: [
-    "https://www.instagram.com/playa_cleaning",
-    "https://www.facebook.com/profile.php?id=61555670068109",
-  ],
+  ...businessNode(),
 }
 
 export default async function RootLayout({
@@ -129,6 +124,10 @@ export default async function RootLayout({
       )}
     >
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(businessJsonLd) }}
+        />
         <GoogleTagManager gtmId={gtmId} />
         <MetaTestLink />
         <ThemeProvider>

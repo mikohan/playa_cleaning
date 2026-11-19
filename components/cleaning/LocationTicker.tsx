@@ -2,8 +2,12 @@ import React from "react"
 import { MapPin, ArrowUpRight } from "lucide-react"
 import Link from "next/link"
 import { LOS_ANGELES_AREAS } from "@/app/data/west-side-areas"
+import { getFooterLocations } from "@/lib/get-locations"
 
-export const LocationTicker = () => {
+// Areas without their own city page are shown without a link
+// (a link to a missing page redirects and wastes Google's crawl)
+export const LocationTicker = async () => {
+  const pages = new Set((await getFooterLocations()).map((l) => l.slug))
   return (
     <div className="overflow-hidden py-16">
       <div className="container mx-auto">
@@ -14,12 +18,10 @@ export const LocationTicker = () => {
             style={{ "--marquee-duration": "45s" } as React.CSSProperties}
           >
             {/* Double the imported data for a seamless loop */}
-            {[...LOS_ANGELES_AREAS, ...LOS_ANGELES_AREAS].map((area, index) => (
-              <Link
-                key={`${area.slug}-${index}`}
-                href={`/locations/${area.slug}`}
-                className="group flex flex-none items-center gap-3 px-4 transition-all"
-              >
+            {[...LOS_ANGELES_AREAS, ...LOS_ANGELES_AREAS].map((area, index) => {
+              const key = `${area.slug}-${index}`
+              const inner = (
+                <>
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary-blue transition-colors group-hover:bg-primary-blue group-hover:text-primary-foreground">
                   <MapPin className="h-5 w-5" />
                 </div>
@@ -38,8 +40,18 @@ export const LocationTicker = () => {
                     className="-translate-y-1 text-primary-blue opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100"
                   />
                 </div>
-              </Link>
-            ))}
+                </>
+              )
+              return pages.has(area.slug) ? (
+                <Link key={key} href={`/locations/${area.slug}`} className="group flex flex-none items-center gap-3 px-4 transition-all">
+                  {inner}
+                </Link>
+              ) : (
+                <div key={key} className="group flex flex-none items-center gap-3 px-4 transition-all">
+                  {inner}
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>

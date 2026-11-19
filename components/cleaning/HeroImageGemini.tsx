@@ -8,6 +8,7 @@ import { CleaningModal } from "../common/CleaningModal"
 import { ModalVideo } from "../common/ModalVideo"
 import { RoughNotation, RoughNotationGroup } from "react-rough-notation"
 import { WaveDividerBottom } from "../common/WaveDividerBottom"
+import { GOOGLE_RATING } from "@/lib/google-rating"
 
 export function HeroImageGemini() {
   return (
@@ -23,7 +24,7 @@ export function HeroImageGemini() {
             <div className="flex flex-wrap items-center justify-center gap-5 lg:justify-start">
               <AvatarGroup />
               <div className="hidden h-6 w-px bg-slate-200 sm:block" />
-              <GoogleStars starsCount={5} rating="4.99/5" />
+              <GoogleStars starsCount={5} rating={`${GOOGLE_RATING.ratingValue}/5`} />
             </div>
 
             <RoughNotationGroup show={true}>

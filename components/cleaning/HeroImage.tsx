@@ -8,6 +8,7 @@ import { AvatarGroup } from "./AvatarGroup"
 import { CleaningModal } from "../common/CleaningModal"
 import { ModalVideo } from "../common/ModalVideo"
 import { RoughNotation, RoughNotationGroup } from "react-rough-notation"
+import { GOOGLE_RATING } from "@/lib/google-rating"
 
 export function HeroImage() {
   return (
@@ -20,7 +21,7 @@ export function HeroImage() {
           <div className="md:flex-1">
             <div className="inline-flex items-center gap-4">
               <AvatarGroup />
-              <GoogleStars starsCount={5} rating="4.99/5" />
+              <GoogleStars starsCount={5} rating={`${GOOGLE_RATING.ratingValue}/5`} />
             </div>
             {/* Wrapper for text and button without rating */}
             <div className="flex flex-col md:w-full md:items-center">

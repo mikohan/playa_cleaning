@@ -15,6 +15,8 @@ import { WhyMeVideo } from "@/components/cleaning/WhyMeVideo"
 import { getFooterLocations } from "@/lib/get-locations"
 import { getHomepageProjects } from "@/lib/projects"
 import { RecentJobs } from "@/components/projects/RecentJobs"
+import { businessNode } from "@/lib/business-schema"
+import { FAQ_DATA } from "@/app/data/home-faq"
 
 // ─────────────────────────────────────────────────────────────
 // 1. WORLD-CLASS SEO METADATA STATIC PAYLOAD
@@ -84,7 +86,6 @@ export default async function Page() {
   const recentJobs = await getHomepageProjects(4)
 
   // Dynamic values parsed from Environment or targeted fallback structures
-  const phoneNumber = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343"
 
   // Dynamically map locations into Administrative Area objects for areaServed
   const dynamicAreas =
@@ -120,40 +121,18 @@ export default async function Page() {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "HomeAndConstructionBusiness",
-        "@id": "https://playacleaning.com/#localbusiness",
-        name: "Playa Cleaning",
-        image: "https://playacleaning.com/og-image.jpg",
-        url: "https://playacleaning.com",
-        telephone: phoneNumber,
-        priceRange: "$$",
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: "Los Angeles",
-          addressRegion: "CA",
-          addressCountry: "US",
-        },
-        geo: {
-          "@type": "GeoCoordinates",
-          latitude: 33.9754,
-          longitude: -118.4214,
-        },
-        openingHoursSpecification: {
-          "@type": "OpeningHoursSpecification",
-          dayOfWeek: [
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-            "Sunday",
-          ],
-          opens: "08:00",
-          closes: "18:00",
-        },
+        ...businessNode(),
         areaServed: dynamicAreas,
         knowsAbout: dynamicSkills,
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://playacleaning.com/#faq",
+        mainEntity: FAQ_DATA.map((f) => ({
+          "@type": "Question",
+          name: f.question,
+          acceptedAnswer: { "@type": "Answer", text: f.answer },
+        })),
       },
     ],
   }

@@ -5,6 +5,7 @@ import AliciaImage from "@/public/images/cleaning/hero-4.webp"
 import { GoogleStars } from "../cleaning/GoogleStars"
 import { CleaningModal } from "@/components/common/CleaningModal"
 import { LogoTicker } from "../cleaning/LogoTicker"
+import { GOOGLE_RATING } from "@/lib/google-rating"
 interface ServiceSection {
   category: string
   items: string[]
@@ -97,7 +98,7 @@ export function HeroImage({ data }: WhatIncludedProps) {
                   </div>
                 ))}
                 <div className="pl-6 text-sm font-medium text-muted-foreground">
-                  <GoogleStars rating="4.99" starsCount={5} size={16} />
+                  <GoogleStars rating={GOOGLE_RATING.ratingValue} starsCount={5} size={16} />
                 </div>
               </div>
             </div>

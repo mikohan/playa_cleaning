@@ -21,42 +21,32 @@ import GoogleMap from "@/components/common/GoogleMap"
 import { BreadCrumbsUniversal } from "@/components/common/BreadCrumbsUniversal"
 import { getProjectsByLocation } from "@/lib/projects"
 import { RecentJobs } from "@/components/projects/RecentJobs"
+import { businessRef, GOOGLE_RATING } from "@/lib/business-schema"
 
 const STRAPI_URL = process.env.STRAPI_URL || "https://cms.playacleaning.com"
-const companyPhone = process.env.NEXT_PUBLIC_COMPANY_PHONE || "(424) 356-2343"
 
 // ─────────────────────────────────────────────────────────────
 // Type Declarations for Structured Schema Data
 // ─────────────────────────────────────────────────────────────
+// A city page describes the service in that city; the business itself is
+// one node (lib/business-schema), referenced here as the provider.
 interface SchemaLocalBusiness {
-  "@type": "LocalBusiness"
+  "@type": "Service"
   "@id": string
   name: string
   image: string
-  telephone: string
   url: string
-  priceRange: string
   description: string
   serviceType: string
-  address: {
-    "@type": "PostalAddress"
-    addressLocality: string
-    addressRegion: string
-    addressCountry: string
-  }
-  geo: {
-    "@type": "GeoCoordinates"
-    latitude: number
-    longitude: number
-  }
-  aggregateRating: {
-    "@type": "AggregateRating"
-    ratingValue: string
-    reviewCount: string
-  }
+  provider: { "@id": string }
   areaServed: {
     "@type": "City"
     name: string
+    geo: {
+      "@type": "GeoCoordinates"
+      latitude: number
+      longitude: number
+    }
   }
   hasOfferCatalog: {
     "@type": "OfferCatalog"
@@ -163,11 +153,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!location) return { title: "Location Not Found" }
 
-  const pageTitle = `Professional Cleaning Services in ${location.city_name}`
+  // Title and description say what people search for: the service + the city
+  const pageTitle = `House & Deep Cleaning in ${location.city_name}`
   const title = `${pageTitle} | Playa Cleaning`
-  const description =
-    location.local_hook ||
-    `Top-rated residential and commercial cleaning in ${location.city_name}. 5-star local professionals, instant quotes, and eco-friendly products.`
+  const description = `House cleaning in ${location.city_name}: deep cleaning, regular cleaning and move-in/move-out cleaning by Alicia. Rated ${GOOGLE_RATING.ratingValue} on Google. Get a free quote.`
   const url = `https://playacleaning.com/locations/${slug}`
 
   const lat = location.coordinates?.lat || 34.0522
@@ -222,44 +211,32 @@ function JsonLd({
   const lat = location.coordinates?.lat || 34.0522
   const lng = location.coordinates?.lng || -118.2437
   const pageUrl = `https://playacleaning.com/locations/${location.slug}`
-  const businessId = `${pageUrl}#cleaning-service`
+  const businessId = `${pageUrl}#service`
 
   const dynamicDescription =
     location.local_hook ||
-    `Top-rated residential and commercial cleaning services in ${location.city_name}.`
+    `House cleaning in ${location.city_name} by Playa Cleaning.`
 
   const graphArray: SchemaGraphNode[] = [
     {
-      "@type": "LocalBusiness",
+      "@type": "Service",
       "@id": businessId,
-      name: `Playa Cleaning ${location.city_name}`,
+      name: `House Cleaning in ${location.city_name}`,
       image: location.location_image?.url
         ? `${STRAPI_URL}${location.location_image.url}`
         : "",
-      telephone: companyPhone,
       url: pageUrl,
-      priceRange: "$$",
       description: dynamicDescription,
-      serviceType: "CleaningService",
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: location.city_name,
-        addressRegion: "CA",
-        addressCountry: "US",
-      },
-      geo: {
-        "@type": "GeoCoordinates",
-        latitude: lat,
-        longitude: lng,
-      },
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "4.9",
-        reviewCount: "37",
-      },
+      serviceType: "House cleaning",
+      provider: businessRef,
       areaServed: {
         "@type": "City",
         name: location.city_name,
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: lat,
+          longitude: lng,
+        },
       },
       hasOfferCatalog: {
         "@type": "OfferCatalog",
