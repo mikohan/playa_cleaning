@@ -158,7 +158,7 @@ export const BookingCalculatorCarpet = () => {
         </div>
 
         <p className="px-2 text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
-          Professional Steam Extraction • Angara Steamers
+          Professional Steam Extraction • Playa Cleaning
         </p>
       </div>
     </div>

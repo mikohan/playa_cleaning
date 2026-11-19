@@ -16,7 +16,6 @@ export const metadata: Metadata = {
     "upholstery cleaning Los Angeles",
     "apartment cleaning LA",
     "deep cleaning services",
-    "Angara Steamers",
     "Playa Cleaning",
   ],
   alternates: {
