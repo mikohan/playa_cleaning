@@ -55,6 +55,13 @@ const nextConfig = {
         permanent: true,
       },
 
+      // 0.7. Old Google Ads landing page (Playa/Deep campaign) -> deep cleaning
+      {
+        source: "/deep/:path*",
+        destination: "/services/deep-cleaning",
+        permanent: true,
+      },
+
       // 1. FIX SERVICE SLUG MISMATCHES (Old/Short -> New Strapi Slugs)
       {
         source: "/services/maid-service/(.+)",
